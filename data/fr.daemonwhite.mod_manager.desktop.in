@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=py_mod_manager
+Exec=py_mod_manager
+Icon=fr.daemonwhite.mod_manager
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true

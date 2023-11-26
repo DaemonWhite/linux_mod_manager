@@ -1,0 +1,49 @@
+{
+    "app-id" : "fr.daemonwhite.mod_manager",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "master",
+    "sdk" : "org.gnome.Sdk",
+    "command" : "py_mod_manager",
+    "finish-args" : [
+        "--share=network",
+        "--share=ipc",
+        "--socket=fallback-x11",
+        "--device=dri",
+        "--socket=wayland"
+    ],
+    "cleanup" : [
+        "/include",
+        "/lib/pkgconfig",
+        "/man",
+        "/share/doc",
+        "/share/gtk-doc",
+        "/share/man",
+        "/share/pkgconfig",
+        "*.la",
+        "*.a"
+    ],
+    "modules" : [
+      {
+        "name": "blueprint-compiler",
+        "buildsystem": "meson",
+        "sources": [
+          {
+            "type": "git",
+            "url": "https://gitlab.gnome.org/jwestman/blueprint-compiler",
+            "tag": "v0.10.0"
+  	  }
+	  ]
+	},
+        {
+            "name" : "py_mod_manager",
+            "builddir" : true,
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "file:///home/matheo/Projets/Python"
+                }
+            ]
+        }
+    ]
+}

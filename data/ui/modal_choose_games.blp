@@ -1,0 +1,48 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PyModManagerWindowChooseGames : $AdwWindow {
+	modal: true;
+	default-width: 400;
+	default-height: 400;
+
+	Gtk.Box {
+		Adw.ToolbarView {
+		  [top]
+		  Adw.HeaderBar {
+		  }
+		}
+		orientation: vertical;
+		vexpand: true;
+		hexpand: true;
+
+		Gtk.Box {
+			orientation: vertical;
+			hexpand: true;
+			vexpand: true;
+			margin-end: 10;
+			margin-start: 10;
+			spacing: 20;
+			Adw.PreferencesGroup {
+				Adw.ComboRow {
+					title: "Jeux";
+					model:
+						StringList {
+							strings [
+							_("Oblivion"),
+							_("Skyrim"),
+							_("Fallout 4"),
+							_("Fallout 3"),
+							]
+						}
+					;
+				}
+			}
+			Gtk.Button {
+				label: "Valider";
+				action-name: "app.quit";
+				styles ["pill"]
+			}
+		}
+	}
+}

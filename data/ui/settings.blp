@@ -1,0 +1,30 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $SettingsStack : $AdwBin {
+	Gtk.Box {
+		Adw.PreferencesPage {
+			Adw.PreferencesGroup {
+				title: "Base";
+				Adw.SwitchRow {
+					title: "Liens Symbolic";
+				}
+				Adw.SwitchRow {
+					title: "Copie mode";
+					subtitle: "Deplace ce qui rend les réinstallation plus lente";
+				}
+				Adw.ActionRow {
+					title: "Indiquer le prefix";
+					subtitle: "Chemin du prefix";
+				}
+				Adw.ActionRow {
+					title: "Indiquer le chemin du jeux";
+					subtitle: "Chemin du prefix";
+				}
+				Adw.ActionRow {
+					title: "Archiver le jeux";
+				}
+			}
+		}
+	}
+}

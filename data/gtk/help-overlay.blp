@@ -1,0 +1,20 @@
+using Gtk 4.0;
+
+Gtk.ShortcutsWindow help_overlay {
+	modal: true;
+	Gtk.ShortcutsSection {
+		section-name: 'shortcuts';
+		max-height: 10;
+		Gtk.ShortcutsGroup {
+			title: 'General';
+			Gtk.ShortcutsShortcut {
+				title: C_("shortcut window", "Show Shortcut");
+				action-name: 'win.show-help-overlay';
+			}
+			Gtk.ShortcutsShortcut {
+				title: C_("shortcut window","Exit");
+				action-name: 'app.quit';
+			}
+		}
+	}
+}

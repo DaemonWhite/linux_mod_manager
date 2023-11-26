@@ -1,0 +1,6 @@
+data/fr.daemonwhite.mod_manager.desktop.in
+data/fr.daemonwhite.mod_manager.metainfo.xml.in
+data/fr.daemonwhite.mod_manager.gschema.xml
+src/main.py
+src/window.py
+src/window.ui

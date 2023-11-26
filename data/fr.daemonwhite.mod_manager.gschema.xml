@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="py_mod_manager">
+	<schema id="fr.daemonwhite.mod_manager" path="/fr/daemonwhite/mod_manager/">
+	</schema>
+</schemalist>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/fr/daemonwhite/mod_manager">
+    <file preprocess="xml-stripblanks">ui/window.ui</file>
+    <file preprocess="xml-stripblanks">ui/modal_choose_games.ui</file>
+		<file preprocess="xml-stripblanks">ui/settings.ui</file>
+		<file preprocess="xml-stripblanks">ui/order.ui</file>
+		<file preprocess="xml-stripblanks">ui/mod.ui</file>
+		<file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
+  </gresource>
+</gresources>

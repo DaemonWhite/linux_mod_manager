@@ -1,0 +1,18 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $ModStack : $AdwBin {
+	Adw.PreferencesPage {
+		Adw.PreferencesGroup {
+			Adw.ExpanderRow {
+				title: "Mod Installer";
+			}
+			Adw.ExpanderRow {
+				title: "Mod Configurer";
+			}
+			Adw.ExpanderRow {
+				title: "Mod Desinstaller";
+			}
+		}
+	}
+}
