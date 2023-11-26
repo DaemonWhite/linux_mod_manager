@@ -1,5 +1,7 @@
+from gi.repository import GObject
+
 class PluginGames(object):
-    name_game="Oblivion"
+    name_game="Skyrim"
     syst="win"
     symbolic=True
     nexus_mod=True

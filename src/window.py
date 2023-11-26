@@ -19,9 +19,10 @@
 
 from gi.repository import Adw
 from gi.repository import Gtk
+from gi.repository import Gio
 
 from plugin_controller.plugin import PluginManager
-
+from plugin_controller.factory import Game
 from modal.choose_games import PyModManagerWindowChooseGames
 
 from stack.settings import SettingsStack
@@ -32,8 +33,8 @@ from stack.mod import ModStack
 class PyModManagerWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'PyModManagerWindow'
 
-    label = Gtk.Template.Child()
     main_stack = Gtk.Template.Child()
+    choose_game = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -41,30 +42,67 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         self.choose_games = PyModManagerWindowChooseGames(self)
 
+        # Start Plugin
         self.plugin = PluginManager()
         self.plugin.load("/home/matheo/Projets/Python/py_mod_manager/src/plugins")
-        self.plugin.get_names_plugin()
+        self._activate_plugin = self.plugin.get_first_plugin()
 
-        self.show()
+        # Create list plugin
+        self.list = Gio.ListStore.new(Game)
+
+        # Event List plugin
+        self.list_plugin = self.plugin.get_list_plugin()
+        factory = Gtk.SignalListItemFactory()
+        factory.connect("setup", self._on_factory_setup)
+        factory.connect("bind", self._on_factory_bind)
+        self.choose_game.set_factory(factory)
+
+        # Add Plugin
+        index = 0
+        for plugin in self.list_plugin:
+            self.list.append(Game(game_id=index, game_name=str(plugin)))
+            index += 1
+        del index
+
+        # Apply list
+        self.choose_game.set_model(self.list)
+        self.choose_game.connect("notify::selected-item", self._on_selected_item_notify)
+
         self.page_settings = SettingsStack(self)
         self.page_order = OrderStack(self)
         self.page_mod = ModStack(self)
 
         self.main_stack.add_titled(
-        	child=self.page_mod,
-        	name="page_mod",
-        	title="Mods"
+            child=self.page_mod,
+            name="page_mod",
+            title="Mods"
         )
         self.main_stack.add_titled(
-        	child=self.page_order,
-        	name="page_order",
-        	title="Order"
+            child=self.page_order,
+            name="page_order",
+            title="Order"
         )
         self.main_stack.add_titled(
-        	child=self.page_settings,
-        	name="page_settings",
-        	title="Settings"
+            child=self.page_settings,
+            name="page_settings",
+            title="Settings"
         )
         self.main_stack.set_visible_child_name("page_mod")
+
+        self.show()
         self.choose_games.show()
+
+    def _on_factory_setup(self, factory, list_item):
+        label = Gtk.Label()
+        list_item.set_child(label)
+
+    def _on_factory_bind(self, factory, list_item):
+        label = list_item.get_child()
+        game = list_item.get_item()
+        label.set_text(game.game_name)
+
+    def _on_selected_item_notify(self, dropdown, _):
+        game = dropdown.get_selected_item()
+        self._activate_plugin = self.plugin.get_plugin_by_name(game.game_name)
+        print(game.game_name)
 
