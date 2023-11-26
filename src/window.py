@@ -23,6 +23,8 @@ from gi.repository import Gio
 
 from plugin_controller.plugin import PluginManager
 from plugin_controller.factory import Game
+
+from modal.preferences import PreferencesLinuxModManager
 from modal.choose_games import PyModManagerWindowChooseGames
 
 from stack.settings import SettingsStack
@@ -42,16 +44,18 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         self.choose_games = PyModManagerWindowChooseGames(self)
 
+        self.app.create_action('preferences', self.__show_prefrences)
+
         # Start Plugin
-        self.plugin = PluginManager()
-        self.plugin.load("/home/matheo/Projets/Python/py_mod_manager/src/plugins")
-        self._activate_plugin = self.plugin.get_first_plugin()
+        self._plugin = PluginManager()
+        self._plugin.load("/home/matheo/Projets/Python/py_mod_manager/src/plugins")
+        self._activate_plugin = self._plugin.get_first_plugin()
 
         # Create list plugin
-        self.list = Gio.ListStore.new(Game)
+        self._list = Gio.ListStore.new(Game)
 
         # Event List plugin
-        self.list_plugin = self.plugin.get_list_plugin()
+        self._list_plugin = self._plugin.get_list_plugin()
         factory = Gtk.SignalListItemFactory()
         factory.connect("setup", self._on_factory_setup)
         factory.connect("bind", self._on_factory_bind)
@@ -59,13 +63,13 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         # Add Plugin
         index = 0
-        for plugin in self.list_plugin:
-            self.list.append(Game(game_id=index, game_name=str(plugin)))
+        for plugin in self._list_plugin:
+            self._list.append(Game(game_id=index, game_name=str(plugin)))
             index += 1
         del index
 
         # Apply list
-        self.choose_game.set_model(self.list)
+        self.choose_game.set_model(self._list)
         self.choose_game.connect("notify::selected-item", self._on_selected_item_notify)
 
         self.page_settings = SettingsStack(self)
@@ -76,22 +80,30 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             child=self.page_mod,
             name="page_mod",
             title="Mods"
-        )
+        ).set_icon_name("application-x-addon-symbolic")
         self.main_stack.add_titled(
             child=self.page_order,
             name="page_order",
             title="Order"
-        )
+        ).set_icon_name("view-list-symbolic")
         self.main_stack.add_titled(
             child=self.page_settings,
             name="page_settings",
             title="Settings"
-        )
+        ).set_icon_name("preferences-other-symbolic")
 
         self.main_stack.set_visible_child_name("page_mod")
         self.enable_current_plugin()
-        self.show()
-        self.choose_games.show()
+        # self.show()
+        # self.choose_games.show()
+
+    @property
+    def list_plugin(self):
+        return self._list_plugin
+
+    @property
+    def plugin(self):
+        return self._plugin
 
     def enable_current_plugin(self):
         print(self._activate_plugin.symbolic)
@@ -102,6 +114,10 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             self.page_settings.enable_windows(True)
         else:
             self.page_settings.enable_windows(False)
+
+    def __show_prefrences(self, _, _1):
+        pref = PreferencesLinuxModManager(self)
+        pref.present()
 
     def _on_factory_setup(self, factory, list_item):
         label = Gtk.Label()
@@ -114,6 +130,6 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
     def _on_selected_item_notify(self, dropdown, _):
         game = dropdown.get_selected_item()
-        self._activate_plugin = self.plugin.get_plugin_by_name(game.game_name)
+        self._activate_plugin = self._plugin.get_plugin_by_name(game.game_name)
         self.enable_current_plugin()
 

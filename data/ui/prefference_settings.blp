@@ -1,0 +1,43 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PreferencesLinuxModManager : $AdwPreferencesWindow {
+	title: "Preferences";
+	modal: true;
+	default-width: 750;
+	default-height: 600;
+  hide-on-close: true;
+	Adw.PreferencesPage {
+		title: "Comportement";
+		icon-name: "preferences-system-symbolic";
+		Adw.PreferencesGroup {
+			title: "Mode";
+			Adw.SwitchRow {
+				title: "Privilégier les paramètres généraux";
+			}
+			Adw.SwitchRow {
+				title: "Copie";
+			}
+			Adw.SwitchRow {
+				title: "Symbolic";
+			}
+			Adw.SwitchRow {
+				title: "Archive";
+			}
+		}
+
+		Adw.PreferencesGroup {
+			title: "Application";
+			Adw.SwitchRow {
+				title: "Auto detecter les jeux";
+			}
+		}
+	}
+
+	Adw.PreferencesPage {
+		title: "plugins";
+		icon-name: "application-x-addon-symbolic";
+		Adw.PreferencesGroup list_plugin {
+		}
+	}
+}

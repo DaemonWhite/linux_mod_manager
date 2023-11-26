@@ -4,6 +4,8 @@ class PluginGame(object):
         self.__name_game = name_game
         self.__version = version
         self.__plugin_verssion = plugin_verssion
+        self._activate = True
+        self._authors = "Uknow"
         self._systeme = ["linux"]
         self._symbolic = True
         self._archive = True
@@ -22,6 +24,14 @@ class PluginGame(object):
     @property
     def plugin_verssion(self):
         return self.__plugin_verssion
+
+    @property
+    def activate(self):
+        return self._activate
+
+    @property
+    def authors(self):
+        return self._authors
 
     @property
     def systeme(self):
