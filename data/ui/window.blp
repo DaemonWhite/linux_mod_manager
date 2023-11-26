@@ -7,28 +7,35 @@ template $PyModManagerWindow : $AdwApplicationWindow {
 
   Gtk.Box {
   	orientation: vertical;
-  	Adw.HeaderBar header_bar {
-  		title-widget: Adw.ViewSwitcherTitle view_switcher_title{
-  			title: "Linux Mod Manager";
-  			stack: main_stack;
-  		};
-    	[start]
-    	Gtk.DropDown choose_game {
-    	}
-      [end]
-      Gtk.MenuButton {
-				primary: true;
-				icon-name: 'open-menu-symbolic';
-				tooltip-text: 'Menu';
-				menu-model: primary_menu;
-      }
-    }
-    Adw.ViewStack main_stack{
-	    Adw.ViewSwitcherBar view_switcher_bar {
-	    	stack: main_stack;
-	      reveal: bind view_switcher_title.title-visible;
-	    }
-    }
+  	vexpand: true;
+  	hexpand: true;
+  	Adw.ToolbarView {
+  		[top]
+			Adw.HeaderBar header_bar {
+				title-widget: Adw.ViewSwitcherTitle view_switcher_title{
+					title: "Linux Mod Manager";
+					stack: main_stack;
+				};
+		  	[start]
+		  	Gtk.DropDown choose_game {
+		  	}
+		    [end]
+		    Gtk.MenuButton {
+					primary: true;
+					icon-name: 'open-menu-symbolic';
+					tooltip-text: 'Menu';
+					menu-model: primary_menu;
+		    }
+		  }
+		  Adw.ViewStack main_stack{
+		  	vexpand: true;
+		  }
+		  [bottom]
+			Adw.ViewSwitcherBar view_switcher_bar {
+			  stack: main_stack;
+			  reveal: bind view_switcher_title.title-visible;
+			}
+		}
   }
 }
 
