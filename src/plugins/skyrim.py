@@ -1,8 +1,7 @@
-class PluginGames(object):
-    name_game="Skyrim"
-    syst="linux"
-    symbolic=False
-    copie=True
-    archive=True
-    nexus_mod=True
-    platform=["steam", "gog"]
+from plugin_controller.plugin_game import PluginGame
+
+class PluginGames(PluginGame):
+    def __init__(self):
+        super().__init__("Skyrim", 1, 0.1)
+        self._nexus_mod = True
+        self._systeme = "win"

@@ -98,7 +98,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.page_settings.set_symbolic_row(self._activate_plugin.symbolic)
         self.page_settings.set_copie_row(self._activate_plugin.copie)
         self.page_settings.set_archive_row(self._activate_plugin.archive)
-        if self._activate_plugin.syst == "win":
+        if self._activate_plugin.systeme == "win":
             self.page_settings.enable_windows(True)
         else:
             self.page_settings.enable_windows(False)
@@ -114,7 +114,6 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
     def _on_selected_item_notify(self, dropdown, _):
         game = dropdown.get_selected_item()
-        print(game.game_name)
         self._activate_plugin = self.plugin.get_plugin_by_name(game.game_name)
         self.enable_current_plugin()
 
