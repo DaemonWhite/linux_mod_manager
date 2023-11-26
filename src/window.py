@@ -87,10 +87,21 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             name="page_settings",
             title="Settings"
         )
-        self.main_stack.set_visible_child_name("page_mod")
 
+        self.main_stack.set_visible_child_name("page_mod")
+        self.enable_current_plugin()
         self.show()
         self.choose_games.show()
+
+    def enable_current_plugin(self):
+        print(self._activate_plugin.symbolic)
+        self.page_settings.set_symbolic_row(self._activate_plugin.symbolic)
+        self.page_settings.set_copie_row(self._activate_plugin.copie)
+        self.page_settings.set_archive_row(self._activate_plugin.archive)
+        if self._activate_plugin.syst == "win":
+            self.page_settings.enable_windows(True)
+        else:
+            self.page_settings.enable_windows(False)
 
     def _on_factory_setup(self, factory, list_item):
         label = Gtk.Label()
@@ -103,6 +114,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
     def _on_selected_item_notify(self, dropdown, _):
         game = dropdown.get_selected_item()
-        self._activate_plugin = self.plugin.get_plugin_by_name(game.game_name)
         print(game.game_name)
+        self._activate_plugin = self.plugin.get_plugin_by_name(game.game_name)
+        self.enable_current_plugin()
 

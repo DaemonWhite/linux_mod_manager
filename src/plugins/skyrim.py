@@ -1,10 +1,8 @@
-from gi.repository import GObject
-
 class PluginGames(object):
     name_game="Skyrim"
-    syst="win"
-    symbolic=True
+    syst="linux"
+    symbolic=False
+    copie=True
+    archive=True
     nexus_mod=True
     platform=["steam", "gog"]
-    def ba(self):
-        print("ba")

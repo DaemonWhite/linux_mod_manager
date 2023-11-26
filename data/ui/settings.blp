@@ -6,22 +6,22 @@ template $SettingsStack : $AdwBin {
 		Adw.PreferencesPage {
 			Adw.PreferencesGroup {
 				title: "Base";
-				Adw.SwitchRow {
+				Adw.SwitchRow symbolic_row {
 					title: "Liens Symbolic";
 				}
-				Adw.SwitchRow {
+				Adw.SwitchRow copie_row {
 					title: "Copie mode";
 					subtitle: "Deplace ce qui rend les réinstallation plus lente";
 				}
-				Adw.ActionRow {
+				Adw.ActionRow prefix_row {
 					title: "Indiquer le prefix";
 					subtitle: "Chemin du prefix";
 				}
-				Adw.ActionRow {
+				Adw.ActionRow path_row {
 					title: "Indiquer le chemin du jeux";
 					subtitle: "Chemin du prefix";
 				}
-				Adw.ActionRow {
+				Adw.SwitchRow archive_row {
 					title: "Archiver le jeux";
 				}
 			}
