@@ -79,15 +79,15 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.page_mod = ModStack(self)
 
         self.main_stack.add_titled(
-            child=self.page_mod,
-            name="page_mod",
-            title="Mods"
-        ).set_icon_name("application-x-addon-symbolic")
-        self.main_stack.add_titled(
             child=self.page_order,
             name="page_order",
             title="Order"
         ).set_icon_name("view-list-symbolic")
+        self.main_stack.add_titled(
+            child=self.page_mod,
+            name="page_mod",
+            title="Mods"
+        ).set_icon_name("application-x-addon-symbolic")
         self.main_stack.add_titled(
             child=self.page_settings,
             name="page_settings",
