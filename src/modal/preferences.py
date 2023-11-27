@@ -23,11 +23,15 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
-        self.__settings = Gio.Settings("fr.daemonwhite.mod_manager")
+        self.connect("close-request", self.on_destroy)
 
         self.__win = window
         self.set_transient_for(self.__win)
         self.plugin = self.__win.plugin
+
+        self.preference_copy.connect('notify::selected', self.on_change)
+        self.preference_symbolic.connect('notify::selected', self.on_change)
+        self.preference_archive.connect('notify::selected', self.on_change)
 
         self.load_settings()
 
@@ -59,7 +63,37 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         if not mode_archive == 2:
             self.force_archive.set_sensitive(False)
 
-        self.auto_detect.set_active(self.__settings.get_boolean("auto-detect-games"))
+        self.auto_detect.set_active(self.__win.cg.get_auto_detect_games())
+
+    def __verified_change(self, row, value):
+        if value == 2:
+            row.set_sensitive(True)
+        else:
+            row.set_sensitive(False)
+
+    def on_change(self, _widget, _):
+        mode_copy = self.preference_copy.get_selected()
+        mode_symb = self.preference_symbolic.get_selected()
+        mode_archive = self.preference_archive.get_selected()
+
+        self.__verified_change(self.force_copy, mode_copy)
+        self.__verified_change(self.force_symb, mode_symb)
+        self.__verified_change(self.force_archive, mode_archive)
+
 
     def save_settings(self):
-        pass
+        # Save Force
+        self.__win.cg.set_app_copy(self.force_copy.get_active())
+        self.__win.cg.set_app_symb(self.force_symb.get_active())
+        self.__win.cg.set_app_archive(self.force_archive.get_active())
+        # Save Mode
+        self.__win.cg.set_mode_copy(self.preference_copy.get_selected())
+        self.__win.cg.set_mode_symb(self.preference_symbolic.get_selected())
+        self.__win.cg.set_mode_archive(self.preference_archive.get_selected())
+
+        self.__win.cg.set_auto_detect_games(self.auto_detect.get_active())
+
+        self.__win.cg.save_app_settings()
+
+    def on_destroy(self, _):
+        self.save_settings()

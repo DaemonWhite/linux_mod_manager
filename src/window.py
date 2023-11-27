@@ -44,8 +44,6 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         super().__init__(**kwargs)
         self.app = kwargs.get("application")
 
-        self.cg = CurrentGame("ok")
-
         self.choose_games = PyModManagerWindowChooseGames(self)
 
         self.app.create_action('preferences', self.__show_prefrences)
@@ -53,7 +51,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         # Start Plugin
         self._plugin = PluginManager()
         self._plugin.load("/home/matheo/Projets/Python/py_mod_manager/src/plugins")
-        self._activate_plugin = self._plugin.get_first_plugin()
+        self.cg = CurrentGame(self._plugin.get_first_plugin())
 
         # Create list plugin
         self._list = Gio.ListStore.new(Game)
@@ -110,11 +108,11 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         return self._plugin
 
     def enable_current_plugin(self):
-        print(self._activate_plugin.symbolic)
-        self.page_settings.set_symbolic_row(self._activate_plugin.symbolic)
-        self.page_settings.set_copie_row(self._activate_plugin.copie)
-        self.page_settings.set_archive_row(self._activate_plugin.archive)
-        if self._activate_plugin.systeme == "win":
+        self.page_settings.set_symbolic_row(self.cg.symbolic)
+        self.page_settings.set_copie_row(self.cg.copy)
+        self.page_settings.set_archive_row(self.cg.archive)
+
+        if self.cg.systeme == "win":
             self.page_settings.enable_windows(True)
         else:
             self.page_settings.enable_windows(False)
@@ -134,5 +132,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
     def _on_selected_item_notify(self, dropdown, _):
         game = dropdown.get_selected_item()
-        self._activate_plugin = self._plugin.get_plugin_by_name(game.game_name)
+        self.cg.set_current_game( \
+            self._plugin.get_plugin_by_name(game.game_name) \
+        )
         self.enable_current_plugin()
