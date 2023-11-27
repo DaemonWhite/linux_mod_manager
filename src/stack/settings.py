@@ -12,7 +12,23 @@ class SettingsStack(Adw.Bin):
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
-        self.window = window
+        self.__window = window
+        self.symbolic_row.connect("notify::active", self.__switch_change, "symbolic")
+        self.copie_row.connect("notify::active", self.__switch_change, "copy")
+        self.archive_row.connect("notify::active", self.__switch_change, "archive")
+
+    def __switch_change(self, widget, _, data):
+        mode = 0
+        if data == "symbolic":
+            mode = self.__window.cg.get_mode_symb()
+        elif data == "copy":
+            mode = self.__window.cg.get_mode_copy()
+        elif data == "archive":
+            mode = self.__window.cg.get_mode_archive()
+
+        if mode == 0:
+            self.__window.cg.set_configuration(data, widget.get_active())
+            self.__window.cg.save_plugin()
 
     def enable_windows(self, activate):
         self.prefix_row.set_visible(activate)
