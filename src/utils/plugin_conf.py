@@ -41,8 +41,13 @@ class PluginConfig(object):
             self.__plugin = json.load(json_file)
 
     def save_plugin(self):
-        with open(self.__path, "w") as json_file:
-            json.dump(self.__plugin, json_file)
+        plugin = {}
+        if self.__existe:
+            with open(self.__path, "r") as json_file:
+                plugin = json.load(json_file)
+        if not self.__plugin == plugin:
+            with open(self.__path, "w") as json_file:
+                json.dump(self.__plugin, json_file)
 
     def get_plugin_configuration(self, name):
         return self.__plugin[name]
