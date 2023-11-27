@@ -27,6 +27,8 @@ from plugin_controller.factory import Game
 from modal.preferences import PreferencesLinuxModManager
 from modal.choose_games import PyModManagerWindowChooseGames
 
+from utils.current_game import CurrentGame
+
 from stack.settings import SettingsStack
 from stack.order import OrderStack
 from stack.mod import ModStack
@@ -41,6 +43,8 @@ class PyModManagerWindow(Adw.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.app = kwargs.get("application")
+
+        self.cg = CurrentGame("ok")
 
         self.choose_games = PyModManagerWindowChooseGames(self)
 
@@ -132,4 +136,3 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         game = dropdown.get_selected_item()
         self._activate_plugin = self._plugin.get_plugin_by_name(game.game_name)
         self.enable_current_plugin()
-

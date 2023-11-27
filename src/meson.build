@@ -29,4 +29,5 @@ py_mod_manager_sources = [
 install_subdir('modal', install_dir: pkgdatadir)
 install_subdir('stack', install_dir: pkgdatadir)
 install_subdir('plugin_controller', install_dir: pkgdatadir)
+install_subdir('utils', install_dir: pkgdatadir)
 install_data(py_mod_manager_sources, install_dir: moduledir)

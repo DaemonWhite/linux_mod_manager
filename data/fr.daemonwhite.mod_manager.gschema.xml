@@ -1,5 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="py_mod_manager">
 	<schema id="fr.daemonwhite.mod_manager" path="/fr/daemonwhite/mod_manager/">
+	  <key name="force-default-copy" type="b">
+      <default>false</default>
+      <summary>Force la copy</summary>
+      <description></description>
+    </key>
+	  <key name="force-default-symb" type="b">
+      <default>false</default>
+      <summary>Force le liens symbolic</summary>
+      <description></description>
+    </key>
+	  <key name="force-default-archive" type="b">
+      <default>false</default>
+      <summary>Force l'archive</summary>
+      <description></description>
+    </key>
+	  <key name="mode-default-copy" type="i">
+      <default>0</default>
+      <summary>Mode la copy</summary>
+      <description></description>
+    </key>
+	  <key name="mode-default-symb" type="i">
+      <default>0</default>
+      <summary>mode le liens symbolic</summary>
+      <description></description>
+    </key>
+	  <key name="mode-default-archive" type="i">
+      <default>0</default>
+      <summary>mode l'archive</summary>
+      <description></description>
+    </key>
+	  <key name="auto-detect-games" type="b">
+      <default>true</default>
+      <summary>Force la copy</summary>
+      <description></description>
+    </key>
+	  <key name="game-plugin" type="a{sv}">
+      <default>{}</default>
+      <summary>Paramètres</summary>
+      <description>Un exemple de paramètres avec des valeurs variées.</description>
+    </key>
 	</schema>
 </schemalist>

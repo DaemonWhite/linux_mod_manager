@@ -6,29 +6,46 @@ template $PreferencesLinuxModManager : $AdwPreferencesWindow {
 	modal: true;
 	default-width: 750;
 	default-height: 600;
-  hide-on-close: true;
+	hide-on-close: true;
 	Adw.PreferencesPage {
 		title: "Comportement";
 		icon-name: "preferences-system-symbolic";
 		Adw.PreferencesGroup {
 			title: "Mode";
-			Adw.SwitchRow {
-				title: "Privilégier les paramètres généraux";
-			}
-			Adw.SwitchRow {
+			Adw.ComboRow preference_copy {
 				title: "Copie";
+				model: user_choice;
 			}
-			Adw.SwitchRow {
+
+			Adw.ComboRow preference_symbolic {
 				title: "Symbolic";
+				model: user_choice;
 			}
-			Adw.SwitchRow {
+
+			Adw.ComboRow preference_archive {
 				title: "Archive";
+				model: user_choice;
+			}
+
+
+			Adw.ExpanderRow expand_default_settings {
+				title: "Paramètre génènraux";
+				subtitle: "";
+				Adw.SwitchRow force_copy {
+					title: "Copie";
+				}
+				Adw.SwitchRow force_symb {
+					title: "Symbolic";
+				}
+				Adw.SwitchRow force_archive {
+					title: "Archive";
+				}
 			}
 		}
 
 		Adw.PreferencesGroup {
 			title: "Application";
-			Adw.SwitchRow {
+			Adw.SwitchRow auto_detect {
 				title: "Auto detecter les jeux";
 			}
 		}
@@ -37,7 +54,16 @@ template $PreferencesLinuxModManager : $AdwPreferencesWindow {
 	Adw.PreferencesPage {
 		title: "plugins";
 		icon-name: "application-x-addon-symbolic";
-		Adw.PreferencesGroup list_plugin {
+		Adw.PreferencesGroup list_games_plugin {
+			title: "Plugin Games";
 		}
 	}
+}
+
+StringList user_choice {
+	strings [
+		"user",
+		"plugin",
+		"global",
+	]
 }
