@@ -47,7 +47,7 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
         elif self._mode_symb == 1:
             copy = self.__current_game.copie
         else:
-            copy = self.get_app_symb()
+            copy = self.get_app_copy()
         return copy
 
     @property
@@ -56,9 +56,9 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
         if self._mode_symb == 0:
             archive = self.get_plugin_configuration("archive")
         elif self._mode_symb == 1:
-            archive = self.__current_game.copie
+            archive = self.__current_game.archive
         else:
-            archive = self.get_app_symb()
+            archive = self.get_app_archive()
         return archive
 
     @property

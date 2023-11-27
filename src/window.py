@@ -107,7 +107,28 @@ class PyModManagerWindow(Adw.ApplicationWindow):
     def plugin(self):
         return self._plugin
 
+    def verif_sensitive_settings(self, row, value):
+        if value == 0:
+            row.set_sensitive(True)
+        else:
+            row.set_sensitive(False)
+
     def enable_current_plugin(self):
+        self.verif_sensitive_settings( \
+            self.page_settings.symbolic_row, \
+            self.cg.get_mode_symb() \
+        )
+
+        self.verif_sensitive_settings( \
+            self.page_settings.copie_row, \
+            self.cg.get_mode_copy() \
+        )
+
+        self.verif_sensitive_settings( \
+            self.page_settings.archive_row, \
+            self.cg.get_mode_archive() \
+        )
+
         self.page_settings.set_symbolic_row(self.cg.symbolic)
         self.page_settings.set_copie_row(self.cg.copy)
         self.page_settings.set_archive_row(self.cg.archive)

@@ -97,3 +97,4 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
     def on_destroy(self, _):
         self.save_settings()
+        self.__win.enable_current_plugin()
