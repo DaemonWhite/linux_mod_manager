@@ -34,7 +34,9 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
         elif self._mode_symb == 1:
             symbolic = self.__current_game.symbolic
         else:
-            symbolic = self.get_mode_symb()
+            print("symbolic")
+            symbolic = self.get_app_symb()
+        print(symbolic)
         return symbolic
 
     @property
@@ -45,7 +47,7 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
         elif self._mode_symb == 1:
             copy = self.__current_game.copie
         else:
-            copy = self.get_mode_symb()
+            copy = self.get_app_symb()
         return copy
 
     @property
@@ -56,7 +58,7 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
         elif self._mode_symb == 1:
             archive = self.__current_game.copie
         else:
-            archive = self.get_mode_symb()
+            archive = self.get_app_symb()
         return archive
 
     @property
