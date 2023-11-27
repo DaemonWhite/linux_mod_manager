@@ -19,7 +19,7 @@ class PluginGame(object):
 
     @property
     def version(self):
-        return self.__verssion
+        return self.__version
 
     @property
     def plugin_verssion(self):
