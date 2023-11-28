@@ -28,6 +28,7 @@ from modal.preferences import PreferencesLinuxModManager
 from modal.choose_games import PyModManagerWindowChooseGames
 
 from utils.current_game import CurrentGame
+from utils.plugin_conf import PluginConfig
 
 from stack.settings import SettingsStack
 from stack.order import OrderStack
@@ -68,12 +69,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         factory.connect("bind", self._on_factory_bind)
         self.choose_game.set_factory(factory)
 
-        # Add Plugin
-        index = 0
-        for plugin in self._list_plugin:
-            self._list.append(Game(game_id=index, game_name=str(plugin)))
-            index += 1
-        del index
+        self.load_support_game()
 
         # Apply list
         self.choose_game.set_model(self._list)
@@ -103,6 +99,20 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.enable_current_plugin()
         # self.show()
         # self.choose_games.show()
+
+    def unload_support_game(self):
+        self._list.remove_all()
+
+    def load_support_game(self):
+        # Add Plugin
+        index = 0
+        for plugin in self._list_plugin:
+            conf_plugin = CurrentGame(self._plugin.get_plugin_by_name(plugin))
+            if conf_plugin.is_enable():
+                self._list.append(Game(game_id=index, game_name=str(plugin)))
+                index += 1
+        del index
+
 
     @property
     def list_plugin(self):

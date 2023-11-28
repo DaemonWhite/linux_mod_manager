@@ -3,6 +3,8 @@ from gi.repository import Adw
 
 from py_mod_manager.const import *
 
+from utils.current_game import CurrentGame
+
 @Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/prefference_settings.ui')
 class PreferencesLinuxModManager(Adw.PreferencesWindow):
     __gtype_name__ = 'PreferencesLinuxModManager'
@@ -35,14 +37,7 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         self.preference_archive.connect('notify::selected', self.on_change)
 
         self.load_settings()
-
-        for plugin in self.__win.list_plugin:
-            plug = Adw.SwitchRow.new()
-            data_plugin = self.plugin.get_plugin_by_name(plugin)
-            plug.set_title(data_plugin.name_game)
-            plug.set_subtitle(f"V {data_plugin.plugin_version} Authors {data_plugin.authors}")
-            plug.set_active(data_plugin.activate)
-            self.list_games_plugin.add(plug)
+        self.load_game_plugin()
 
     def load_settings(self):
         self.force_copy.set_active(self.__win.cg.get_app_copy())
@@ -65,6 +60,23 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
             self.force_archive.set_sensitive(False)
 
         self.auto_detect.set_active(self.__win.cg.get_auto_detect_games())
+
+    def load_game_plugin(self):
+        for name_plugin in self.__win.list_plugin:
+            plug = Adw.SwitchRow.new()
+            plugin = self.plugin.get_plugin_by_name(name_plugin)
+            plug.set_title(plugin.name_game)
+            plug.set_subtitle(f"V {plugin.plugin_version} Authors {plugin.authors}")
+            conf_plugin = CurrentGame(plugin)
+            plug.set_active(conf_plugin.is_enable())
+            plug.connect(NOTIFY_ACTIVE, self.__active_game_plugin)
+            self.list_games_plugin.add(plug)
+
+    def __active_game_plugin(self, widget, _):
+        name_plugin = widget.get_title()
+        plugin = self.plugin.get_plugin_by_name(name_plugin)
+        conf_plugin = CurrentGame(plugin)
+        conf_plugin.enable(widget.get_active())
 
     def __verified_change(self, row, value):
         if value == 2:
@@ -98,4 +110,6 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
     def on_destroy(self, _):
         self.save_settings()
+        self.__win.unload_support_game()
+        self.__win.load_support_game()
         self.__win.enable_current_plugin()

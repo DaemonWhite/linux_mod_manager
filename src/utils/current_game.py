@@ -1,8 +1,8 @@
 import os
-import xdg.BaseDirectory
 
 from utils.conf import ApllicationConfiguration
 from utils.plugin_conf import PluginConfig
+from utils.xdg import xdg_conf_path
 
 from py_mod_manager.const import USER, PLUGIN
 
@@ -10,17 +10,8 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
 
     def __init__(self, current_game):
         ApllicationConfiguration.__init__(self)
-        conf_path = "~"
 
-        try:
-            conf_path = xdg.BaseDirectory.xdg_config_home
-        except:
-            print("Error no XDG Conf define")
-
-        self.__conf_path = os.path.join(conf_path, "linux_mode_manager")
-
-        if not os.path.isdir(self.__conf_path):
-            os.makedirs(self.__conf_path)
+        self.__conf_path = xdg_conf_path()
 
         PluginConfig.__init__(self)
 

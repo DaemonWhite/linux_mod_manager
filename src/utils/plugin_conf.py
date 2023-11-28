@@ -1,11 +1,13 @@
 import os
 import json
+
 class PluginConfig(object):
 
     def __init__(self):
         self.__existe = False
 
         self.__plugin = {
+            "enable": True,
             "version" : 0.0,
             "copy" : False,
             "archive" : True,
@@ -29,6 +31,12 @@ class PluginConfig(object):
         if os.path.isfile(self.__path):
             self.__existe = True
 
+    def enable(self, enable):
+        self.__plugin["enable"] = enable
+        self.save_plugin()
+
+    def is_enable(self):
+        return self.__plugin["enable"]
 
     def add_configuration(self, data):
         self.__plugin += data
@@ -51,5 +59,3 @@ class PluginConfig(object):
 
     def get_plugin_configuration(self, name):
         return self.__plugin[name]
-
-
