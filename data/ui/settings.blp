@@ -16,6 +16,17 @@ template $SettingsStack : $AdwBin {
 				Adw.ActionRow prefix_row {
 					title: "Indiquer le prefix";
 					subtitle: "Chemin du prefix";
+					activatable-widget: prefix_folder ;
+					Gtk.Box {
+						Gtk.Button prefix_folder {
+							valign: center;
+							label: "Open";
+							icon-name: "document-open-symbolic";
+							styles [
+            		"flat",
+          		]
+						}
+					}
 				}
 				Adw.ActionRow path_row {
 					title: "Indiquer le chemin du jeux";
