@@ -4,16 +4,29 @@ moduledir = pkgdatadir / 'py_mod_manager'
 gnome = import('gnome')
 python = import('python')
 
+conf_python = configuration_data()
+conf_python.set('PYTHON', python.find_installation('python3').path())
+conf_python.set('localedir', get_option('prefix') / get_option('localedir'))
+conf_python.set('pkgdatadir', pkgdatadir)
+
 conf = configuration_data()
-conf.set('PYTHON', python.find_installation('python3').path())
 conf.set('VERSION', meson.project_version())
-conf.set('localedir', get_option('prefix') / get_option('localedir'))
-conf.set('pkgdatadir', pkgdatadir)
+conf.set('DEVEL', devel)
+
+
+configure_file(
+  input: 'const.in',
+  output: 'const.py',
+  configuration: conf,
+  install: true,
+  install_dir: moduledir,
+  install_mode: 'r-xr--r--'
+)
 
 configure_file(
   input: 'py_mod_manager.in',
   output: 'py_mod_manager',
-  configuration: conf,
+  configuration: conf_python,
   install: true,
   install_dir: get_option('bindir'),
   install_mode: 'r-xr--r--'

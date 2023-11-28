@@ -1,5 +1,7 @@
 from gi.repository import Gtk, Adw, GObject
 
+from py_mod_manager.const import USER, NOTIFY_ACTIVE
+
 @Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/settings.ui')
 class SettingsStack(Adw.Bin):
     __gtype_name__ = 'SettingsStack'
@@ -13,12 +15,12 @@ class SettingsStack(Adw.Bin):
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
         self.__window = window
-        self.symbolic_row.connect("notify::active", self.__switch_change, "symbolic")
-        self.copie_row.connect("notify::active", self.__switch_change, "copy")
-        self.archive_row.connect("notify::active", self.__switch_change, "archive")
+        self.symbolic_row.connect(NOTIFY_ACTIVE, self.__switch_change, "symbolic")
+        self.copie_row.connect(NOTIFY_ACTIVE, self.__switch_change, "copy")
+        self.archive_row.connect(NOTIFY_ACTIVE, self.__switch_change, "archive")
 
     def __switch_change(self, widget, _, data):
-        mode = 0
+        mode = USER
         if data == "symbolic":
             mode = self.__window.cg.get_mode_symb()
         elif data == "copy":
@@ -26,7 +28,7 @@ class SettingsStack(Adw.Bin):
         elif data == "archive":
             mode = self.__window.cg.get_mode_archive()
 
-        if mode == 0:
+        if mode == USER:
             self.__window.cg.set_configuration(data, widget.get_active())
             self.__window.cg.save_plugin()
 

@@ -4,6 +4,8 @@ import xdg.BaseDirectory
 from utils.conf import ApllicationConfiguration
 from utils.plugin_conf import PluginConfig
 
+from py_mod_manager.const import USER, PLUGIN
+
 class CurrentGame(ApllicationConfiguration, PluginConfig):
 
     def __init__(self, current_game):
@@ -29,9 +31,9 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
     @property
     def symbolic(self):
         symbolic = False
-        if self._mode_symb == 0:
+        if self._mode_symb == USER:
             symbolic = self.get_plugin_configuration("symbolic")
-        elif self._mode_symb == 1:
+        elif self._mode_symb == PLUGIN:
             symbolic = self.__current_game.symbolic
         else:
             symbolic = self.get_app_symb()
@@ -40,9 +42,9 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
     @property
     def copy(self):
         copy = False
-        if self._mode_copy == 0:
+        if self._mode_copy == USER:
             copy = self.get_plugin_configuration("copy")
-        elif self._mode_copy == 1:
+        elif self._mode_copy == PLUGIN:
             copy = self.__current_game.copie
         else:
             copy = self.get_app_copy()
@@ -51,9 +53,9 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
     @property
     def archive(self):
         archive = False
-        if self._mode_archive == 0:
+        if self._mode_archive == USER:
             archive = self.get_plugin_configuration("archive")
-        elif self._mode_archive == 1:
+        elif self._mode_archive == PLUGIN:
             archive = self.__current_game.archive
         else:
             archive = self.get_app_archive()

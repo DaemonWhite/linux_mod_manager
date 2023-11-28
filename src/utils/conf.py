@@ -1,5 +1,7 @@
 from gi.repository import Gio
 
+from py_mod_manager.const import USER
+
 class ApllicationConfiguration(object):
     def __init__(self):
         self.__settings = Gio.Settings("fr.daemonwhite.mod_manager")
@@ -7,9 +9,9 @@ class ApllicationConfiguration(object):
         # User = 0
         # Plugin = 1
         # Systeme = 2
-        self._copy_mode = 0
-        self._symb_mode = 0
-        self._archive_mode = 0
+        self._copy_mode = USER
+        self._symb_mode = USER
+        self._archive_mode = USER
 
         self._app_copy = False
         self._app_symb = False

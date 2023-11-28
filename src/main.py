@@ -25,13 +25,14 @@ gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Gio, Adw
 from .window import PyModManagerWindow
+from .const import URI, VERSION, DEVELOPERS
 
 
 class PyModManagerApplication(Adw.Application):
     """The main application singleton class."""
 
     def __init__(self):
-        super().__init__(application_id='fr.daemonwhite.mod_manager',
+        super().__init__(application_id=URI,
                          flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
         self.create_action('quit', lambda *_: self.quit(), ['<primary>q'])
         self.create_action('about', self.on_about_action)
@@ -52,15 +53,11 @@ class PyModManagerApplication(Adw.Application):
         about = Adw.AboutWindow(transient_for=self.props.active_window,
                                 application_name='py_mod_manager',
                                 application_icon='fr.daemonwhite.mod_manager',
-                                developer_name='Unknown',
-                                version='0.1.0',
-                                developers=['DaemonWhite'],
+                                developer_name=DEVELOPERS[0],
+                                version=VERSION,
+                                developers=DEVELOPERS,
                                 copyright='© 2023 Unknown')
         about.present()
-
-    def on_preferences_action(self, widget, _):
-        """Callback for the app.preferences action."""
-        print('app.preferences action activated')
 
     def create_action(self, name, callback, shortcuts=None):
         """Add an application action.

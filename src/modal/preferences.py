@@ -1,6 +1,7 @@
 from gi.repository import Gtk
 from gi.repository import Adw
-from gi.repository import Gio
+
+from py_mod_manager.const import *
 
 @Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/prefference_settings.ui')
 class PreferencesLinuxModManager(Adw.PreferencesWindow):
@@ -39,7 +40,7 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
             plug = Adw.SwitchRow.new()
             data_plugin = self.plugin.get_plugin_by_name(plugin)
             plug.set_title(data_plugin.name_game)
-            plug.set_subtitle(f"V {data_plugin.plugin_verssion} Authors {data_plugin.authors}")
+            plug.set_subtitle(f"V {data_plugin.plugin_version} Authors {data_plugin.authors}")
             plug.set_active(data_plugin.activate)
             self.list_games_plugin.add(plug)
 
@@ -56,11 +57,11 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         self.preference_symbolic.set_selected(mode_symb)
         self.preference_archive.set_selected(mode_archive)
 
-        if not mode_copy == 2:
+        if not mode_copy == GLOBAL:
             self.force_copy.set_sensitive(False)
-        if not mode_symb == 2:
+        if not mode_symb == GLOBAL:
             self.force_symb.set_sensitive(False)
-        if not mode_archive == 2:
+        if not mode_archive == GLOBAL:
             self.force_archive.set_sensitive(False)
 
         self.auto_detect.set_active(self.__win.cg.get_auto_detect_games())

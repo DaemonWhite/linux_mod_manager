@@ -4,6 +4,12 @@ project('py_mod_manager',
   default_options: [ 'warning_level=2', 'werror=false', ],
 )
 
+devel='prod'
+if get_option('devel')
+	devel='devel'
+endif
+
+
 i18n = import('i18n')
 gnome = import('gnome')
 

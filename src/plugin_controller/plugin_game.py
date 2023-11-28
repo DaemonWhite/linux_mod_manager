@@ -1,11 +1,14 @@
+from py_mod_manager.const import VERSION_PLUGIN
+
 class PluginGame(object):
 
-    def __init__(self, name_game, version, plugin_verssion):
+    def __init__(self, name_game, version, plugin_version):
+        self.__plugin_manager_version = VERSION_PLUGIN
         self.__name_game = name_game
         self.__version = version
-        self.__plugin_verssion = plugin_verssion
+        self.__plugin_version = plugin_version
         self._activate = True
-        self._authors = "Uknow"
+        self._authors = "Unknow"
         self._systeme = ["linux"]
         self._symbolic = True
         self._archive = True
@@ -22,8 +25,8 @@ class PluginGame(object):
         return self.__version
 
     @property
-    def plugin_verssion(self):
-        return self.__plugin_verssion
+    def plugin_version(self):
+        return self.__plugin_version
 
     @property
     def activate(self):

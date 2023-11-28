@@ -1,7 +1,7 @@
 {
     "app-id" : "fr.daemonwhite.mod_manager",
     "runtime" : "org.gnome.Platform",
-    "runtime-version" : "master",
+    "runtime-version" : "45",
     "sdk" : "org.gnome.Sdk",
     "command" : "py_mod_manager",
     "finish-args" : [
@@ -23,18 +23,18 @@
         "*.a"
     ],
     "modules" : [
-      "python3-pyxdg.json",
-      {
-        "name": "blueprint-compiler",
-        "buildsystem": "meson",
-        "sources": [
-          {
-            "type": "git",
-            "url": "https://gitlab.gnome.org/jwestman/blueprint-compiler",
-            "tag": "v0.10.0"
-  	  }
-	  ]
-	},
+        "python3-pyxdg.json",
+        {
+            "name" : "blueprint-compiler",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/jwestman/blueprint-compiler",
+                    "tag" : "v0.10.0"
+                }
+            ]
+        },
         {
             "name" : "py_mod_manager",
             "builddir" : true,
@@ -44,7 +44,13 @@
                     "type" : "git",
                     "url" : "file:///home/matheo/Projets/Python"
                 }
+            ],
+            "config-opts" : [
+                "-Ddevel=true"
             ]
         }
-    ]
+    ],
+    "build-options" : {
+        "env" : {        }
+    }
 }

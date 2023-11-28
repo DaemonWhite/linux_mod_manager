@@ -33,6 +33,8 @@ from stack.settings import SettingsStack
 from stack.order import OrderStack
 from stack.mod import ModStack
 
+from py_mod_manager.const import USER, NOTIFY_SELECT_ITEM, BUILD_TYPE
+
 @Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/window.ui')
 class PyModManagerWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'PyModManagerWindow'
@@ -45,6 +47,9 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.app = kwargs.get("application")
 
         self.choose_games = PyModManagerWindowChooseGames(self)
+
+        if BUILD_TYPE == "devel":
+            self.add_css_class(BUILD_TYPE)
 
         self.app.create_action('preferences', self.__show_prefrences)
 
@@ -72,7 +77,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         # Apply list
         self.choose_game.set_model(self._list)
-        self.choose_game.connect("notify::selected-item", self._on_selected_item_notify)
+        self.choose_game.connect(NOTIFY_SELECT_ITEM, self._on_selected_item_notify)
 
         self.page_settings = SettingsStack(self)
         self.page_order = OrderStack(self)
@@ -108,7 +113,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         return self._plugin
 
     def verif_sensitive_settings(self, row, value):
-        if value == 0:
+        if value == USER:
             row.set_sensitive(True)
         else:
             row.set_sensitive(False)
