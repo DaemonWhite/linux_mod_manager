@@ -10,6 +10,7 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
     __gtype_name__ = 'PreferencesLinuxModManager'
 
     list_games_plugin = Gtk.Template.Child()
+    list_auto_detect_games_plugin = Gtk.Template.Child()
 
     force_copy = Gtk.Template.Child()
     force_symb = Gtk.Template.Child()
@@ -38,6 +39,7 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
         self.load_settings()
         self.load_game_plugin()
+        self.load_detect_games_plugin()
 
     def load_settings(self):
         self.force_copy.set_active(self.__win.cg.get_app_copy())
@@ -61,11 +63,28 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
         self.auto_detect.set_active(self.__win.cg.get_auto_detect_games())
 
+    def __add_row():
+        pass
+
+    def load_detect_games_plugin(self):
+        list_plugin = self.__win.plugin.get_list_plugin_detect_game()
+        for name_plugin in list_plugin:
+            plug = Adw.SwitchRow.new()
+            plugin = self.plugin.get_plugin_detect_game_by_name(name_plugin)
+            plug.set_title(plugin.name)
+            plug.set_subtitle(f"V {plugin.plugin_version} Authors {plugin.authors}")
+            # conf_plugin = CurrentGame(plugin)
+            plug.set_active(True)
+            plug.connect(NOTIFY_ACTIVE, self.__active_game_plugin)
+            self.list_auto_detect_games_plugin.add(plug)
+
+
+
     def load_game_plugin(self):
         for name_plugin in self.__win.list_plugin:
             plug = Adw.SwitchRow.new()
             plugin = self.plugin.get_plugin_game_by_name(name_plugin)
-            plug.set_title(plugin.name_game)
+            plug.set_title(plugin.name)
             plug.set_subtitle(f"V {plugin.plugin_version} Authors {plugin.authors}")
             conf_plugin = CurrentGame(plugin)
             plug.set_active(conf_plugin.is_enable())

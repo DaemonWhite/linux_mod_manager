@@ -58,7 +58,7 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
 
     def set_current_game(self, current_game):
         self.__current_game = current_game
-        self._set_path(self.__current_game.name_game, self.__conf_path)
+        self._set_path(self.__current_game.name, self.__conf_path)
         if self._existe:
             self._load_plugin()
             if not self.__current_game.version == self.get_plugin_configuration("version"):

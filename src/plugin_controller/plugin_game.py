@@ -1,40 +1,15 @@
-from py_mod_manager.const import VERSION_PLUGIN
+from plugin_controller.plugin_base import PluginBase
 
-class PluginGame(object):
+class PluginGame(PluginBase):
 
-    def __init__(self, name_game, version, plugin_version):
-        self.__plugin_manager_version = VERSION_PLUGIN
-        self.__name_game = name_game
-        self.__version = version
-        self.__plugin_version = plugin_version
-        self._activate = True
-        self._authors = "Unknow"
+    def __init__(self, name, version, plugin_version):
+        super().__init__(name, version, plugin_version)
         self._systeme = ["linux"]
         self._symbolic = True
         self._archive = True
         self._copie = True
         self._nexus_mod = False
         self._platform = ["Manual"]
-
-    @property
-    def name_game(self):
-        return self.__name_game
-
-    @property
-    def version(self):
-        return self.__version
-
-    @property
-    def plugin_version(self):
-        return self.__plugin_version
-
-    @property
-    def activate(self):
-        return self._activate
-
-    @property
-    def authors(self):
-        return self._authors
 
     @property
     def systeme(self):

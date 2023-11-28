@@ -1,13 +1,9 @@
-from plugin_controller.detect_game import DetectGame
+from plugin_controller.plugin_detect_game import PluginDetectGame
 
-class DetectGames(DetectGame):
+class PluginDetectGames(PluginDetectGame):
 
     def __init__(self,):
-        super.__init__()
+        super().__init__('Steam', 1, 0.1)
 
     def _search_game(self):
         pass
-
-    def search_game(self, game):
-        self.game = game
-        return self._game_detected, self._path

@@ -71,6 +71,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         # Start Plugin
         self._plugin = PluginManager(plugin_path, xdg_conf_path())
         self._plugin.load_games()
+        self._plugin.load_detect_plugin()
         self.cg = CurrentGame(self._plugin.get_first_plugin_game())
 
         # Create list plugin
