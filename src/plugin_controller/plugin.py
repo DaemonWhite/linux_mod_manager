@@ -32,10 +32,20 @@ class PluginManager(object):
         except Exception:
             print(f"Impossible d'accéder au donné {folder}")
 
+
+    def load_detect_plugin():
+        name = 'DetectGames'
+        def plugin_name(module):
+            return module.DetectGames().name_modul
+
+        sys_path = self.verif_folder(self.__folder_path, self.GAME)
+        user_path = self.verif_folder(self.__user_folder_path, self.GAME)
+        self.__load(name, plugin_name, self.__plugin_detect, sys_path)
+        self.__load(name, plugin_name, self.__plugin_detect, user_path)
+
     def load_games(self):
         name = 'PluginGames'
         def plugin_name(module):
-            print(module)
             return module.PluginGames().name_game
 
         sys_path = self.verif_folder(self.__folder_path, self.GAME)
