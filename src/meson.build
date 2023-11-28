@@ -12,6 +12,8 @@ conf_python.set('pkgdatadir', pkgdatadir)
 conf = configuration_data()
 conf.set('VERSION', meson.project_version())
 conf.set('DEVEL', devel)
+conf.set('localedir', get_option('prefix') / get_option('localedir'))
+conf.set('pkgdatadir', pkgdatadir)
 
 
 configure_file(
@@ -41,6 +43,7 @@ py_mod_manager_sources = [
 
 install_subdir('modal', install_dir: pkgdatadir)
 install_subdir('stack', install_dir: pkgdatadir)
+install_subdir('plugins', install_dir: pkgdatadir)
 install_subdir('plugin_controller', install_dir: pkgdatadir)
 install_subdir('utils', install_dir: pkgdatadir)
 install_data(py_mod_manager_sources, install_dir: moduledir)

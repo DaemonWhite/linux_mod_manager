@@ -2,32 +2,59 @@ import importlib
 import os
 
 class PluginManager(object):
+    GAME = "games"
+    DETECT_GAMES = "detect_games"
+    def __init__(self, path, user_path):
+        self.__folder_path = path
+        self.__user_folder_path = os.path.join(user_path, "plugin")
 
-    def __init__(self):
-        self.__plugins = dict()
+        self.__plugins_game = dict()
+        self.__plugin_detect = dict()
 
-    def load(self, folder_path):
-        for file_name in os.listdir(folder_path):
-            if file_name.endswith(".py") and file_name != "__init__.py":
-                plugin_name = os.path.splitext(file_name)[0]
-                spec = importlib.util.spec_from_file_location("PluginGames", f"{folder_path}/{file_name}")
-                module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module)
-                self.__plugins[module.PluginGames().name_game] = module
+    @staticmethod
+    def verif_folder(folder, target):
+        path = os.path.join(folder, target)
+        if not os.path.isdir(path):
+            os.makedirs(path)
+        return path
 
-    def get_first_plugin(self):
+    @staticmethod
+    def __load(list_module, folder):
+        try:
+            for file_name in os.listdir(folder):
+                if file_name.endswith(".py") and file_name != "__init__.py":
+                    plugin_name = os.path.splitext(file_name)[0]
+                    spec = importlib.util.spec_from_file_location("PluginGames", f"{folder}/{file_name}")
+                    module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(module)
+                    list_module[module.PluginGames().name_game] = module
+        except Exception:
+            print(f"Impossible d'accéder au donné {folder}")
+
+
+
+    def load_games(self):
+        sys_path = self.verif_folder(self.__folder_path, self.GAME)
+        user_path = self.verif_folder(self.__user_folder_path, self.GAME)
+        self.__load(self.__plugins_game, sys_path)
+        self.__load(self.__plugins_game, user_path)
+
+    def get_first_plugin_game(self):
         plugin = None
-        for _, plug in self.__plugins.items():
+        for _, plug in self.__plugins_game.items():
             plugin = plug
             break
         return  plugin.PluginGames()
 
-    def get_plugin_by_name(self, name):
-        return self.__plugins[name].PluginGames()
+    def get_plugin_game_by_name(self, name):
+        return self.__plugins_game[name].PluginGames()
 
-    def get_list_plugin(self):
+    def get_list_plugin_detect_game(self):
+        pass
+
+    def get_list_plugin_game(self):
         list_plugin = list()
-        for _, plugin in self.__plugins.items():
+        for _, plugin in self.__plugins_game.items():
             list_plugin.append(plugin.PluginGames().name_game)
 
         return list_plugin

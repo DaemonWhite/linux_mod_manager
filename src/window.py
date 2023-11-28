@@ -17,6 +17,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import os
+
 from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import Gio
@@ -30,13 +32,14 @@ from modal.choose_games import PyModManagerWindowChooseGames
 
 from utils.current_game import CurrentGame
 from utils.plugin_conf import PluginConfig
+from utils.xdg import xdg_conf_path
 
 from stack.settings import SettingsStack
 from stack.order import OrderStack
 from stack.mod import ModStack
 from stack.error import ErrorStack
 
-from py_mod_manager.const import USER, NOTIFY_SELECT_ITEM, BUILD_TYPE, URI
+from py_mod_manager.const import USER, NOTIFY_SELECT_ITEM, BUILD_TYPE, URI, PKGDATADIR
 
 @Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/window.ui')
 class PyModManagerWindow(Adw.ApplicationWindow):
@@ -52,6 +55,8 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         super().__init__(**kwargs)
         self.app = kwargs.get("application")
 
+        plugin_path = os.path.join(PKGDATADIR, 'plugins')
+
         settings = Gio.Settings(URI)
         self.__last_game = settings.get_string('last-game-plugin')
         self.__last_page = settings.get_string('last-page')
@@ -64,16 +69,16 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.app.create_action('preferences', self.__show_prefrences)
 
         # Start Plugin
-        self._plugin = PluginManager()
-        self._plugin.load("/home/matheo/Projets/Python/py_mod_manager/src/plugins")
-        self.cg = CurrentGame(self._plugin.get_first_plugin())
+        self._plugin = PluginManager(plugin_path, xdg_conf_path())
+        self._plugin.load_games()
+        self.cg = CurrentGame(self._plugin.get_first_plugin_game())
 
         # Create list plugin
         self._list = Gio.ListStore.new(Game)
         self._list_plugin_game_load = list()
 
         # Event List plugin
-        self._list_plugin = self._plugin.get_list_plugin()
+        self._list_plugin = self._plugin.get_list_plugin_game()
 
         factory = Gtk.SignalListItemFactory()
         factory.connect("setup", self._on_factory_setup)
@@ -151,7 +156,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self._list_plugin_game_load = list()
         self.__len_enable_support_game = 0
         for plugin in self._list_plugin:
-            conf_plugin = CurrentGame(self._plugin.get_plugin_by_name(plugin))
+            conf_plugin = CurrentGame(self._plugin.get_plugin_game_by_name(plugin))
             if conf_plugin.is_enable():
                 self._list_plugin_game_load.append(plugin)
                 self._list.append(Game(plugin))
@@ -229,7 +234,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             game = dropdown.get_selected_item()
             self.__last_game = game.game_name
             self.cg.set_current_game( \
-                self._plugin.get_plugin_by_name(game.game_name) \
+                self._plugin.get_plugin_game_by_name(game.game_name) \
             )
         self.enable_current_plugin()
 

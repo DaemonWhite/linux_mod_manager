@@ -64,7 +64,7 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
     def load_game_plugin(self):
         for name_plugin in self.__win.list_plugin:
             plug = Adw.SwitchRow.new()
-            plugin = self.plugin.get_plugin_by_name(name_plugin)
+            plugin = self.plugin.get_plugin_game_by_name(name_plugin)
             plug.set_title(plugin.name_game)
             plug.set_subtitle(f"V {plugin.plugin_version} Authors {plugin.authors}")
             conf_plugin = CurrentGame(plugin)
@@ -74,7 +74,7 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
     def __active_game_plugin(self, widget, _):
         name_plugin = widget.get_title()
-        plugin = self.plugin.get_plugin_by_name(name_plugin)
+        plugin = self.plugin.get_plugin_game_by_name(name_plugin)
         conf_plugin = CurrentGame(plugin)
         conf_plugin.enable(widget.get_active())
 

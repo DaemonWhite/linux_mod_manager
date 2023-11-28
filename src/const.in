@@ -14,3 +14,6 @@ DEVELOPERS=['DaemonWhite']
 VERSION='@VERSION@'
 VERSION_PLUGIN="0.1"
 BUILD_TYPE='@DEVEL@'
+
+PKGDATADIR = '@pkgdatadir@'
+LOCALEDIR = '@localedir@'
