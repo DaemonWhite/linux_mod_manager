@@ -1,10 +1,10 @@
 from gi.repository import Gio
 
-from py_mod_manager.const import USER
+from py_mod_manager.const import USER, URI
 
 class ApllicationConfiguration(object):
     def __init__(self):
-        self.__settings = Gio.Settings("fr.daemonwhite.mod_manager")
+        self.__settings = Gio.Settings(URI)
 
         # User = 0
         # Plugin = 1

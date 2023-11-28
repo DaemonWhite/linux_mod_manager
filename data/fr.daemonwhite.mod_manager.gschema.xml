@@ -36,10 +36,15 @@
       <summary>Force la copy</summary>
       <description></description>
     </key>
-	  <key name="game-plugin" type="a{sv}">
-      <default>{}</default>
-      <summary>Paramètres</summary>
-      <description>Un exemple de paramètres avec des valeurs variées.</description>
+	  <key name="last-game-plugin" type="s">
+      <default>""</default>
+      <summary>Last game selected</summary>
+      <description>Le dernier jeux selectionner</description>
+    </key>
+    <key name="last-page" type="s">
+      <default>""</default>
+      <summary>Dernière page selectionner</summary>
+      <description></description>
     </key>
 	</schema>
 </schemalist>

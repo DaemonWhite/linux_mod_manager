@@ -26,8 +26,8 @@ class PluginManager(object):
         return self.__plugins[name].PluginGames()
 
     def get_list_plugin(self):
-        list_plugin = tuple()
+        list_plugin = list()
         for _, plugin in self.__plugins.items():
-            list_plugin += tuple([plugin.PluginGames().name_game])
+            list_plugin.append(plugin.PluginGames().name_game)
 
         return list_plugin

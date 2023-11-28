@@ -112,4 +112,5 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         self.save_settings()
         self.__win.unload_support_game()
         self.__win.load_support_game()
-        self.__win.enable_current_plugin()
+        if self.__win.verif_load_game():
+            self.__win.enable_current_plugin()
