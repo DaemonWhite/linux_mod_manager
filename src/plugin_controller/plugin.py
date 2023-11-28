@@ -19,25 +19,29 @@ class PluginManager(object):
         return path
 
     @staticmethod
-    def __load(list_module, folder):
+    def __load(name, detect_plugin_name, list_module, folder):
         try:
             for file_name in os.listdir(folder):
                 if file_name.endswith(".py") and file_name != "__init__.py":
                     plugin_name = os.path.splitext(file_name)[0]
-                    spec = importlib.util.spec_from_file_location("PluginGames", f"{folder}/{file_name}")
+                    spec = importlib.util.spec_from_file_location(name, f"{folder}/{file_name}")
                     module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(module)
-                    list_module[module.PluginGames().name_game] = module
+                    print(module)
+                    list_module[detect_plugin_name(module)] = module
         except Exception:
             print(f"Impossible d'accéder au donné {folder}")
 
-
-
     def load_games(self):
+        name = 'PluginGames'
+        def plugin_name(module):
+            print(module)
+            return module.PluginGames().name_game
+
         sys_path = self.verif_folder(self.__folder_path, self.GAME)
         user_path = self.verif_folder(self.__user_folder_path, self.GAME)
-        self.__load(self.__plugins_game, sys_path)
-        self.__load(self.__plugins_game, user_path)
+        self.__load(name, plugin_name, self.__plugins_game, sys_path)
+        self.__load(name, plugin_name, self.__plugins_game, user_path)
 
     def get_first_plugin_game(self):
         plugin = None
