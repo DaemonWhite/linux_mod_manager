@@ -50,6 +50,7 @@ class PluginDetectGames(PluginDetectGame):
                         self._game_name = d['AppState']['name']
                         self.detect_prefix(d['AppState']['appid'])
                         self._install_dir = d['AppState']['installdir']
+                        print(self._install_dir)
 
     def _search_game(self):
         self.detect_path(os.path.join(self.flatpak_base_path, self._flatpak_path))

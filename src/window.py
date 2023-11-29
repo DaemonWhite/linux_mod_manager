@@ -29,6 +29,7 @@ from plugin_controller.factory import Game
 
 from modal.preferences import PreferencesLinuxModManager
 from modal.choose_games import PyModManagerWindowChooseGames
+from modal.load import PyModManagerWindowModalLoad
 
 from utils.current_game import CurrentGame
 from utils.plugin_conf import PluginConfig
@@ -74,9 +75,12 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self._plugin.load_detect_plugin()
         self.cg = CurrentGame(self._plugin.get_first_plugin_game())
 
-        # Create list plugin
+        # Create list plugin game
         self._list = Gio.ListStore.new(Game)
         self._list_plugin_game_load = list()
+
+        # Create list plugin auto_detect_game
+        self._list_auto_detect = self._plugin.get_list_plugin_detect_game()
 
         # Event List plugin
         self._list_plugin = self._plugin.get_list_plugin_game()
@@ -127,8 +131,24 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         if self.verif_load_game():
             self.enable_current_plugin()
-        # self.show()
+        self.show()
+        self.__load_modal = PyModManagerWindowModalLoad(self)
         # self.choose_games.show()
+
+    def on_start(self):
+        # TODO Ajouter le faite que la machine et bien configurer
+        if not self.cg.plugin_conf:
+            self.auto_detect_game()
+
+    def auto_detect_game(self):
+        self.__load_modal.set_name_load(self.cg.name, "Veullier patienter pendant que le système cherche votre jeux" )
+        self.__load_modal.present()
+        result, path, prefix = self.cg.auto_detect_path_game(self.plugin, self._list_auto_detect)
+        if result:
+            self.__load_modal.set_name_result(result, self.cg.name, "A bien étais trouver")
+        else:
+            self.__load_modal.set_name_result(result, self.cg.name, "N'a pas étais trouver")
+        print(result, prefix, path)
 
     def __change_page(self, widget, _):
          self.__last_page = widget.get_visible_child_name()

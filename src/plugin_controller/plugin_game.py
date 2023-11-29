@@ -2,14 +2,24 @@ from plugin_controller.plugin_base import PluginBase
 
 class PluginGame(PluginBase):
 
-    def __init__(self, name, version, plugin_version):
-        super().__init__(name, version, plugin_version)
+    def __init__(self, short_name, true_name, version, plugin_version):
+        super().__init__(short_name, version, plugin_version)
+        self._list_name = [short_name, true_name]
+        self._true_name = true_name
         self._systeme = ["linux"]
         self._symbolic = True
         self._archive = True
         self._copie = True
         self._nexus_mod = False
         self._platform = ["Manual"]
+
+    @property
+    def true_name(self):
+        return self._true_name
+
+    @property
+    def list_name(self):
+        return self._list_name
 
     @property
     def systeme(self):

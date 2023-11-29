@@ -8,6 +8,7 @@ class PluginConfig(object):
 
         self.__plugin = {
             "enable": True,
+            "plugin_conf": False,
             "version" : 0.0,
             "copy" : False,
             "archive" : True,

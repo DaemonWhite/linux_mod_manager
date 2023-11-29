@@ -1,0 +1,56 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PyModManagerWindowModalLoad : $AdwWindow {
+	modal: true;
+	default-height: 450;
+	default-width: 450;
+
+	Gtk.Box {
+		orientation: vertical;
+		vexpand: true;
+		hexpand: true;
+		Gtk.Box {
+			vexpand: true;
+			hexpand: true;
+			Gtk.Stack load_stack {
+				transition-type: crossfade;
+				Gtk.StackPage  {
+					name: 'load_status_page';
+					child:
+					Adw.StatusPage load_status {
+						vexpand: true;
+						hexpand: true;
+						title: "Recherche de jeux en cours";
+						description: "Configure le jeux avec y plugin";
+						icon-name: 'input-gaming-symbolic';
+						Gtk.Spinner search_spiner {
+								vexpand: true;
+								hexpand: true;
+								valign: center;
+								width-request: 100;
+								height-request: 100;
+								styles ["flat", "title-1"]
+				    }
+					};
+				}
+				Gtk.StackPage {
+					name: 'result_status_page';
+					child:
+					Adw.StatusPage result_status {
+						vexpand: true;
+						hexpand: true;
+						title: "Recherche de jeux en cours";
+						description: "Configure le jeux avec y plugin";
+						icon-name: 'input-gaming-symbolic';
+						Gtk.Button close_button {
+							label: "Fermer";
+							valign: center;
+							styles ["suggested-action", "Pill", "title-2"]
+						}
+					};
+				}
+			}
+		}
+	}
+}

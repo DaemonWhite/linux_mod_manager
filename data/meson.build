@@ -34,6 +34,7 @@ blueprints = custom_target('blueprints',
   input: files(
     'ui/window.blp',
     'ui/modal_choose_games.blp',
+    'ui/modal_load.blp',
     'ui/settings.blp',
     'ui/prefference_settings.blp',
     'ui/order.blp',

@@ -17,6 +17,13 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
 
         self.set_current_game(current_game)
 
+    @property
+    def name(self):
+        return self.__current_game.true_name
+
+    @property
+    def plugin_conf(self):
+        return self.get_plugin_configuration("plugin_conf")
 
 
     @property
@@ -69,6 +76,28 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
             self.set_configuration("archive", self.__current_game.archive)
             self.set_configuration("symbolic", self.__current_game.archive)
             self.save_plugin()
+
+    def auto_detect_path_game(self, plugin, list_name_plugin):
+        result = False
+        prefix = ""
+        install_dir = ""
+        print("Auto detection", self._path)
+        if self.get_plugin_configuration("path") == "":
+            for game_name in self.__current_game.list_name:
+                for plug in list_name_plugin:
+                    plug = plugin.get_plugin_detect_game_by_name(plug)
+                    print(plug, game_name)
+                    game = plug.search_game(game_name)
+                    install_dir = game.install_dir
+                    if not install_dir == "":
+                        prefix = game.prefix
+                        result = True
+                        break
+
+        return result, prefix, install_dir
+
+
+
 
     def set_copy(self):
         self._default_force

@@ -47,6 +47,7 @@ class PyModManagerApplication(Adw.Application):
         if not win:
             win = PyModManagerWindow(application=self)
         win.present()
+        win.on_start()
 
     def on_about_action(self, widget, _):
         """Callback for the app.about action."""
