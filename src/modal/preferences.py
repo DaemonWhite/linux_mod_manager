@@ -71,6 +71,7 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         for name_plugin in list_plugin:
             plug = Adw.SwitchRow.new()
             plugin = self.plugin.get_plugin_detect_game_by_name(name_plugin)
+            print(plugin.search_game("The Elder Scrolls IV Oblivion").name)
             plug.set_title(plugin.name)
             plug.set_subtitle(f"V {plugin.plugin_version} Authors {plugin.authors}")
             # conf_plugin = CurrentGame(plugin)

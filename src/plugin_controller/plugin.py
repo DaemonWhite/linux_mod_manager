@@ -28,8 +28,8 @@ class PluginManager(object):
                     module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(module)
                     list_module[detect_plugin_name(module)] = module
-        except Exception:
-            print(f"Impossible d'accéder au donné {folder}")
+        except Exception as e:
+            print(f"Impossible d'accéder au donné {folder} \n\n {e}")
 
 
     def load_detect_plugin(self):
