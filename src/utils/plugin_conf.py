@@ -1,21 +1,22 @@
 import os
 import json
 
+from utils.xdg import xdg_conf_path
+
 class PluginConfig(object):
 
-    def __init__(self):
+    def __init__(self, plugin):
         self.__existe = False
+
+        self.__base_path = ['plugin_conf', plugin.type_plugin]
 
         self.__plugin = {
             "enable": True,
             "plugin_conf": False,
-            "version" : 0.0,
-            "copy" : False,
-            "archive" : True,
-            "symbolic" : True,
-            "path" : "",
-            "prefix" : "",
         }
+        for name, data in plugin.get_plugin_conf().items():
+            self.__plugin[name] = data
+        print(self.__plugin)
 
 
     @property
@@ -26,9 +27,15 @@ class PluginConfig(object):
     def _path(self):
         return self.__path
 
-    def _set_path(self, name, path):
+    def _set_path(self, name, base_path):
         self.__existe = False
-        self.__path =  os.path.join(path, f"{name}.json")
+
+        for path in self.__base_path:
+            base_path = os.path.join(base_path, path)
+            if not os.path.isdir(base_path):
+                os.makedirs(base_path)
+
+        self.__path =  os.path.join(base_path, f"{name}.json")
         if os.path.isfile(self.__path):
             self.__existe = True
 

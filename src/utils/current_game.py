@@ -13,7 +13,7 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
 
         self.__conf_path = xdg_conf_path()
 
-        PluginConfig.__init__(self)
+        PluginConfig.__init__(self, current_game)
 
         self.set_current_game(current_game)
 
@@ -50,7 +50,7 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
         if self._mode_copy == USER:
             copy = self.get_plugin_configuration("copy")
         elif self._mode_copy == PLUGIN:
-            copy = self.__current_game.copie
+            copy = self.__current_game.copy
         else:
             copy = self.get_app_copy()
         return copy
@@ -92,10 +92,10 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
         if self._existe:
             self._load_plugin()
             if not self.__current_game.version == self.get_plugin_configuration("version"):
-                print("ne correspond pas")
+                print(f"ne correspond pas {self.__current_game.name}")
         else:
             self.set_configuration("version", self.__current_game.version)
-            self.set_configuration("copy", self.__current_game.copie)
+            self.set_configuration("copy", self.__current_game.copy)
             self.set_configuration("archive", self.__current_game.archive)
             self.set_configuration("symbolic", self.__current_game.archive)
             self.save_plugin()

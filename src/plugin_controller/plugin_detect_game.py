@@ -13,7 +13,7 @@ class GameData(object):
 class PluginDetectGame(PluginBase):
 
     def __init__(self, name, version, plugin_version):
-        super().__init__(name, version, plugin_version)
+        super().__init__(name, version, plugin_version, 'detect_games')
         self.__base_path = Path.home()
         self.__flatpak_base_path = f"{Path.home()}/.var/app"
         self._flatpak_path = ""

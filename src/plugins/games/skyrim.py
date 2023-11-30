@@ -5,3 +5,4 @@ class PluginGames(PluginGame):
         super().__init__("Skyrim", "The Elder Scrolls V: Skyrim", 1, 0.1)
         self._nexus_mod = True
         self._systeme = "win"
+        self.symbolic = False
