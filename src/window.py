@@ -19,6 +19,7 @@
 
 import os
 import threading
+import time
 
 from gi.repository import Adw
 from gi.repository import Gtk
@@ -149,15 +150,16 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             self.cg.plugin_conf = True
             self.cg.path_game = path
             self.cg.path_prefix = prefix
+            self.enable_current_plugin()
         else:
-           load_modal.set_name_result(result, self.cg.name, "N'a pas étais trouver")
+            load_modal.set_name_result(result, self.cg.name, "N'a pas étais trouver")
 
     def auto_detect_game(self):
         load_modal = PyModManagerWindowModalLoad(self)
         load_modal.set_name_load(self.cg.name, "Veullier patienter pendant que le système cherche votre jeux" )
         load_modal.show()
-        thread_cam = threading.Thread(target=self.__end_auto_detect_game, args=(load_modal,))
-        thread_cam.start()
+        thread_detect_game = threading.Thread(target=self.__end_auto_detect_game, args=(load_modal,))
+        thread_detect_game.start()
 
     def __change_page(self, widget, _):
          self.__last_page = widget.get_visible_child_name()
