@@ -61,6 +61,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         settings = Gio.Settings(URI)
         self.__last_game = settings.get_string('last-game-plugin')
         self.__last_page = settings.get_string('last-page')
+        self.__auto_detect_games = settings.get_boolean('auto-detect-games')
 
         self.choose_games = PyModManagerWindowChooseGames(self)
 
@@ -136,8 +137,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         # self.choose_games.show()
 
     def on_start(self):
-        # TODO Ajouter le faite que la machine et bien configurer
-        if not self.cg.plugin_conf:
+        if not self.cg.plugin_conf and self.__auto_detect_games:
             self.auto_detect_game()
 
     def auto_detect_game(self):
