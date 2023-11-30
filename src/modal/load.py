@@ -19,13 +19,18 @@ class PyModManagerWindowModalLoad(Adw.Window):
         self.set_transient_for(self.__window)
         self.search_spiner.start()
 
+        self.accept_close = False
+
         self.close_button.connect("clicked", self.on_close)
 
     def do_close_request(self, *_args) -> bool:
+        if self.accept_close:
+            return False
         return True
 
     def on_close(self, _):
-        self.destroy()
+        self.accept_close = True
+        self.close()
 
     def set_name_load(self, name, description):
         title = f'Rechercher de : {name}'

@@ -18,6 +18,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
+import threading
 
 from gi.repository import Adw
 from gi.repository import Gtk
@@ -57,6 +58,8 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.app = kwargs.get("application")
 
         plugin_path = os.path.join(PKGDATADIR, 'plugins')
+
+        self.__started = False
 
         settings = Gio.Settings(URI)
         self.__last_game = settings.get_string('last-game-plugin')
@@ -131,25 +134,30 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.select_game(self.search_game_plugin(self.__last_game))
 
         self.show()
-        self.__load_modal = PyModManagerWindowModalLoad(self)
         # self.choose_games.show()
 
     def on_start(self):
         if self.verif_load_game():
             self.enable_current_plugin()
 
-    def auto_detect_game(self):
-        self.__load_modal.set_name_load(self.cg.name, "Veullier patienter pendant que le système cherche votre jeux" )
-        self.__load_modal.present()
+        self.__started = True
+
+    def __end_auto_detect_game(self, load_modal):
         result, prefix, path = self.cg.auto_detect_path_game(self.plugin, self._list_auto_detect)
         if result:
-            self.__load_modal.set_name_result(result, self.cg.name, "A bien étais trouver")
+            load_modal.set_name_result(result, self.cg.name, "A bien étais trouver")
             self.cg.plugin_conf = True
             self.cg.path_game = path
             self.cg.path_prefix = prefix
         else:
-            self.__load_modal.set_name_result(result, self.cg.name, "N'a pas étais trouver")
-        print(result, prefix, path)
+           load_modal.set_name_result(result, self.cg.name, "N'a pas étais trouver")
+
+    def auto_detect_game(self):
+        load_modal = PyModManagerWindowModalLoad(self)
+        load_modal.set_name_load(self.cg.name, "Veullier patienter pendant que le système cherche votre jeux" )
+        load_modal.show()
+        thread_cam = threading.Thread(target=self.__end_auto_detect_game, args=(load_modal,))
+        thread_cam.start()
 
     def __change_page(self, widget, _):
          self.__last_page = widget.get_visible_child_name()
@@ -264,7 +272,8 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             self.cg.set_current_game( \
                 self._plugin.get_plugin_game_by_name(game.game_name) \
             )
-        self.enable_current_plugin()
+        if self.__started:
+            self.enable_current_plugin()
 
     def on_destroy(self, _):
         if not self.__len_enable_support_game == 0:
