@@ -30,7 +30,18 @@ template $SettingsStack : $AdwBin {
 				}
 				Adw.ActionRow path_row {
 					title: "Indiquer le chemin du jeux";
-					subtitle: "Chemin du prefix";
+					subtitle: "Chemin du jeux";
+					activatable-widget: game_folder;
+					Gtk.Box {
+						Gtk.Button game_folder {
+							valign: center;
+							label: "Open";
+							icon-name: "document-open-symbolic";
+							styles [
+            		"flat",
+          		]
+						}
+					}
 				}
 				Adw.SwitchRow archive_row {
 					title: "Archiver le jeux";

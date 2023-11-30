@@ -25,10 +25,13 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
     def plugin_conf(self):
         return self.get_plugin_configuration("plugin_conf")
 
-    @plugin_conf.setter
-    def plugin_conf(self, value: bool):
-        self.set_configuration("plugin_conf", value)
-        self.save_plugin()
+    @property
+    def path_game(self):
+        return self.get_plugin_configuration("path")
+
+    @property
+    def path_prefix(self):
+        return self.get_plugin_configuration("prefix")
 
     @property
     def symbolic(self):
@@ -66,6 +69,22 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
     @property
     def systeme(self):
         return self.__current_game.systeme
+
+    @path_game.setter
+    def path_game(self, value: str):
+        self.set_configuration("path", value)
+        self.save_plugin()
+
+    @path_prefix.setter
+    def path_prefix(self, value: str):
+        self.set_configuration("prefix", value)
+        print(value)
+        self.save_plugin()
+
+    @plugin_conf.setter
+    def plugin_conf(self, value: bool):
+        self.set_configuration("plugin_conf", value)
+        self.save_plugin()
 
     def set_current_game(self, current_game):
         self.__current_game = current_game

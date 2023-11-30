@@ -130,23 +130,23 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         self.select_game(self.search_game_plugin(self.__last_game))
 
-        if self.verif_load_game():
-            self.enable_current_plugin()
         self.show()
         self.__load_modal = PyModManagerWindowModalLoad(self)
         # self.choose_games.show()
 
     def on_start(self):
-        if not self.cg.plugin_conf and self.__auto_detect_games:
-            self.auto_detect_game()
+        if self.verif_load_game():
+            self.enable_current_plugin()
 
     def auto_detect_game(self):
         self.__load_modal.set_name_load(self.cg.name, "Veullier patienter pendant que le système cherche votre jeux" )
         self.__load_modal.present()
-        result, path, prefix = self.cg.auto_detect_path_game(self.plugin, self._list_auto_detect)
+        result, prefix, path = self.cg.auto_detect_path_game(self.plugin, self._list_auto_detect)
         if result:
             self.__load_modal.set_name_result(result, self.cg.name, "A bien étais trouver")
             self.cg.plugin_conf = True
+            self.cg.path_game = path
+            self.cg.path_prefix = prefix
         else:
             self.__load_modal.set_name_result(result, self.cg.name, "N'a pas étais trouver")
         print(result, prefix, path)
@@ -214,6 +214,9 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             row.set_sensitive(False)
 
     def enable_current_plugin(self):
+        if not self.cg.plugin_conf and self.__auto_detect_games:
+            self.auto_detect_game()
+
         self.verif_sensitive_settings( \
             self.page_settings.symbolic_row, \
             self.cg.get_mode_symb() \
@@ -232,6 +235,9 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.page_settings.set_symbolic_row(self.cg.symbolic)
         self.page_settings.set_copie_row(self.cg.copy)
         self.page_settings.set_archive_row(self.cg.archive)
+
+        self.page_settings.set_path_row(self.cg.path_game)
+        self.page_settings.set_prefix_row(self.cg.path_prefix)
 
         if self.cg.systeme == "win":
             self.page_settings.enable_windows(True)
