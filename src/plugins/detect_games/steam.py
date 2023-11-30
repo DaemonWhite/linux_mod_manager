@@ -25,14 +25,14 @@ class PluginDetectGames(PluginDetectGame):
                 for index in range(nb_path):
                     self.__detect_game_path.append(d['libraryfolders'][f'{index}']['path'])
 
-    def detect_prefix(self, appid):
+    def detect_folder(self, path_to_find, data_path):
         for i in range(len(self.__detect_game_path)):
             try:
                 path = os.path.join(self.__detect_game_path[i], self.STEAMAPPS )
-                path = os.path.join(path, "compatdata")
+                path = os.path.join(path, data_path)
                 for file_name in os.listdir(path):
-                    if file_name == appid:
-                        self._prefix = os.path.join(path, appid)
+                    if file_name == path_to_find:
+                        return os.path.join(path, path_to_find)
             except Exception as e:
                 print(f"Chemin non trouver {e}")
 
@@ -47,10 +47,9 @@ class PluginDetectGames(PluginDetectGame):
                     d = vdf.load(open(os.path.join(path, file_name)))
                     name = d['AppState']['name']
                     if name == self._game:
-                        self._game_name = d['AppState']['name']
-                        self.detect_prefix(d['AppState']['appid'])
-                        self._install_dir = d['AppState']['installdir']
-                        print(self._install_dir)
+                        self._game_name = name
+                        self._prefix = self.detect_folder(d['AppState']['appid'], 'compatdata')
+                        self._install_dir =  self.detect_folder(d['AppState']['installdir'], 'common')
 
     def _search_game(self):
         self.detect_path(os.path.join(self.flatpak_base_path, self._flatpak_path))
