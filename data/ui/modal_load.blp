@@ -38,15 +38,14 @@ template $PyModManagerWindowModalLoad : $AdwWindow {
 					name: 'result_status_page';
 					child:
 					Adw.StatusPage result_status {
-						vexpand: true;
-						hexpand: true;
 						title: "Recherche de jeux en cours";
 						description: "Configure le jeux avec y plugin";
 						icon-name: 'input-gaming-symbolic';
+
 						Gtk.Button close_button {
 							label: "Fermer";
-							valign: center;
-							styles ["suggested-action", "Pill", "title-2"]
+							halign: center;
+							styles ["suggested-action", "pill", "title-2"]
 						}
 					};
 				}

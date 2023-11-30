@@ -146,6 +146,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         result, path, prefix = self.cg.auto_detect_path_game(self.plugin, self._list_auto_detect)
         if result:
             self.__load_modal.set_name_result(result, self.cg.name, "A bien étais trouver")
+            self.cg.plugin_conf = True
         else:
             self.__load_modal.set_name_result(result, self.cg.name, "N'a pas étais trouver")
         print(result, prefix, path)

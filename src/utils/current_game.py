@@ -25,6 +25,10 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
     def plugin_conf(self):
         return self.get_plugin_configuration("plugin_conf")
 
+    @plugin_conf.setter
+    def plugin_conf(self, value: bool):
+        self.set_configuration("plugin_conf", value)
+        self.save_plugin()
 
     @property
     def symbolic(self):
