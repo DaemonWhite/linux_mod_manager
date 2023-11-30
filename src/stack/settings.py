@@ -71,4 +71,4 @@ class SettingsStack(Adw.Bin):
 
     def set_prefix_row(self, path: str):
         subtitle = f'Chemin du prefix : {path}'
-        self.prefix_row.set_subtitle(path)
+        self.prefix_row.set_subtitle(subtitle)
