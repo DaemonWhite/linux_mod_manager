@@ -78,7 +78,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self._plugin = PluginManager(plugin_path, xdg_conf_path())
         self._plugin.load_games()
         self._plugin.load_detect_plugin()
-        self.cg = CurrentGame(self._plugin.get_first_plugin_game())
+        self.cg = CurrentGame(PluginGame("None", "None", 0.1, 0.1), False)
 
         # Create list plugin game
         self._list = Gio.ListStore.new(Game)
@@ -132,12 +132,10 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.main_stack.set_visible_child_name(self.__last_page)
         self.main_stack.connect("notify::visible-child", self.__change_page)
 
-        self.select_game(self.search_game_plugin(self.__last_game))
-
-        self.show()
         # self.choose_games.show()
 
     def on_start(self):
+        self.select_game(self.search_game_plugin(self.__last_game))
         if self.verif_load_game():
             self.enable_current_plugin()
 
@@ -194,7 +192,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
                 self._list.append(Game(plugin))
                 self.__len_enable_support_game += 1
 
-    def search_game_plugin(self, name):
+    def search_game_plugin(self, name: str) -> int:
         index = -1
         i=0
         for plugin_name in self._list_plugin_game_load:
@@ -205,9 +203,12 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         return index
 
 
-    def select_game(self, index):
+    def select_game(self, index: int):
         if index > -1:
             self.choose_game.set_selected(index)
+            self.cg = CurrentGame(self._plugin.get_plugin_game_by_name(self._list_plugin_game_load[index]))
+        else:
+            self.cg = CurrentGame(self._plugin.get_first_plugin_game())
 
     @property
     def list_plugin(self):

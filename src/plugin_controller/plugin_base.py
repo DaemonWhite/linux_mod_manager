@@ -66,7 +66,6 @@ class PluginBase(object):
 
         for name_conf, _ in self.__plugin_conf.items():
             if name_conf == name:
-                print(name_conf, value)
                 if type(self.__plugin_conf[name]) == type(value):
                     valide = True
                     self.__plugin_conf[name] = value

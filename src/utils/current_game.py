@@ -8,14 +8,16 @@ from py_mod_manager.const import USER, PLUGIN
 
 class CurrentGame(ApllicationConfiguration, PluginConfig):
 
-    def __init__(self, current_game):
+    def __init__(self, current_game, auto_genrated=True):
         ApllicationConfiguration.__init__(self)
 
         self.__conf_path = xdg_conf_path()
 
         PluginConfig.__init__(self, current_game)
-
-        self.set_current_game(current_game)
+        if auto_genrated:
+            self.set_current_game(current_game)
+        else:
+            self.__current_game = current_game
 
     @property
     def name(self):
