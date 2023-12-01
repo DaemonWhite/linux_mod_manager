@@ -42,7 +42,7 @@
       <description>Le dernier jeux selectionner</description>
     </key>
     <key name="last-page" type="s">
-      <default>""</default>
+      <default>"page_mod"</default>
       <summary>Dernière page selectionner</summary>
       <description></description>
     </key>
