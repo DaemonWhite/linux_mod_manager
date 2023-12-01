@@ -208,7 +208,9 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             self.choose_game.set_selected(index)
             self.cg = CurrentGame(self._plugin.get_plugin_game_by_name(self._list_plugin_game_load[index]))
         else:
-            self.cg = CurrentGame(self._plugin.get_first_plugin_game())
+            game = self.choose_game.get_selected_item()
+            if game:
+                self.cg = CurrentGame(self._plugin.get_plugin_game_by_name(game.game_name))
 
     @property
     def list_plugin(self):
