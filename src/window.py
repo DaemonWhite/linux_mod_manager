@@ -160,7 +160,9 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         thread_detect_game.start()
 
     def __change_page(self, widget, _):
-         self.__last_page = widget.get_visible_child_name()
+        PAGE = widget.get_visible_child_name()
+        if PAGE == "page_order" or PAGE == "page_mod" or PAGE == "page_settings":
+            self.__last_page = widget.get_visible_child_name()
 
     def verif_load_game(self):
         if self.__len_enable_support_game == 0:
@@ -174,6 +176,15 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             self.view_switcher_title.set_visible(True)
             self.main_stack.set_visible_child_name(self.__last_page)
             return True
+
+    def reload(self):
+        self.__started = False
+        self.unload_support_game()
+        self.load_support_game()
+        self.select_game(self.search_game_plugin(self.__last_game))
+        if self.verif_load_game():
+            self.enable_current_plugin()
+        self.__started = True
 
 
     def unload_support_game(self):
