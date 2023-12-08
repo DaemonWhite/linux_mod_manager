@@ -73,6 +73,7 @@ class SwitchInfoRow(Adw.PreferencesRow):
     def set_active(self, active):
         self.active_switch.set_active(active)
 
-    def create_tag(self, name , color):
-        pass
-
+    def create_tag(self, name: str, color):
+        #TODO Activer l'ajout de tag avec couleur
+        label = Gtk.Label()
+        label.set_label(name)

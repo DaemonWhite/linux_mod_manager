@@ -3,6 +3,8 @@ import json
 
 from utils.xdg import xdg_conf_path
 
+#TODO Re-protéger set_path
+
 class PluginConfig(object):
 
     def __init__(self, plugin):
@@ -17,16 +19,18 @@ class PluginConfig(object):
         for name, data in plugin.get_plugin_conf().items():
             self.__plugin[name] = data
 
+    def is_enable(self):
+        return bool(self.__plugin["enable"])
 
     @property
-    def _existe(self):
+    def existe(self):
         return self.__existe
 
     @property
-    def _path(self):
+    def path_plugin(self):
         return self.__path
 
-    def _set_path(self, name, base_path):
+    def set_path_plugin(self, name, base_path):
         self.__existe = False
 
         for path in self.__base_path:
@@ -51,7 +55,7 @@ class PluginConfig(object):
     def set_configuration(self, name,  data):
         self.__plugin[name] = data
 
-    def _load_plugin(self):
+    def load_plugin(self):
         with open(self.__path, "r") as json_file:
             self.__plugin = json.load(json_file)
 

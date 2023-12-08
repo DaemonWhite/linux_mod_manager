@@ -4,6 +4,8 @@ from gi.repository import Adw
 from py_mod_manager.const import *
 
 from utils.current_game import CurrentGame
+from utils.plugin_conf import PluginConfig
+from utils.xdg import xdg_conf_path
 
 from custom_widget.switch_info_row import SwitchInfoRow
 
@@ -40,6 +42,8 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         self.preference_symbolic.connect('notify::selected', self.on_change)
         self.preference_archive.connect('notify::selected', self.on_change)
 
+        self.__plugin_path = xdg_conf_path()
+
         self.load_settings()
         self.load_game_plugin()
         self.load_detect_games_plugin()
@@ -66,29 +70,32 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
         self.auto_detect.set_active(self.__win.cg.get_auto_detect_games())
 
-    def __add_row(self, ):
-        pass
+    def __create_base_row_plugin(self, plugin):
+        plug = SwitchInfoRow()
+        plug.set_title(plugin.name)
+        plug.set_subtitle(f"V {plugin.plugin_version} Authors {plugin.authors}")
+        return plug
 
     def load_detect_games_plugin(self):
         list_plugin = self.__win.plugin.get_list_plugin_detect_game()
         for name_plugin in list_plugin:
-            plug = SwitchInfoRow()
             plugin = self.plugin.get_plugin_detect_game_by_name(name_plugin)
-            plug.set_title(plugin.name)
-            plug.set_subtitle(f"V {plugin.plugin_version} Authors {plugin.authors}")
-            # conf_plugin = CurrentGame(plugin)
-            plug.set_active(True)
-            plug.connect(NOTIFY_ACTIVE, self.__active_game_plugin)
+            conf_plugin = PluginConfig(plugin)
+            conf_plugin.set_path_plugin(plugin.name, self.__plugin_path)
+            if not conf_plugin.existe:
+                conf_plugin.save_plugin()
+
+            conf_plugin.load_plugin()
+            plug = self.__create_base_row_plugin(plugin)
+            plug.connect(NOTIFY_ACTIVE, self.__active_detect_game_plugin)
+            plug.set_active(conf_plugin.is_enable())
             self.list_auto_detect_games_plugin.add(plug)
-
-
 
     def load_game_plugin(self):
         for name_plugin in self.__win.list_plugin:
             plug = SwitchInfoRow()
             plugin = self.plugin.get_plugin_game_by_name(name_plugin)
-            plug.set_title(plugin.name)
-            plug.set_subtitle(f"V {plugin.plugin_version} Authors {plugin.authors}")
+            plug = self.__create_base_row_plugin(plugin)
             conf_plugin = CurrentGame(plugin)
             plug.set_active(conf_plugin.is_enable())
             plug.connect(NOTIFY_ACTIVE, self.__active_game_plugin)
@@ -98,6 +105,16 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         name_plugin = widget.get_title()
         plugin = self.plugin.get_plugin_game_by_name(name_plugin)
         conf_plugin = CurrentGame(plugin)
+        conf_plugin.enable(widget.get_active())
+
+    def __active_detect_game_plugin(self, widget, _):
+        name_plugin = widget.get_title()
+        plugin = self.plugin.get_plugin_detect_game_by_name(name_plugin)
+        conf_plugin = PluginConfig(plugin)
+        conf_plugin.set_path_plugin(plugin.name, self.__plugin_path)
+        if not conf_plugin.existe:
+            conf_plugin.save_plugin()
+        conf_plugin.load_plugin()
         conf_plugin.enable(widget.get_active())
 
     def __verified_change(self, row, value):

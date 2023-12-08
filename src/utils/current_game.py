@@ -90,9 +90,9 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
 
     def set_current_game(self, current_game):
         self.__current_game = current_game
-        self._set_path(self.__current_game.name, self.__conf_path)
-        if self._existe:
-            self._load_plugin()
+        self.set_path_plugin(self.__current_game.name, self.__conf_path)
+        if self.existe:
+            self.load_plugin()
             if not self.__current_game.version == self.get_plugin_configuration("version"):
                 print(f"ne correspond pas {self.__current_game.name}")
         else:
@@ -106,7 +106,7 @@ class CurrentGame(ApllicationConfiguration, PluginConfig):
         result = False
         prefix = ""
         install_dir = ""
-        print("Auto detection", self._path)
+        print("Auto detection", self.path_plugin)
         if self.get_plugin_configuration("path") == "":
             for game_name in self.__current_game.list_name:
                 for plug in list_name_plugin:
