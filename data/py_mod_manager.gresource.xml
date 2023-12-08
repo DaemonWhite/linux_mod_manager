@@ -9,6 +9,7 @@
     <file preprocess="xml-stripblanks">ui/order.ui</file>
     <file preprocess="xml-stripblanks">ui/mod.ui</file>
     <file preprocess="xml-stripblanks">ui/error.ui</file>
+    <file preprocess="xml-stripblanks">ui/widget_switch_info_row.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
   </gresource>
 </gresources>

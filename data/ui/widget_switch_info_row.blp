@@ -1,0 +1,39 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $SwitchInfoRow : Adw.PreferencesRow {
+  action-name: "row.activated";
+	Gtk.Box contents {
+		orientation: horizontal;
+		Gtk.Box labels_box {
+			margin-top: 6;
+		  margin-start: 12;
+		  margin-bottom: 6;
+		  spacing: 3;
+		  hexpand: true;
+		  vexpand: true;
+		  orientation: vertical;
+
+			Gtk.Label title_label {
+				xalign: 0;
+			}
+			Gtk.Label subtitle_label {
+				xalign: 0;
+				styles [
+          "dim-label",
+          "caption"
+        ]
+			}
+			Gtk.Box info_box {
+				spacing: 3;
+			}
+		}
+		Gtk.Box {
+			margin-end: 6;
+			Gtk.Switch active_switch {
+				halign: fill;
+				valign: center;
+			}
+		}
+	}
+}

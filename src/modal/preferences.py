@@ -5,6 +5,9 @@ from py_mod_manager.const import *
 
 from utils.current_game import CurrentGame
 
+from custom_widget.switch_info_row import SwitchInfoRow
+
+
 @Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/prefference_settings.ui')
 class PreferencesLinuxModManager(Adw.PreferencesWindow):
     __gtype_name__ = 'PreferencesLinuxModManager'
@@ -63,15 +66,14 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
         self.auto_detect.set_active(self.__win.cg.get_auto_detect_games())
 
-    def __add_row():
+    def __add_row(self, ):
         pass
 
     def load_detect_games_plugin(self):
         list_plugin = self.__win.plugin.get_list_plugin_detect_game()
         for name_plugin in list_plugin:
-            plug = Adw.SwitchRow.new()
+            plug = SwitchInfoRow()
             plugin = self.plugin.get_plugin_detect_game_by_name(name_plugin)
-            print(plugin.search_game("The Elder Scrolls IV Oblivion").name)
             plug.set_title(plugin.name)
             plug.set_subtitle(f"V {plugin.plugin_version} Authors {plugin.authors}")
             # conf_plugin = CurrentGame(plugin)
@@ -83,7 +85,7 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
     def load_game_plugin(self):
         for name_plugin in self.__win.list_plugin:
-            plug = Adw.SwitchRow.new()
+            plug = SwitchInfoRow()
             plugin = self.plugin.get_plugin_game_by_name(name_plugin)
             plug.set_title(plugin.name)
             plug.set_subtitle(f"V {plugin.plugin_version} Authors {plugin.authors}")
@@ -130,7 +132,5 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
     def on_destroy(self, _):
         self.save_settings()
-        self.__win.unload_support_game()
-        self.__win.load_support_game()
-        if self.__win.verif_load_game():
-            self.__win.enable_current_plugin()
+        self.__win.reload()
+

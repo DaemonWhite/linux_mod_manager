@@ -41,6 +41,7 @@ py_mod_manager_sources = [
 ]
 
 
+install_subdir('custom_widget', install_dir: pkgdatadir)
 install_subdir('modal', install_dir: pkgdatadir)
 install_subdir('stack', install_dir: pkgdatadir)
 install_subdir('plugins', install_dir: pkgdatadir)
