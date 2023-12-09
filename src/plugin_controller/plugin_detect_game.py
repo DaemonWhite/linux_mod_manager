@@ -21,6 +21,7 @@ class PluginDetectGame(PluginBase):
         self._absolute_path = [str()]
         self._flatpak = False
         self._local = False
+        self._windows = False
         self._game = str()
         self.__game = GameData()
 
@@ -49,6 +50,10 @@ class PluginDetectGame(PluginBase):
     @property
     def local(self):
         return self._local
+
+    @property
+    def windows(self):
+        return self._windows
 
     @property
     def flatpak_path(self):
