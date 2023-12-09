@@ -87,6 +87,15 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
             conf_plugin.load_plugin()
             plug = self.__create_base_row_plugin(plugin)
+            if plugin.flatpak:
+                plug.create_tag("Flatpak")
+
+            if plugin.local:
+                plug.create_tag("Local")
+
+            if plugin.windows:
+                plug.create_tag("Wine")
+
             plug.connect(NOTIFY_ACTIVE, self.__active_detect_game_plugin)
             plug.set_active(conf_plugin.is_enable())
             self.list_auto_detect_games_plugin.add(plug)
@@ -97,6 +106,8 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
             plugin = self.plugin.get_plugin_game_by_name(name_plugin)
             plug = self.__create_base_row_plugin(plugin)
             conf_plugin = CurrentGame(plugin)
+            for systeme in plugin.systeme:
+                plug.create_tag(systeme)
             plug.set_active(conf_plugin.is_enable())
             plug.connect(NOTIFY_ACTIVE, self.__active_game_plugin)
             self.list_games_plugin.add(plug)
