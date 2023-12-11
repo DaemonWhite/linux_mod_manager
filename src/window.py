@@ -36,6 +36,7 @@ from modal.load import PyModManagerWindowModalLoad
 from utils.current_game import CurrentGame
 from utils.plugin_conf import PluginConfig
 from utils.xdg import xdg_conf_path
+from utils.plugin_loaders import PluginManager as NewPluginManager
 
 from stack.settings import SettingsStack
 from stack.order import OrderStack
@@ -59,6 +60,8 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.app = kwargs.get("application")
 
         plugin_path = os.path.join(PKGDATADIR, 'plugins')
+
+        self.__teste_plugins = NewPluginManager()
 
         self.__started = False
 
