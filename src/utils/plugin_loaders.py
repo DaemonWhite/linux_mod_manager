@@ -24,8 +24,8 @@ class PluginManager(object):
         self.__path = xdg_conf_path()
         PLUGINS = "plugins"
 
-        PLUGIN_GAMES = "PluginGames"
-        PLUGIN_DETECT_GAMES = "PluginDetectGames"
+        self.__PLUGIN_GAMES = "PluginGames"
+        self.__PLUGIN_DETECT_GAMES = "PluginDetectGames"
 
         self.__plugins = dict()
 
@@ -34,36 +34,50 @@ class PluginManager(object):
         self.__USER_PATH = os.path.join(self.__path, PLUGINS)
         self.__SYSTEME_PATH = os.path.join(PKGDATADIR, PLUGINS)
 
+        self.__load()
+
+
+
+    def __load(self):
         self.__games = PluginLoader("games", PluginGame)
         self.__games.create_folder_plugin(self.__USER_PATH)
-        self.__games.load(PLUGIN_GAMES, self.__SYSTEME_PATH, registery_game_plugin)
-        self.__games.load(PLUGIN_GAMES, self.__USER_PATH, registery_game_plugin)
+        self.__games.load(self.__PLUGIN_GAMES, self.__SYSTEME_PATH, registery_game_plugin)
+        self.__games.load(self.__PLUGIN_GAMES, self.__USER_PATH, registery_game_plugin)
 
-        self.__load_plugins(PLUGIN_GAMES, self.__games)
+        self.__load_plugins(self.__PLUGIN_GAMES, self.__games)
 
         self.__detect_games = PluginLoader("detect_games", PluginGame)
         self.__detect_games.create_folder_plugin(self.__USER_PATH)
-        self.__detect_games.load(PLUGIN_DETECT_GAMES, self.__SYSTEME_PATH, registery_detect_game_plugin)
-        self.__detect_games.load(PLUGIN_DETECT_GAMES, self.__USER_PATH, registery_detect_game_plugin)
+        self.__detect_games.load(self.__PLUGIN_DETECT_GAMES, self.__SYSTEME_PATH, registery_detect_game_plugin)
+        self.__detect_games.load(self.__PLUGIN_DETECT_GAMES, self.__USER_PATH, registery_detect_game_plugin)
+
+    def reload(self):
+        self.__plugins.clear()
+        self.__load()
+
 
     def __load_plugins(self, name, plugins):
-        self.__plugins[name] = {"True" : dict(), "False": dict()}
+        self.__plugins[name] = dict()
         for plugin_name, plugin in plugins.get_liste_plugins().items():
             conf = PluginConfig(plugin())
             conf.set_path_plugin(plugin_name, self.__path)
             if not conf.existe:
                 conf.save_plugin()
             conf.load_plugin()
-            self.__plugins[name][str(conf.is_enable())][plugin_name] = plugin
+            self.__plugins[name][plugin_name] = (plugin, conf)
 
-    def list_name_plugin_load_enabled(plugin):
-        return self.__plugins[plugin]["True"].clone()
 
-    def list_name_plugin_load_disable(plugin):
-        return self.__plugins[plugin]["false"].clone()
+    def get_list_all_plugin(self):
+        return self.__plugins.copy()
 
-    def list_plugin(plugin)
-        list_plugin = self.__plugins
+    def get_list_plugin(plugin):
+        return self.__plugins[plugin].copy()
+
+    def get_plugin(plugin, plugin_name):
+        return self.__plugins[plugin][plugin_name][0]
+
+    def get_conf_plugin(plugin, plugin_name):
+        return self.__plugins[plugin][plugin_name][1]
 
     @property
     def CONF_PATH(self):
@@ -76,3 +90,11 @@ class PluginManager(object):
     @property
     def SYSTEME_PATH(self):
         return self.__SYTEME_PATH
+
+    @property
+    def PLUGIN_GAMES(self):
+        return self.__PLUGIN_GAMES
+
+    @property
+    def PLUGIN_DETECT_GAMES(self):
+        return self.__PLUGIN_DETECT_GAMES

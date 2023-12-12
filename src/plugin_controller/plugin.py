@@ -30,11 +30,15 @@ class PluginLoader(object):
         except Exception as e:
             print(f"Impossible d'accéder au donné {folder} \n\n {e}")
 
+    def reload(self, name, path , registery_plugin):
+        self.unload()
+        self.load(name, path, registery_plugin)
+
     def get_liste_plugins(self):
         return self.__list_plugin.copy()
 
     def unload(self):
-        self.__list_plugin = dict()
+        self.__list_plugin.clear()
 
 class PluginManager(object):
     GAME = "games"
