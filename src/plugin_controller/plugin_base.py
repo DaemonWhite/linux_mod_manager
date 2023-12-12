@@ -81,5 +81,4 @@ class PluginBase(object):
         return self.__plugin_conf[name]
 
     def get_plugin_conf(self):
-        print(self.__plugin_conf)
         return self.__plugin_conf.copy()

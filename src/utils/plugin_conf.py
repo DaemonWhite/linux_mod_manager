@@ -67,7 +67,6 @@ class PluginConfig(object):
         if not self.__plugin == plugin:
             with open(self.__path, "w") as json_file:
                 json.dump(self.__plugin, json_file)
-        print(self.__plugin)
 
     def get_plugin_configuration(self, name):
         return self.__plugin[name]

@@ -77,16 +77,13 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         return plug
 
     def load_detect_games_plugin(self):
-        list_plugin = self.__win.plugin.get_list_plugin_detect_game()
-        for name_plugin in list_plugin:
-            plugin = self.plugin.get_plugin_detect_game_by_name(name_plugin)
-            conf_plugin = PluginConfig(plugin)
-            conf_plugin.set_path_plugin(plugin.name, self.__plugin_path)
-            if not conf_plugin.existe:
-                conf_plugin.save_plugin()
+        list_plugin = self.__win.list_auto_detect
+        for name_plugin, plugin_data in list_plugin.items():
+            plugin = plugin_data[0]()
+            conf_plugin = plugin_data[1]
 
-            conf_plugin.load_plugin()
             plug = self.__create_base_row_plugin(plugin)
+
             if plugin.flatpak:
                 plug.create_tag("Flatpak")
 
@@ -96,36 +93,26 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
             if plugin.windows:
                 plug.create_tag("Wine")
 
-            plug.connect(NOTIFY_ACTIVE, self.__active_detect_game_plugin)
+            plug.connect(NOTIFY_ACTIVE, self.__active_plugin, self.__win.plugin.PLUGIN_DETECT_GAMES)
             plug.set_active(conf_plugin.is_enable())
             self.list_auto_detect_games_plugin.add(plug)
 
     def load_game_plugin(self):
-        for name_plugin in self.__win.list_plugin:
+        for name_plugin, plugin_data in self.__win.list_plugin.items():
             plug = SwitchInfoRow()
-            plugin = self.plugin.get_plugin_game_by_name(name_plugin)
+            plugin = plugin_data[0]()
             plug = self.__create_base_row_plugin(plugin)
-            conf_plugin = CurrentGame(plugin)
+            conf_plugin = plugin_data[1]
             for systeme in plugin.systeme:
                 plug.create_tag(systeme)
             plug.set_active(conf_plugin.is_enable())
-            plug.connect(NOTIFY_ACTIVE, self.__active_game_plugin)
+            plug.connect(NOTIFY_ACTIVE, self.__active_plugin, self.__win.plugin.PLUGIN_GAMES)
             self.list_games_plugin.add(plug)
 
-    def __active_game_plugin(self, widget, _):
+    def __active_plugin(self, widget, _, plugin_registre):
         name_plugin = widget.get_title()
-        plugin = self.plugin.get_plugin_game_by_name(name_plugin)
-        conf_plugin = CurrentGame(plugin)
-        conf_plugin.enable(widget.get_active())
-
-    def __active_detect_game_plugin(self, widget, _):
-        name_plugin = widget.get_title()
-        plugin = self.plugin.get_plugin_detect_game_by_name(name_plugin)
-        conf_plugin = PluginConfig(plugin)
-        conf_plugin.set_path_plugin(plugin.name, self.__plugin_path)
-        if not conf_plugin.existe:
-            conf_plugin.save_plugin()
-        conf_plugin.load_plugin()
+        plugin = self.__win.plugin.get_plugin(plugin_registre, name_plugin)
+        conf_plugin = self.__win.plugin.get_conf_plugin(plugin_registre, name_plugin)
         conf_plugin.enable(widget.get_active())
 
     def __verified_change(self, row, value):
