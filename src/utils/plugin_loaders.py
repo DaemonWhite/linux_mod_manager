@@ -46,10 +46,11 @@ class PluginManager(object):
 
         self.__load_plugins(self.__PLUGIN_GAMES, self.__games)
 
-        self.__detect_games = PluginLoader("detect_games", PluginGame)
+        self.__detect_games = PluginLoader("detect_games", PluginDetectGame)
         self.__detect_games.create_folder_plugin(self.__USER_PATH)
         self.__detect_games.load(self.__PLUGIN_DETECT_GAMES, self.__SYSTEME_PATH, registery_detect_game_plugin)
         self.__detect_games.load(self.__PLUGIN_DETECT_GAMES, self.__USER_PATH, registery_detect_game_plugin)
+        self.__load_plugins(self.__PLUGIN_DETECT_GAMES, self.__detect_games)
 
     def reload(self):
         self.__plugins.clear()
@@ -68,15 +69,16 @@ class PluginManager(object):
 
 
     def get_list_all_plugin(self):
-        return self.__plugins.copy()
+        return self.__plugins
 
-    def get_list_plugin(plugin):
-        return self.__plugins[plugin].copy()
+    def get_list_plugin(self, plugin):
+        print(plugin)
+        return self.__plugins[plugin]
 
-    def get_plugin(plugin, plugin_name):
-        return self.__plugins[plugin][plugin_name][0]
+    def get_plugin(self, plugin, plugin_name):
+        return self.__plugins[plugin][plugin_name][0]()
 
-    def get_conf_plugin(plugin, plugin_name):
+    def get_conf_plugin(self, plugin, plugin_name):
         return self.__plugins[plugin][plugin_name][1]
 
     @property
