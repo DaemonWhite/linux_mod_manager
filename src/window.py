@@ -61,8 +61,6 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         plugin_path = os.path.join(PKGDATADIR, 'plugins')
 
-        self.__teste_plugins = NewPluginManager()
-
         self.__started = False
 
         settings = Gio.Settings(URI)
@@ -78,20 +76,19 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.app.create_action('preferences', self.__show_prefrences)
 
         # Start Plugin
-        self._plugin = PluginManager(plugin_path, xdg_conf_path())
-        self._plugin.load_games()
-        self._plugin.load_detect_plugin()
-        self.cg = CurrentGame(PluginGame("None", "None", 0.1, 0.1), False)
+        # self._plugin = PluginManager(plugin_path, xdg_conf_path())
+        self._plugin = NewPluginManager()
+        self.cg = CurrentGame()
 
         # Create list plugin game
         self._list = Gio.ListStore.new(Game)
         self._list_plugin_game_load = list()
 
         # Create list plugin auto_detect_game
-        self._list_auto_detect = self._plugin.get_list_plugin_detect_game()
+        self._list_auto_detect = self._plugin.get_list_plugin(self._plugin.PLUGIN_DETECT_GAMES)
 
         # Event List plugin
-        self._list_plugin = self._plugin.get_list_plugin_game()
+        self._list_plugin = self._plugin.get_list_plugin(self._plugin.PLUGIN_GAMES)
 
         factory = Gtk.SignalListItemFactory()
         factory.connect("setup", self._on_factory_setup)
@@ -145,7 +142,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.__started = True
 
     def __end_auto_detect_game(self, load_modal):
-        result, prefix, path = self.cg.auto_detect_path_game(self.plugin, self._list_auto_detect)
+        result, prefix, path = self.cg.auto_detect_path_game(self._plugin, self._list_auto_detect)
         if result:
             load_modal.set_name_result(result, self.cg.name, "A bien étais trouver")
             self.cg.plugin_conf = True
@@ -199,12 +196,13 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         # Add Plugin
         self._list_plugin_game_load = list()
         self.__len_enable_support_game = 0
-        for plugin in self._list_plugin:
-            conf_plugin = CurrentGame(self._plugin.get_plugin_game_by_name(plugin))
-            if conf_plugin.is_enable():
-                self._list_plugin_game_load.append(plugin)
-                self._list.append(Game(plugin))
+        print(self._list_plugin)
+        for plugin_name, plugin_data in self._list_plugin.items():
+            if plugin_data[1].is_enable():
+                self._list_plugin_game_load.append(plugin_name)
+                self._list.append(Game(plugin_name))
                 self.__len_enable_support_game += 1
+        print(self.__len_enable_support_game)
 
     def search_game_plugin(self, name: str) -> int:
         index = -1
@@ -218,13 +216,20 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
 
     def select_game(self, index: int):
+        print(self._list_plugin_game_load)
         if index > -1:
             self.choose_game.set_selected(index)
-            self.cg = CurrentGame(self._plugin.get_plugin_game_by_name(self._list_plugin_game_load[index]))
+            self.cg.set_current_game( \
+                self._plugin.get_plugin(self._plugin.PLUGIN_GAMES, self._list_plugin_game_load[index]), \
+                self._plugin.get_conf_plugin(self._plugin.PLUGIN_GAMES, self._list_plugin_game_load[index]) \
+            )
         else:
             game = self.choose_game.get_selected_item()
             if game:
-                self.cg = CurrentGame(self._plugin.get_plugin_game_by_name(game.game_name))
+                self.cg.set_current_game( \
+                    self._plugin.get_plugin(self._plugin.PLUGIN_GAMES, game.game_name), \
+                    self._plugin.get_conf_plugin(self._plugin.PLUGIN_GAMES, game.game_name) \
+                )
 
     @property
     def list_plugin(self):
@@ -266,7 +271,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.page_settings.set_path_row(self.cg.path_game)
         self.page_settings.set_prefix_row(self.cg.path_prefix)
 
-        if self.cg.systeme == "win":
+        if self.cg.systeme == ["win"]:
             self.page_settings.enable_windows(True)
         else:
             self.page_settings.enable_windows(False)
@@ -289,7 +294,8 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             game = dropdown.get_selected_item()
             self.__last_game = game.game_name
             self.cg.set_current_game( \
-                self._plugin.get_plugin_game_by_name(game.game_name) \
+                self._plugin.get_plugin(self._plugin.PLUGIN_GAMES, game.game_name), \
+                self._plugin.get_conf_plugin(self._plugin.PLUGIN_GAMES, game.game_name)
             )
         if self.__started:
             self.enable_current_plugin()
