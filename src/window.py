@@ -232,6 +232,10 @@ class PyModManagerWindow(Adw.ApplicationWindow):
                 )
 
     @property
+    def list_auto_detect(self):
+        return self._list_auto_detect
+
+    @property
     def list_plugin(self):
         return self._list_plugin
 
