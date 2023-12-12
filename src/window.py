@@ -25,7 +25,6 @@ from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import Gio
 
-from plugin_controller.plugin import PluginManager
 from plugin_controller.plugin_game import PluginGame
 from plugin_controller.factory import Game
 
@@ -36,7 +35,7 @@ from modal.load import PyModManagerWindowModalLoad
 from utils.current_game import CurrentGame
 from utils.plugin_conf import PluginConfig
 from utils.xdg import xdg_conf_path
-from utils.plugin_loaders import PluginManager as NewPluginManager
+from utils.plugin_loaders import PluginManager
 
 from stack.settings import SettingsStack
 from stack.order import OrderStack
@@ -76,8 +75,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.app.create_action('preferences', self.__show_prefrences)
 
         # Start Plugin
-        # self._plugin = PluginManager(plugin_path, xdg_conf_path())
-        self._plugin = NewPluginManager()
+        self._plugin = PluginManager()
         self.cg = CurrentGame()
 
         # Create list plugin game
@@ -196,13 +194,11 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         # Add Plugin
         self._list_plugin_game_load = list()
         self.__len_enable_support_game = 0
-        print(self._list_plugin)
         for plugin_name, plugin_data in self._list_plugin.items():
             if plugin_data[1].is_enable():
                 self._list_plugin_game_load.append(plugin_name)
                 self._list.append(Game(plugin_name))
                 self.__len_enable_support_game += 1
-        print(self.__len_enable_support_game)
 
     def search_game_plugin(self, name: str) -> int:
         index = -1
@@ -216,7 +212,6 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
 
     def select_game(self, index: int):
-        print(self._list_plugin_game_load)
         if index > -1:
             self.choose_game.set_selected(index)
             self.cg.set_current_game( \

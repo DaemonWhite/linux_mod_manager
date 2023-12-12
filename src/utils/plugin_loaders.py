@@ -72,7 +72,6 @@ class PluginManager(object):
         return self.__plugins
 
     def get_list_plugin(self, plugin):
-        print(plugin)
         return self.__plugins[plugin]
 
     def get_plugin(self, plugin, plugin_name):

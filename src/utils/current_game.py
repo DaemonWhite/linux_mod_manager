@@ -77,7 +77,6 @@ class CurrentGame(ApllicationConfiguration):
     @path_prefix.setter
     def path_prefix(self, value: str):
         self.__current_config.set_configuration("prefix", value)
-        print(value)
         self.save_plugin()
 
     @plugin_conf.setter
@@ -89,7 +88,6 @@ class CurrentGame(ApllicationConfiguration):
         self.__current_config.set_configuration(name, info)
 
     def set_current_game(self, current_game, current_config):
-        print(current_game, current_config)
         self.__current_game = current_game
         self.__current_config = current_config
         self.__current_config.set_path_plugin(self.__current_game.name, self.__conf_path)

@@ -43,11 +43,7 @@ class SwitchInfoRow(Adw.PreferencesRow):
         )
         row_group.add_action(simple_action)
 
-    def parent_e(self, a, b):
-        print('coucou')
-
     def slider_notify_active_cb(self, widget, param):
-        print("coucou")
         Gtk.Accessible.update_state(
             self, [Gtk.AccessibleState.CHECKED], [int(self.active_switch.get_active())]
         )
