@@ -46,5 +46,20 @@
       <summary>Dernière page selectionner</summary>
       <description></description>
     </key>
+	  <key name="donwload-base-folder" type="s">
+      <default>""</default>
+      <summary>Chemin des mods téléchager</summary>
+      <description></description>
+    </key>
+    <key name="install-base-folder" type="s">
+      <default>""</default>
+      <summary>chemin d'installation des mods</summary>
+      <description>Chemin ou sont installer les configuration ou les mods installer</description>
+    </key>
+	  <key name="archive-base-folder" type="s">
+      <default>""</default>
+      <summary>Chemin ou sont installer les mods archiver</summary>
+      <description></description>
+    </key>
 	</schema>
 </schemalist>

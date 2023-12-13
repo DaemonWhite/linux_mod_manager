@@ -21,6 +21,14 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
     force_symb = Gtk.Template.Child()
     force_archive = Gtk.Template.Child()
 
+    archive_row =  Gtk.Template.Child()
+    install_row =  Gtk.Template.Child()
+    download_row =  Gtk.Template.Child()
+
+    archive_folder = Gtk.Template.Child()
+    install_folder =  Gtk.Template.Child()
+    download_folder =  Gtk.Template.Child()
+
     preference_copy = Gtk.Template.Child()
     preference_symbolic = Gtk.Template.Child()
     preference_archive = Gtk.Template.Child()
@@ -42,6 +50,10 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         self.preference_symbolic.connect('notify::selected', self.on_change)
         self.preference_archive.connect('notify::selected', self.on_change)
 
+        self.archive_folder.connect('clicked', self.__on_select_folder, self.__win.cg.set_archive_base_folder)
+        self.download_folder.connect('clicked', self.__on_select_folder, self.__win.cg.set_donwload_base_folder)
+        self.install_folder.connect('clicked', self.__on_select_folder, self.__win.cg.set_install_base_folder)
+
         self.__plugin_path = xdg_conf_path()
 
         self.load_settings()
@@ -60,6 +72,14 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         self.preference_copy.set_selected(mode_copy)
         self.preference_symbolic.set_selected(mode_symb)
         self.preference_archive.set_selected(mode_archive)
+
+        path_archive = self.__win.cg.get_archive_base_folder()
+        path_download = self.__win.cg.get_donwload_base_folder()
+        path_install = self.__win.cg.get_install_base_folder()
+
+        self.archive_row.set_subtitle(path_archive)
+        self.download_row.set_subtitle(path_download)
+        self.install_row.set_subtitle(path_install)
 
         if not mode_copy == GLOBAL:
             self.force_copy.set_sensitive(False)
@@ -114,6 +134,20 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         plugin = self.__win.plugin.get_plugin(plugin_registre, name_plugin)
         conf_plugin = self.__win.plugin.get_conf_plugin(plugin_registre, name_plugin)
         conf_plugin.enable(widget.get_active())
+
+    def __on_single_selected(self, dialog, result, callback):
+        file = ""
+        try:
+            # TODO Ajouter la gestion d'erreur flatpak et basic
+            file = dialog.select_folder_finish(result).get_path()
+            callback(file)
+            self.load_settings()
+        except Exception as e :
+            print(e)
+
+    def __on_select_folder(self, dialog, callback):
+        dialog_for_folder = Gtk.FileDialog()
+        file = dialog_for_folder.select_folder(self, None, self.__on_single_selected, callback)
 
     def __verified_change(self, row, value):
         if value == 2:

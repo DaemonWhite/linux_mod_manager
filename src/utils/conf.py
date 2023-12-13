@@ -2,6 +2,8 @@ from gi.repository import Gio
 
 from py_mod_manager.const import USER, URI
 
+#TODO Le charger dans window et non dans Current Game
+
 class ApllicationConfiguration(object):
     def __init__(self):
         self.__settings = Gio.Settings(URI)
@@ -21,8 +23,6 @@ class ApllicationConfiguration(object):
 
         self.load_app_settings()
 
-        self.plugin_games = {}
-
     def load_app_settings(self):
         self._app_copy = self.__settings.get_boolean("force-default-copy")
         self._app_symb = self.__settings.get_boolean("force-default-symb")
@@ -31,6 +31,10 @@ class ApllicationConfiguration(object):
         self._mode_copy = self.__settings.get_int("mode-default-copy")
         self._mode_symb = self.__settings.get_int("mode-default-symb")
         self._mode_archive = self.__settings.get_int("mode-default-archive")
+
+        self._donwload_base_folder = self.__settings.get_string("donwload-base-folder")
+        self._install_base_folder = self.__settings.get_string("install-base-folder")
+        self._archive_base_folder = self.__settings.get_string("archive-base-folder")
 
         self._auto_detect_games = self.__settings.get_boolean("auto-detect-games")
 
@@ -42,6 +46,10 @@ class ApllicationConfiguration(object):
         self.__settings.set_int("mode-default-copy", self._mode_copy)
         self.__settings.set_int("mode-default-symb",self._mode_symb)
         self.__settings.set_int("mode-default-archive",self._mode_archive)
+
+        self.__settings.set_string("donwload-base-folder", self._donwload_base_folder)
+        self.__settings.set_string("install-base-folder", self._install_base_folder)
+        self.__settings.set_string("archive-base-folder", self._archive_base_folder)
 
         self.__settings.set_boolean("auto-detect-games",self._auto_detect_games)
 
@@ -66,23 +74,41 @@ class ApllicationConfiguration(object):
     def get_auto_detect_games(self):
         return self._auto_detect_games
 
-    def set_app_copy(self, copy):
+    def get_donwload_base_folder(self):
+        return self._donwload_base_folder
+
+    def get_install_base_folder(self):
+        return self._install_base_folder
+
+    def get_archive_base_folder(self):
+        return self._archive_base_folder
+
+    def set_app_copy(self, copy: bool):
         self._app_copy = copy
 
-    def set_app_archive(self, archive):
+    def set_app_archive(self, archive: bool):
         self._app_archive = archive
 
-    def set_app_symb(self, symb):
+    def set_app_symb(self, symb: bool):
         self._app_symb = symb
 
-    def set_mode_copy(self, copy):
+    def set_mode_copy(self, copy: int):
         self._mode_copy = copy
 
-    def set_mode_archive(self, archive):
+    def set_mode_archive(self, archive: int):
         self._mode_archive = archive
 
-    def set_mode_symb(self, symb):
+    def set_mode_symb(self, symb: int):
         self._mode_symb = symb
 
-    def set_auto_detect_games(self, auto):
+    def set_auto_detect_games(self, auto: bool):
         self._auto_detect_games = auto
+
+    def set_donwload_base_folder(self, donwload_base_folder: str):
+        self._donwload_base_folder = donwload_base_folder
+
+    def set_install_base_folder(self, install_base_folder: str):
+        self._install_base_folder = install_base_folder
+
+    def set_archive_base_folder(self, archive_base_folder: str):
+        self._archive_base_folder = archive_base_folder

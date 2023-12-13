@@ -36,6 +36,7 @@ from utils.current_game import CurrentGame
 from utils.plugin_conf import PluginConfig
 from utils.xdg import xdg_conf_path
 from utils.plugin_loaders import PluginManager
+from utils.create_default_mod_path import create_default_mod_path
 
 from stack.settings import SettingsStack
 from stack.order import OrderStack
@@ -60,9 +61,11 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         plugin_path = os.path.join(PKGDATADIR, 'plugins')
 
+        settings = Gio.Settings(URI)
+        create_default_mod_path(settings)
+
         self.__started = False
 
-        settings = Gio.Settings(URI)
         self.__last_game = settings.get_string('last-game-plugin')
         self.__last_page = settings.get_string('last-page')
         self.__auto_detect_games = settings.get_boolean('auto-detect-games')

@@ -14,16 +14,19 @@ template $PreferencesLinuxModManager : $AdwPreferencesWindow {
 			title: "Mode";
 			Adw.ComboRow preference_copy {
 				title: "Copie";
+				subtitle: "Actile la copie des donné installer autrement les déplaces";
 				model: user_choice;
 			}
 
 			Adw.ComboRow preference_symbolic {
 				title: "Symbolic";
+				subtitle: "Utilise des liens symbolic a la place de copier ou coller";
 				model: user_choice;
 			}
 
 			Adw.ComboRow preference_archive {
 				title: "Archive";
+				subtitle: "Crée des archives pour switcher rapidement sur des ancienne configurations";
 				model: user_choice;
 			}
 
@@ -48,6 +51,55 @@ template $PreferencesLinuxModManager : $AdwPreferencesWindow {
 			Adw.SwitchRow auto_detect {
 				title: "Auto detecter les jeux";
 			}
+			Adw.ActionRow download_row {
+					title: "Indiquer le chemin ou les mods télècharger son stocker";
+					subtitle: "Chemin télèchargement";
+					activatable-widget: download_folder;
+
+					Gtk.Box {
+						Gtk.Button download_folder {
+							valign: center;
+							label: "Open";
+							icon-name: "document-open-symbolic";
+							styles [
+            		"flat",
+          		]
+						}
+					}
+				}
+				Adw.ActionRow  install_row {
+					title: "Indiquer le chemin ou les mods sont stocker";
+					subtitle: "Chemin installation";
+					activatable-widget: install_folder;
+
+					Gtk.Box {
+						Gtk.Button install_folder {
+							valign: center;
+							label: "Open";
+							icon-name: "document-open-symbolic";
+							styles [
+            		"flat",
+          		]
+						}
+					}
+				}
+
+				Adw.ActionRow  archive_row {
+					title: "Indiquer le chemin ou stocker les archive";
+					subtitle: "Chemin installation";
+					activatable-widget: archive_folder;
+
+					Gtk.Box {
+						Gtk.Button archive_folder {
+							valign: center;
+							label: "Open";
+							icon-name: "document-open-symbolic";
+							styles [
+            		"flat",
+          		]
+						}
+					}
+				}
 		}
 	}
 
