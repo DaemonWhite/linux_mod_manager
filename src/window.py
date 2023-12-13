@@ -133,8 +133,6 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.main_stack.set_visible_child_name(self.__last_page)
         self.main_stack.connect("notify::visible-child", self.__change_page)
 
-        # self.choose_games.show()
-
     def on_start(self):
         self.select_game(self.search_game_plugin(self.__last_game))
         if self.verif_load_game():
@@ -215,19 +213,19 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
 
     def select_game(self, index: int):
+        if self.__len_enable_support_game == 0:
+            print('Not selected games')
+            return False
+
+        game = self.choose_game.get_selected_item().game_name
         if index > -1:
+            game = self._list_plugin_game_load[index]
             self.choose_game.set_selected(index)
-            self.cg.set_current_game( \
-                self._plugin.get_plugin(self._plugin.PLUGIN_GAMES, self._list_plugin_game_load[index]), \
-                self._plugin.get_conf_plugin(self._plugin.PLUGIN_GAMES, self._list_plugin_game_load[index]) \
-            )
-        else:
-            game = self.choose_game.get_selected_item()
-            if game:
-                self.cg.set_current_game( \
-                    self._plugin.get_plugin(self._plugin.PLUGIN_GAMES, game.game_name), \
-                    self._plugin.get_conf_plugin(self._plugin.PLUGIN_GAMES, game.game_name) \
-                )
+
+        self.cg.set_current_game( \
+            self._plugin.get_plugin(self._plugin.PLUGIN_GAMES, game), \
+            self._plugin.get_conf_plugin(self._plugin.PLUGIN_GAMES, game) \
+        )
 
     @property
     def list_auto_detect(self):
