@@ -98,6 +98,9 @@ class ApllicationConfiguration(object):
     def get_last_page(self):
         return self._last_page
 
+    def set_string(self, name, data):
+        self.__settings.set_string(name, data)
+
     def set_app_copy(self, copy: bool):
         self._app_copy = copy
 
