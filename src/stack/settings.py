@@ -43,11 +43,11 @@ class SettingsStack(Adw.Bin):
     def __switch_change(self, widget, _, data):
         mode = USER
         if data == "symbolic":
-            mode = self.__window.cg.get_mode_symb()
+            mode = self.__window.settings.get_mode_symb()
         elif data == "copy":
-            mode = self.__window.cg.get_mode_copy()
+            mode = self.__window.settings.get_mode_copy()
         elif data == "archive":
-            mode = self.__window.cg.get_mode_archive()
+            mode = self.__window.settings.get_mode_archive()
 
         if mode == USER:
             self.__window.cg.set_configuration(data, widget.get_active())

@@ -38,6 +38,9 @@ class ApllicationConfiguration(object):
 
         self._auto_detect_games = self.__settings.get_boolean("auto-detect-games")
 
+        self._last_game = self.__settings.get_string("last-game-plugin")
+        self._last_page = self.__settings.get_string("last-page")
+
     def save_app_settings(self):
         self.__settings.set_boolean("force-default-copy",self._app_copy)
         self.__settings.set_boolean("force-default-symb",self._app_symb)
@@ -52,6 +55,12 @@ class ApllicationConfiguration(object):
         self.__settings.set_string("archive-base-folder", self._archive_base_folder)
 
         self.__settings.set_boolean("auto-detect-games",self._auto_detect_games)
+
+        self.__settings.set_string("last-game-plugin", self._last_game)
+        self.__settings.set_string("last-page", self._last_page)
+
+    def get_string(self, name: str):
+        return self.__settings.get_string(name)
 
     def get_app_copy(self):
         return self._app_copy
@@ -83,6 +92,12 @@ class ApllicationConfiguration(object):
     def get_archive_base_folder(self):
         return self._archive_base_folder
 
+    def get_last_game(self):
+        return self._last_game
+
+    def get_last_page(self):
+        return self._last_page
+
     def set_app_copy(self, copy: bool):
         self._app_copy = copy
 
@@ -112,3 +127,9 @@ class ApllicationConfiguration(object):
 
     def set_archive_base_folder(self, archive_base_folder: str):
         self._archive_base_folder = archive_base_folder
+
+    def set_last_game(self, last_game: str):
+        self._last_game = last_game
+
+    def set_last_page(self, last_page):
+        self._last_page = last_page

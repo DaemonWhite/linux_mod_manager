@@ -1,18 +1,17 @@
 import os
 
-from utils.conf import ApllicationConfiguration
+
 from utils.plugin_conf import PluginConfig
 from utils.xdg import xdg_conf_path
 
 from py_mod_manager.const import USER, PLUGIN
 
-class CurrentGame(ApllicationConfiguration):
+class CurrentGame(object):
 
-    def __init__(self):
-        ApllicationConfiguration.__init__(self)
+    def __init__(self, settings):
 
         self.__conf_path = xdg_conf_path()
-
+        self.__settings = settings
         self.__current_game = None
         self.__current_config = None
 
@@ -35,34 +34,37 @@ class CurrentGame(ApllicationConfiguration):
     @property
     def symbolic(self):
         symbolic = False
-        if self._mode_symb == USER:
+        mode_symb = self.__settings.get_mode_symb()
+        if mode_symb == USER:
             symbolic = self.__current_config.get_plugin_configuration("symbolic")
-        elif self._mode_symb == PLUGIN:
+        elif mode_symb == PLUGIN:
             symbolic = self.__current_game.symbolic
         else:
-            symbolic = self.get_app_symb()
+            symbolic = self.__settings.get_app_symb()
         return symbolic
 
     @property
     def copy(self):
         copy = False
-        if self._mode_copy == USER:
+        mode_copy = self.__settings.get_mode_copy()
+        if mode_copy == USER:
             copy = self.__current_config.get_plugin_configuration("copy")
-        elif self._mode_copy == PLUGIN:
+        elif mode_copy == PLUGIN:
             copy = self.__current_game.copy
         else:
-            copy = self.get_app_copy()
+            copy = self.__settings.get_app_copy()
         return copy
 
     @property
     def archive(self):
         archive = False
-        if self._mode_archive == USER:
+        mode_archive = self.__settings.get_mode_archive()
+        if mode_archive == USER:
             archive = self.__current_config.get_plugin_configuration("archive")
-        elif self._mode_archive == PLUGIN:
+        elif mode_archive == PLUGIN:
             archive = self.__current_game.archive
         else:
-            archive = self.get_app_archive()
+            archive = self.__settings.get_app_archive()
         return archive
 
     @property

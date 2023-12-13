@@ -50,9 +50,21 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         self.preference_symbolic.connect('notify::selected', self.on_change)
         self.preference_archive.connect('notify::selected', self.on_change)
 
-        self.archive_folder.connect('clicked', self.__on_select_folder, self.__win.cg.set_archive_base_folder)
-        self.download_folder.connect('clicked', self.__on_select_folder, self.__win.cg.set_donwload_base_folder)
-        self.install_folder.connect('clicked', self.__on_select_folder, self.__win.cg.set_install_base_folder)
+        self.archive_folder.connect( \
+            'clicked', \
+            self.__on_select_folder, \
+            self.__win.settings.set_archive_base_folder \
+        )
+        self.download_folder.connect(
+            'clicked', \
+            self.__on_select_folder, \
+            self.__win.settings.set_donwload_base_folder \
+        )
+        self.install_folder.connect(
+            'clicked', \
+            self.__on_select_folder, \
+            self.__win.settings.set_install_base_folder \
+        )
 
         self.__plugin_path = xdg_conf_path()
 
@@ -61,21 +73,21 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         self.load_detect_games_plugin()
 
     def load_settings(self):
-        self.force_copy.set_active(self.__win.cg.get_app_copy())
-        self.force_symb.set_active(self.__win.cg.get_app_symb())
-        self.force_archive.set_active(self.__win.cg.get_app_archive())
+        self.force_copy.set_active(self.__win.settings.get_app_copy())
+        self.force_symb.set_active(self.__win.settings.get_app_symb())
+        self.force_archive.set_active(self.__win.settings.get_app_archive())
 
-        mode_copy = self.__win.cg.get_mode_copy()
-        mode_symb = self.__win.cg.get_mode_symb()
-        mode_archive = self.__win.cg.get_mode_archive()
+        mode_copy = self.__win.settings.get_mode_copy()
+        mode_symb = self.__win.settings.get_mode_symb()
+        mode_archive = self.__win.settings.get_mode_archive()
 
         self.preference_copy.set_selected(mode_copy)
         self.preference_symbolic.set_selected(mode_symb)
         self.preference_archive.set_selected(mode_archive)
 
-        path_archive = self.__win.cg.get_archive_base_folder()
-        path_download = self.__win.cg.get_donwload_base_folder()
-        path_install = self.__win.cg.get_install_base_folder()
+        path_archive = self.__win.settings.get_archive_base_folder()
+        path_download = self.__win.settings.get_donwload_base_folder()
+        path_install = self.__win.settings.get_install_base_folder()
 
         self.archive_row.set_subtitle(path_archive)
         self.download_row.set_subtitle(path_download)
@@ -88,7 +100,7 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         if not mode_archive == GLOBAL:
             self.force_archive.set_sensitive(False)
 
-        self.auto_detect.set_active(self.__win.cg.get_auto_detect_games())
+        self.auto_detect.set_active(self.__win.settings.get_auto_detect_games())
 
     def __create_base_row_plugin(self, plugin):
         plug = SwitchInfoRow()
@@ -167,17 +179,17 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
     def save_settings(self):
         # Save Force
-        self.__win.cg.set_app_copy(self.force_copy.get_active())
-        self.__win.cg.set_app_symb(self.force_symb.get_active())
-        self.__win.cg.set_app_archive(self.force_archive.get_active())
+        self.__win.settings.set_app_copy(self.force_copy.get_active())
+        self.__win.settings.set_app_symb(self.force_symb.get_active())
+        self.__win.settings.set_app_archive(self.force_archive.get_active())
         # Save Mode
-        self.__win.cg.set_mode_copy(self.preference_copy.get_selected())
-        self.__win.cg.set_mode_symb(self.preference_symbolic.get_selected())
-        self.__win.cg.set_mode_archive(self.preference_archive.get_selected())
+        self.__win.settings.set_mode_copy(self.preference_copy.get_selected())
+        self.__win.settings.set_mode_symb(self.preference_symbolic.get_selected())
+        self.__win.settings.set_mode_archive(self.preference_archive.get_selected())
 
-        self.__win.cg.set_auto_detect_games(self.auto_detect.get_active())
+        self.__win.settings.set_auto_detect_games(self.auto_detect.get_active())
 
-        self.__win.cg.save_app_settings()
+        self.__win.settings.save_app_settings()
 
     def on_destroy(self, _):
         self.save_settings()

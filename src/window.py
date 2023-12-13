@@ -33,6 +33,7 @@ from modal.choose_games import PyModManagerWindowChooseGames
 from modal.load import PyModManagerWindowModalLoad
 
 from utils.current_game import CurrentGame
+from utils.conf import ApllicationConfiguration
 from utils.plugin_conf import PluginConfig
 from utils.xdg import xdg_conf_path
 from utils.plugin_loaders import PluginManager
@@ -61,14 +62,13 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         plugin_path = os.path.join(PKGDATADIR, 'plugins')
 
-        settings = Gio.Settings(URI)
-        create_default_mod_path(settings)
+        self.settings = ApllicationConfiguration()
+        create_default_mod_path(self.settings)
 
         self.__started = False
 
-        self.__last_game = settings.get_string('last-game-plugin')
-        self.__last_page = settings.get_string('last-page')
-        self.__auto_detect_games = settings.get_boolean('auto-detect-games')
+        self.__last_game = self.settings.get_last_game()
+        self.__last_page = self.settings.get_last_page()
 
         self.choose_games = PyModManagerWindowChooseGames(self)
 
@@ -79,7 +79,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         # Start Plugin
         self._plugin = PluginManager()
-        self.cg = CurrentGame()
+        self.cg = CurrentGame(self.settings)
 
         # Create list plugin game
         self._list = Gio.ListStore.new(Game)
@@ -248,22 +248,22 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             row.set_sensitive(False)
 
     def enable_current_plugin(self):
-        if not self.cg.plugin_conf and self.__auto_detect_games:
+        if not self.cg.plugin_conf and self.settings.get_auto_detect_games():
             self.auto_detect_game()
 
         self.verif_sensitive_settings( \
             self.page_settings.symbolic_row, \
-            self.cg.get_mode_symb() \
+            self.settings.get_mode_symb() \
         )
 
         self.verif_sensitive_settings( \
             self.page_settings.copie_row, \
-            self.cg.get_mode_copy() \
+            self.settings.get_mode_copy() \
         )
 
         self.verif_sensitive_settings( \
             self.page_settings.archive_row, \
-            self.cg.get_mode_archive() \
+            self.settings.get_mode_archive() \
         )
 
         self.page_settings.set_symbolic_row(self.cg.symbolic)
@@ -304,6 +304,6 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
     def on_destroy(self, _):
         if not self.__len_enable_support_game == 0:
-            settings = Gio.Settings(URI)
-            settings.set_string("last-game-plugin", self.__last_game)
-            settings.set_string("last-page", self.__last_page)
+            self.settings.set_last_game(self.__last_game)
+            self.settings.set_last_page(self.__last_page)
+            self.settings.save_app_settings()
