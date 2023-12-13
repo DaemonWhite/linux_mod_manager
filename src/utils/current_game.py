@@ -20,6 +20,10 @@ class CurrentGame(object):
         return self.__current_game.true_name
 
     @property
+    def plugin_name(self):
+        return self.__current_game.name
+
+    @property
     def plugin_conf(self):
         return self.__current_config.get_plugin_configuration("plugin_conf")
 
