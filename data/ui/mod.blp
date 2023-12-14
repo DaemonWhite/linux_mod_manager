@@ -3,15 +3,47 @@ using Adw 1;
 
 template $ModStack : $AdwBin {
 	Adw.PreferencesPage {
+
+	  Adw.PreferencesGroup {
+	    Adw.ExpanderRow downloader_row {
+	      title: "Télèchargement en cour...";
+	      subtitle : "0/0";
+        [suffix]
+        Gtk.Box {
+          valign: center;
+          halign: center;
+          spacing: 5;
+          Gtk.ProgressBar downloader_progress{
+            valign: center;
+          }
+          Gtk.Button {
+	          valign: center;
+	          halign: center;
+            icon-name: 'user-trash-symbolic';
+            styles ["opaque", "circular"]
+          }
+        }
+	    }
+	  }
+
 		Adw.PreferencesGroup {
-			Adw.ExpanderRow {
+		  title: "Gérer et installer vos mods";
+		  header-suffix:
+		   Gtk.Button import_button {
+		    label: "Importés des mods";
+		  };
+
+			Adw.ExpanderRow install_row {
 				title: "Mod Installer";
+				subtitle: "mod installer dans le jeux";
 			}
-			Adw.ExpanderRow {
+
+			Adw.ExpanderRow configure_row {
 				title: "Mod Configurer";
 			}
-			Adw.ExpanderRow {
+			Adw.ExpanderRow download_row {
 				title: "Mod Desinstaller";
+				subtitle: "mod télécharger mais pas configurer";
 			}
 		}
 	}

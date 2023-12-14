@@ -40,11 +40,18 @@ py_mod_manager_sources = [
   'window.py',
 ]
 
+modules_src = [
+	'custom_widget',
+	'modal',
+	'mod_handlers',
+	'plugin_controller',
+	'plugins',
+	'stack',
+	'utils',
+]
 
-install_subdir('custom_widget', install_dir: pkgdatadir)
-install_subdir('modal', install_dir: pkgdatadir)
-install_subdir('stack', install_dir: pkgdatadir)
-install_subdir('plugins', install_dir: pkgdatadir)
-install_subdir('plugin_controller', install_dir: pkgdatadir)
-install_subdir('utils', install_dir: pkgdatadir)
+foreach module : modules_src
+	install_subdir(module, install_dir: pkgdatadir)
+endforeach
+
 install_data(py_mod_manager_sources, install_dir: moduledir)
