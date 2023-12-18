@@ -32,6 +32,13 @@ class DownloadModManager(object):
     def set_callback_end(self, callback):
         self.__callback_end = callback
 
+    def clear(self):
+        self.__count_task = 0
+        self.__count_download = 0
+        self.__count_total_download = 0
+        self.__count_total_end_download = 0
+        self.__list_download_mod.clear()
+
     def verif_exist_files(self, src):
         pass
 
@@ -51,7 +58,6 @@ class DownloadModManager(object):
             self.__count_task += 1
 
     def __task(self, task_data):
-        print("task : data", task_data)
         task = DownloadMod(task_data['plugin'])
         task.set_src_path(task_data['src'])
         task.set_dest_path(task_data['dest'])

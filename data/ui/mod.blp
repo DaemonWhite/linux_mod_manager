@@ -16,12 +16,15 @@ template $ModStack : $AdwBin {
           Gtk.ProgressBar downloader_progress{
             valign: center;
           }
-          Gtk.Button {
+          Gtk.Button downloader_button {
 	          valign: center;
 	          halign: center;
             icon-name: 'user-trash-symbolic';
             styles ["opaque", "circular"]
           }
+        }
+        Gtk.ListBox dowbloader_list_box {
+          show-separators: true;
         }
 	    }
 	  }

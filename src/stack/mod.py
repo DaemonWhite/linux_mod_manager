@@ -1,8 +1,13 @@
-from gi.repository import Gtk, Adw, GObject, GLib
+from gi.repository import Gtk, Adw, GObject, GLib, Gio
 
 from mod_handlers.download import DownloadModManager
 
 # TODO Donwload end event change color
+
+class model(GObject.Object, Gio.ListModel):
+    __gtype_name__ = 'RowModel'
+    def __init(self):
+        super.__init__()
 
 @Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/mod.ui')
 class ModStack(Adw.Bin):
@@ -16,6 +21,8 @@ class ModStack(Adw.Bin):
 
     downloader_row = Gtk.Template.Child()
     downloader_progress = Gtk.Template.Child()
+    downloader_button = Gtk.Template.Child()
+    dowbloader_list_box = Gtk.Template.Child()
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
@@ -27,6 +34,13 @@ class ModStack(Adw.Bin):
             'application/gzip',
             'application/x-7z-compressed'
         ]
+        placeholder = Gtk.Label()
+        placeholder.set_label("Aucun téléchargement en cours")
+        self.dowbloader_list_box.set_placeholder(placeholder)
+        self.dowbloader_list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+
+        self.downloader_button.connect("clicked", self.__erase_download_row)
+
         self.__archive_filter = Gtk.FileFilter()
         self.__archive_filter.set_name("archive")
 
@@ -37,6 +51,16 @@ class ModStack(Adw.Bin):
         for mime_type in list_mime_type:
             self.__archive_filter.add_mime_type(mime_type)
         self.import_button.connect("clicked", self.__on_select_files)
+
+
+    def __erase_download_row(self, button):
+        # TODO Ajouter la verification des erreurs
+        delete_row = []
+        for progress_bar in self.dowbloader_list_box:
+            delete_row.append(progress_bar)
+
+        for progress_bar in delete_row:
+            self.dowbloader_list_box.remove(progress_bar)
 
     def __update_subtitle_download(self, progress, total):
         self.downloader_row.set_subtitle(f"{progress}/{total}")
@@ -61,7 +85,8 @@ class ModStack(Adw.Bin):
         pref.set_title(name)
         pref.set_subtitle(plugin)
         pref.add_suffix(box)
-        self.downloader_row.add_row(pref)
+        # self.downloader_row.add_row(pref)
+        self.dowbloader_list_box.prepend(pref)
         return progress
 
     def __on_single_selected(self, dialog, result):
