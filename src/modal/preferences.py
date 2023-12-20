@@ -10,7 +10,7 @@ from utils.xdg import xdg_conf_path
 from custom_widget.switch_info_row import SwitchInfoRow
 
 
-@Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/prefference_settings.ui')
+@Gtk.Template(resource_path=UI_BASE+'modal/prefferences.ui')
 class PreferencesLinuxModManager(Adw.PreferencesWindow):
     __gtype_name__ = 'PreferencesLinuxModManager'
 

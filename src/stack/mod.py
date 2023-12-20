@@ -2,6 +2,8 @@ from gi.repository import Gtk, Adw, GObject, GLib, Gio
 
 from mod_handlers.download import DownloadModManager
 
+from py_mod_manager.const import UI_BASE
+
 # TODO Donwload end event change color
 
 class model(GObject.Object, Gio.ListModel):
@@ -9,7 +11,7 @@ class model(GObject.Object, Gio.ListModel):
     def __init(self):
         super.__init__()
 
-@Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/mod.ui')
+@Gtk.Template(resource_path=UI_BASE+'stack/mod.ui')
 class ModStack(Adw.Bin):
     __gtype_name__ = 'ModStack'
 

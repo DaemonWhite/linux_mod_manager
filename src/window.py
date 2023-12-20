@@ -44,9 +44,9 @@ from stack.order import OrderStack
 from stack.mod import ModStack
 from stack.error import ErrorStack
 
-from py_mod_manager.const import USER, NOTIFY_SELECT_ITEM, BUILD_TYPE, URI, PKGDATADIR
+from py_mod_manager.const import USER, NOTIFY_SELECT_ITEM, BUILD_TYPE, URI, PKGDATADIR, UI_BASE
 
-@Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/window.ui')
+@Gtk.Template(resource_path=UI_BASE+'window.ui')
 class PyModManagerWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'PyModManagerWindow'
 

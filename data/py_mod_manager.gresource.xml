@@ -2,14 +2,14 @@
 <gresources>
   <gresource prefix="/fr/daemonwhite/mod_manager">
     <file preprocess="xml-stripblanks">ui/window.ui</file>
-    <file preprocess="xml-stripblanks">ui/modal_choose_games.ui</file>
-    <file preprocess="xml-stripblanks">ui/modal_load.ui</file>
-    <file preprocess="xml-stripblanks">ui/settings.ui</file>
-    <file preprocess="xml-stripblanks">ui/prefference_settings.ui</file>
-    <file preprocess="xml-stripblanks">ui/order.ui</file>
-    <file preprocess="xml-stripblanks">ui/mod.ui</file>
-    <file preprocess="xml-stripblanks">ui/error.ui</file>
-    <file preprocess="xml-stripblanks">ui/widget_switch_info_row.ui</file>
+    <file preprocess="xml-stripblanks">ui/modal/choose_games.ui</file>
+    <file preprocess="xml-stripblanks">ui/modal/load.ui</file>
+    <file preprocess="xml-stripblanks">ui/modal/prefferences.ui</file>
+    <file preprocess="xml-stripblanks">ui/stack/settings.ui</file>
+    <file preprocess="xml-stripblanks">ui/stack/order.ui</file>
+    <file preprocess="xml-stripblanks">ui/stack/mod.ui</file>
+    <file preprocess="xml-stripblanks">ui/stack/error.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/switch_info_row.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
   </gresource>
 </gresources>

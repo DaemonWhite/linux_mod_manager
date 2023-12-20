@@ -1,6 +1,8 @@
 from gi.repository import Gtk, Adw, GObject
 
-@Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/error.ui')
+from py_mod_manager.const import UI_BASE
+
+@Gtk.Template(resource_path=UI_BASE+'stack/error.ui')
 class ErrorStack(Adw.Bin):
     __gtype_name__ = 'ErrorStack'
 

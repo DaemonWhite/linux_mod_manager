@@ -1,6 +1,8 @@
 from gi.repository import Gtk, Adw, GObject
 
-@Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/order.ui')
+from py_mod_manager.const import UI_BASE
+
+@Gtk.Template(resource_path=UI_BASE+'stack/order.ui')
 class OrderStack(Adw.Bin):
     __gtype_name__ = 'OrderStack'
 

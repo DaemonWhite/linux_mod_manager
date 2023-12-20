@@ -1,8 +1,8 @@
 from gi.repository import Gtk, Adw, GObject, Gio
 
-from py_mod_manager.const import USER, NOTIFY_ACTIVE
+from py_mod_manager.const import USER, NOTIFY_ACTIVE, UI_BASE
 
-@Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/settings.ui')
+@Gtk.Template(resource_path=UI_BASE+'stack/settings.ui')
 class SettingsStack(Adw.Bin):
     __gtype_name__ = 'SettingsStack'
 

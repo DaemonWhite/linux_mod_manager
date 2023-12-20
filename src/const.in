@@ -9,6 +9,8 @@ ARCHIVE="archive"
 NOTIFY_ACTIVE="notify::active"
 NOTIFY_SELECT_ITEM="notify::selected-item"
 
+UI_BASE="/fr/daemonwhite/mod_manager/ui/"
+
 URI="fr.daemonwhite.mod_manager"
 DEVELOPERS=['DaemonWhite']
 VERSION='@VERSION@'

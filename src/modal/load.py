@@ -1,7 +1,9 @@
 from gi.repository import Adw
 from gi.repository import Gtk
 
-@Gtk.Template(resource_path='/fr/daemonwhite/mod_manager/ui/modal_load.ui')
+from py_mod_manager.const import UI_BASE
+
+@Gtk.Template(resource_path=UI_BASE+'modal/load.ui')
 class PyModManagerWindowModalLoad(Adw.Window):
     __gtype_name__ = 'PyModManagerWindowModalLoad'
 
@@ -47,4 +49,4 @@ class PyModManagerWindowModalLoad(Adw.Window):
         else:
             self.result_status.set_icon_name('process-stop-symbolic')
         self.load_stack.set_visible_child_name("result_status_page")
-        
+
