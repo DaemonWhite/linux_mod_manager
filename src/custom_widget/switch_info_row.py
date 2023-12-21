@@ -1,16 +1,11 @@
 from gi.repository import Adw, Gtk, Gio, GLib, GObject
 
-#TODO Ajouter les property ou autre pour que la recherche marche
-
 from py_mod_manager.const import UI_BASE
 
 @Gtk.Template(resource_path=UI_BASE+'widgets/switch_info_row.ui')
 class SwitchInfoRow(Adw.PreferencesRow):
     __gtype_name__ = "SwitchInfoRow"
     __gobject_init__ = "SwitchInfoRow"
-
-    title = GObject.Property(type=str, default='')
-    subtitle = GObject.Property(type=str, default='')
 
     contents = Gtk.Template.Child()
 
@@ -60,7 +55,7 @@ class SwitchInfoRow(Adw.PreferencesRow):
         return self.active_switch.get_active()
 
     def set_title(self, title):
-        self.title = title
+        super().set_title(title)
         self.title_label.set_label(title)
 
     def set_subtitle(self, subtitle):
@@ -86,3 +81,4 @@ class SwitchInfoRow(Adw.PreferencesRow):
             context_label.add_class(color)
         context.add_class('card')
         context.add_class('activatable')
+
