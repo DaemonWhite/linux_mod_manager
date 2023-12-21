@@ -24,6 +24,7 @@ import time
 from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import Gio
+from gi.repository import Gdk
 
 from plugin_controller.plugin_game import PluginGame
 from plugin_controller.factory import Game
@@ -44,7 +45,7 @@ from stack.order import OrderStack
 from stack.mod import ModStack
 from stack.error import ErrorStack
 
-from py_mod_manager.const import USER, NOTIFY_SELECT_ITEM, BUILD_TYPE, URI, PKGDATADIR, UI_BASE
+from py_mod_manager.const import USER, NOTIFY_SELECT_ITEM, BUILD_TYPE, URI, PKGDATADIR, UI_BASE, URL
 
 @Gtk.Template(resource_path=UI_BASE+'window.ui')
 class PyModManagerWindow(Adw.ApplicationWindow):
@@ -59,6 +60,10 @@ class PyModManagerWindow(Adw.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.app = kwargs.get("application")
+
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_resource(URL+'css/style.css')
+        Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
         plugin_path = os.path.join(PKGDATADIR, 'plugins')
 

@@ -45,8 +45,8 @@ class DownloadModManager(object):
     def __call_callback_progress(self, progress, *args):
         self.__callback_progress(progress, *args)
 
-    def __call_callback_end(self):
-        self.__callback_end(self.total_download_end, self.total_download)
+    def __call_callback_end(self, state_copy, *args):
+        self.__callback_end(self.total_download_end, self.total_download, state_copy, *args[0])
 
     def __add_task(self):
         if self.__count_task < self.__TASK_SYNCHRONE and self.__count_download > 0 :
@@ -62,10 +62,10 @@ class DownloadModManager(object):
         task.set_src_path(task_data['src'])
         task.set_dest_path(task_data['dest'])
         task.set_progress_callback(self.__call_callback_progress, task_data['object_callback'])
-        task.copy()
+        state_copy = task.copy()
         self.__count_task -= 1
         self.__count_total_end_download += 1
-        self.__call_callback_end()
+        self.__call_callback_end(state_copy, task_data['object_callback'])
         self.__add_task()
 
 
@@ -154,5 +154,7 @@ class DownloadMod(object):
                 self.__progress_callback(self._progress_percentage, *self.__args)
                 buffer = source_file.read(buffer_size)
 
+        return True
+
     def copy(self):
-        self.__copy()
+        return self.__copy()

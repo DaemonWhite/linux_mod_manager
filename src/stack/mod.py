@@ -2,6 +2,7 @@ from gi.repository import Gtk, Adw, GObject, GLib, Gio
 
 from mod_handlers.download import DownloadModManager
 
+from custom_widget.progress_row import ProgressRow
 from py_mod_manager.const import UI_BASE
 
 # TODO Donwload end event change color
@@ -69,26 +70,22 @@ class ModStack(Adw.Bin):
         self.downloader_progress.pulse()
         self.downloader_progress.set_fraction(progress/total)
 
-    def __event_end_download(self, progress, total):
+    def __event_end_download(self, progress, total, state_copy=False, progress_bar=None):
+        if state_copy:
+            progress_bar.progress_style(progress_bar.FINISH)
         GLib.idle_add(self.__update_subtitle_download, progress, total)
 
     def __row_update_download(self, progress, progress_bar):
         def row_update(progress, progress_bar):
-            progress_bar.pulse()
-            progress_bar.set_fraction(progress)
+            progress_bar.set_progress_fraction(progress)
         GLib.idle_add(row_update, progress, progress_bar[0])
 
     def __create_downloader_row(self, name, plugin):
         # TODO Create widget
-        box = Gtk.Box()
-        progress = Gtk.ProgressBar()
-        box.append(progress)
-        pref = Adw.ActionRow()
-        pref.set_title(name)
-        pref.set_subtitle(plugin)
-        pref.add_suffix(box)
-        # self.downloader_row.add_row(pref)
-        self.dowbloader_list_box.prepend(pref)
+        progress = ProgressRow()
+        progress.set_title(name)
+        progress.set_subtitle(plugin)
+        self.dowbloader_list_box.prepend(progress)
         return progress
 
     def __on_single_selected(self, dialog, result):

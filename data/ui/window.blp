@@ -26,6 +26,32 @@ template $PyModManagerWindow : $AdwApplicationWindow {
 					tooltip-text: 'Menu';
 					menu-model: primary_menu;
 		    }
+		    [end]
+		    Gtk.MenuButton {
+					tooltip-text: 'Menu';
+					child: Overlay {
+					  Spinner _spinner {
+					    spinning: false;
+					    visible: false;
+					  }
+
+					  Image _image {
+					    icon-name: 'object-select-symbolic';
+					  }
+					};
+
+					popover: Gtk.Popover {
+					  styles["menu"]
+					  Adw.ViewStack _stack_popover {
+              Adw.ViewStackPage {
+                name: 'empty';
+                child: Gtk.Label {
+                  label: "Pas de télèchargement ou d'installation en cours";
+                };
+              }
+					  }
+					};
+		    }
 		  }
 		  Adw.ViewStack main_stack{
 		  	vexpand: true;

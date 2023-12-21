@@ -9,7 +9,9 @@
     <file preprocess="xml-stripblanks">ui/stack/order.ui</file>
     <file preprocess="xml-stripblanks">ui/stack/mod.ui</file>
     <file preprocess="xml-stripblanks">ui/stack/error.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/progress_row.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/switch_info_row.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
+    <file>css/style.css</file>
   </gresource>
 </gresources>

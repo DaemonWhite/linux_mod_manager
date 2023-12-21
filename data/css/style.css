@@ -4,3 +4,16 @@
   margin: 12px;
   border-radius: 12px;
 }
+
+.progress_error > trough > progress {
+    background-color: @error_bg_color;
+}
+
+.progress_warning > trough > progress {
+    background-color: @warning_bg_color;
+}
+
+.progress_valide > trough > progress {
+    background-color: @success_bg_color;
+
+}
