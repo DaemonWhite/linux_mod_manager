@@ -25,7 +25,7 @@ class ModStack(Adw.Bin):
     downloader_row = Gtk.Template.Child()
     downloader_progress = Gtk.Template.Child()
     downloader_button = Gtk.Template.Child()
-    dowbloader_list_box = Gtk.Template.Child()
+    downloader_list_box = Gtk.Template.Child()
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
@@ -39,8 +39,8 @@ class ModStack(Adw.Bin):
         ]
         placeholder = Gtk.Label()
         placeholder.set_label("Aucun téléchargement en cours")
-        self.dowbloader_list_box.set_placeholder(placeholder)
-        self.dowbloader_list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.downloader_list_box.set_placeholder(placeholder)
+        self.downloader_list_box.set_selection_mode(Gtk.SelectionMode.NONE)
 
         self.downloader_button.connect("clicked", self.__erase_download_row)
 
@@ -59,11 +59,12 @@ class ModStack(Adw.Bin):
     def __erase_download_row(self, button):
         # TODO Ajouter la verification des erreurs
         delete_row = []
-        for progress_bar in self.dowbloader_list_box:
-            delete_row.append(progress_bar)
+        for progress_row in self.downloader_list_box:
+            if type(progress_row) == type(ProgressRow()) and not progress_row.PROGRESS == progress_row.state :
+                delete_row.append(progress_row)
 
-        for progress_bar in delete_row:
-            self.dowbloader_list_box.remove(progress_bar)
+        for progress_row in delete_row:
+            self.downloader_list_box.remove(progress_row)
 
     def __update_subtitle_download(self, progress, total):
         self.downloader_row.set_subtitle(f"{progress}/{total}")
@@ -85,7 +86,7 @@ class ModStack(Adw.Bin):
         progress = ProgressRow()
         progress.set_title(name)
         progress.set_subtitle(plugin)
-        self.dowbloader_list_box.prepend(progress)
+        self.downloader_list_box.prepend(progress)
         return progress
 
     def __on_single_selected(self, dialog, result):
