@@ -12,7 +12,7 @@ class PluginDetectGames(PluginDetectGame):
         self.__detect_game_path = []
         self._local = True
         self._flatpak = True
-        self._locals_path = [os.path.join('steam',self.STEAMAPPS), os.path.join('.steam', self.STEAMAPPS)]
+        self._locals_path = [os.path.join('steam',self.STEAMAPPS), os.path.join('.steam/steam', self.STEAMAPPS)]
         self._flatpak_path = "com.valvesoftware.Steam/data/Steam/" + self.STEAMAPPS
 
     def detect_path(self, path):
@@ -52,6 +52,13 @@ class PluginDetectGames(PluginDetectGame):
                         self._install_dir =  self.detect_folder(d['AppState']['installdir'], 'common')
 
     def _search_game(self):
+        # Search flatpak
         self.detect_path(os.path.join(self.flatpak_base_path, self._flatpak_path))
+        # Search in local
+
+        for path in self._locals_path:
+            print(path)
+            self.detect_path(os.path.join(self.base_path, path))
+
         for i in range(len(self.__detect_game_path)):
             self.detect_game(os.path.join(self.base_path, self.__detect_game_path[i]))
