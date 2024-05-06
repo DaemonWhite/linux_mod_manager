@@ -1,7 +1,9 @@
 from plugin_controller.plugin_detect_game import PluginDetectGame
 
-import vdf
 import os
+
+import vdf
+
 from pathlib import PurePath, Path
 
 class PluginDetectGames(PluginDetectGame):
@@ -28,7 +30,7 @@ class PluginDetectGames(PluginDetectGame):
     def detect_folder(self, path_to_find, data_path):
         for i in range(len(self.__detect_game_path)):
             try:
-                path = os.path.join(self.__detect_game_path[i], self.STEAMAPPS )
+                path = os.path.join(self.__detect_game_path[i], self.STEAMAPPS)
                 path = os.path.join(path, data_path)
                 for file_name in os.listdir(path):
                     if file_name == path_to_find:
