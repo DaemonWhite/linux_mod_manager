@@ -1,7 +1,7 @@
 {
     "app-id" : "fr.daemonwhite.mod_manager",
     "runtime" : "org.gnome.Platform",
-    "runtime-version" : "45",
+    "runtime-version" : "46",
     "sdk" : "org.gnome.Sdk",
     "command" : "py_mod_manager",
     "finish-args" : [
@@ -25,9 +25,7 @@
         "*.a"
     ],
     "modules" : [
-        "python3-pyxdg.json",
-        "python3-vdf.json",
-        {
+    	{
             "name" : "blueprint-compiler",
             "buildsystem" : "meson",
             "sources" : [
@@ -38,6 +36,8 @@
                 }
             ]
         },
+        "python3-pyxdg.json",
+        "python3-vdf.json",
         {
             "name" : "py_mod_manager",
             "builddir" : true,
