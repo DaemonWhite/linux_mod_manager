@@ -101,6 +101,22 @@ template $PreferencesLinuxModManager : $AdwPreferencesWindow {
 					}
 				}
 		}
+
+		Adw.PreferencesGroup {
+		  title: "Téléchargement";
+		  Adw.SpinRow download_thread {
+		    title: "Téléchargements simultanée";
+		    subtitle: "Definie le nombre de téléchargement simultanée";
+		    adjustment: Gtk.Adjustment {
+		      lower: 1;
+		      upper: 20;
+		      value: 1;
+		      step-increment: 1;
+		      page-increment: 1;
+		    };
+
+		  }
+		}
 	}
 
 	Adw.PreferencesPage {

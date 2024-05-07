@@ -9,7 +9,7 @@ from py_mod_manager.const import UI_BASE
 
 class model(GObject.Object, Gio.ListModel):
     __gtype_name__ = 'RowModel'
-    def __init(self):
+    def __init__(self):
         super.__init__()
 
 @Gtk.Template(resource_path=UI_BASE+'stack/mod.ui')
@@ -47,8 +47,12 @@ class ModStack(Adw.Bin):
         self.__archive_filter = Gtk.FileFilter()
         self.__archive_filter.set_name("archive")
 
-        self.__download_manager = DownloadModManager()
-        self.__download_manager.set_callback_progress(self.__row_update_download)
+        self.__download_manager = DownloadModManager(
+            self.__window.settings.get_thread_download()
+        )
+        self.__download_manager.set_callback_progress(
+            self.__row_update_download
+        )
         self.__download_manager.set_callback_end(self.__event_end_download)
 
         for mime_type in list_mime_type:
@@ -63,13 +67,23 @@ class ModStack(Adw.Bin):
             if type(progress_row) == type(ProgressRow()) and not progress_row.PROGRESS == progress_row.state :
                 delete_row.append(progress_row)
 
+        self.__download_manager.clear()
+
+        self.__event_end_download(
+            self.__download_manager.total_download_end,
+            self.__download_manager.total_download,
+        )
+
         for progress_row in delete_row:
             self.downloader_list_box.remove(progress_row)
 
     def __update_subtitle_download(self, progress, total):
         self.downloader_row.set_subtitle(f"{progress}/{total}")
         self.downloader_progress.pulse()
-        self.downloader_progress.set_fraction(progress/total)
+        if total == 0:
+            self.downloader_progress.set_fraction(0)
+        else:
+            self.downloader_progress.set_fraction(progress/total)
 
     def __event_end_download(self, progress, total, state_copy=False, progress_bar=None):
         if state_copy:
@@ -96,19 +110,21 @@ class ModStack(Adw.Bin):
             files = dialog.open_multiple_finish(result)
             for file in files:
                 file_path = file.get_path()
-                progress = self.__create_downloader_row(file_path, self.__window.cg.plugin_name)
-                self.__download_manager \
-                    .append( \
-                        file_path, \
-                        self.__window.settings.get_donwload_base_folder(),  \
-                        self.__window.cg.plugin_name, \
-                        progress \
-                    )
-                self.__event_end_download( \
-                    self.__download_manager.total_download_end, \
-                    self.__download_manager.total_download, \
+                progress = self.__create_downloader_row(
+                    file_path,
+                    self.__window.cg.plugin_name
                 )
-        except Exception as e :
+                self.__download_manager.append(
+                    file_path,
+                    self.__window.settings.get_donwload_base_folder(),
+                    self.__window.cg.plugin_name,
+                    progress
+                )
+                self.__event_end_download(
+                    self.__download_manager.total_download_end,
+                    self.__download_manager.total_download,
+                )
+        except Exception as e:
             print(e)
 
     def __on_select_files(self, dialog):
@@ -116,6 +132,10 @@ class ModStack(Adw.Bin):
         dialog_for_folder.set_default_filter(self.__archive_filter)
         dialog_for_folder.set_accept_label("Importer")
         dialog_for_folder.set_title("Importer des mods")
-        file = dialog_for_folder.open_multiple(self.__window, None, self.__on_single_selected)
+        dialog_for_folder.open_multiple(
+            self.__window,
+            None,
+            self.__on_single_selected
+        )
 
 

@@ -7,7 +7,7 @@ class DownloadModManager(object):
     def __init__(self, task_synchrone=1):
         self.__TASK_SYNCHRONE = task_synchrone
         self.__count_task = 0
-        self.__count_download = 0
+        self.__count_download_rest = 0
         self.__count_total_download = 0
         self.__count_total_end_download = 0
         self.__list_download_mod = []
@@ -33,8 +33,12 @@ class DownloadModManager(object):
         self.__callback_end = callback
 
     def clear(self):
+        self.__count_total_download -= self.__count_total_end_download
+        self.__count_total_end_download = 0
+
+    def reset(self):
         self.__count_task = 0
-        self.__count_download = 0
+        self.__count_download_rest = 0
         self.__count_total_download = 0
         self.__count_total_end_download = 0
         self.__list_download_mod.clear()
@@ -46,15 +50,27 @@ class DownloadModManager(object):
         self.__callback_progress(progress, *args)
 
     def __call_callback_end(self, state_copy, *args):
-        self.__callback_end(self.total_download_end, self.total_download, state_copy, *args[0])
+        self.__callback_end(
+            self.total_download_end,
+            self.total_download,
+            state_copy,
+            *args[0]
+        )
 
     def __add_task(self):
-        if self.__count_task < self.__TASK_SYNCHRONE and self.__count_download > 0 :
+        if self.__count_task < self.__TASK_SYNCHRONE and self.__count_download_rest > 0 :
 
-            copy_thread = threading.Thread(target=self.__task, args=(self.__list_download_mod[0].copy(),))
+            copy_thread = threading.Thread(
+                target=self.__task,
+                args=(
+                    self.__list_download_mod[0].copy(),
+                )
+            )
+
             copy_thread.start()
+
             self.__list_download_mod.pop(0)
-            self.__count_download -= 1
+            self.__count_download_rest -= 1
             self.__count_task += 1
 
     def __task(self, task_data):
@@ -76,7 +92,7 @@ class DownloadModManager(object):
             'plugin' : plugin,
             'object_callback' : args
         }
-        self.__count_download += 1
+        self.__count_download_rest += 1
         self.__count_total_download += 1
         self.__list_download_mod.append(dl_data)
         self.__add_task()

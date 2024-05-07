@@ -33,6 +33,8 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
     preference_symbolic = Gtk.Template.Child()
     preference_archive = Gtk.Template.Child()
 
+    download_thread = Gtk.Template.Child()
+
     auto_detect = Gtk.Template.Child()
 
     expand_default_settings = Gtk.Template.Child()
@@ -80,6 +82,8 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         mode_copy = self.__win.settings.get_mode_copy()
         mode_symb = self.__win.settings.get_mode_symb()
         mode_archive = self.__win.settings.get_mode_archive()
+
+        self.download_thread.set_value(self.__win.settings.get_thread_download())
 
         self.preference_copy.set_selected(mode_copy)
         self.preference_symbolic.set_selected(mode_symb)
@@ -189,9 +193,10 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
         self.__win.settings.set_auto_detect_games(self.auto_detect.get_active())
 
+        self.__win.settings.set_thread_download(self.download_thread.get_value())
+
         self.__win.settings.save_app_settings()
 
     def on_destroy(self, _):
         self.save_settings()
         self.__win.reload()
-

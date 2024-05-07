@@ -31,6 +31,11 @@
       <summary>mode l'archive</summary>
       <description></description>
     </key>
+	  <key name="download-thread" type="i">
+      <default>1</default>
+      <summary>Nombre de téléchargement sumultanée</summary>
+      <description></description>
+    </key>
 	  <key name="auto-detect-games" type="b">
       <default>true</default>
       <summary>Force la copy</summary>
