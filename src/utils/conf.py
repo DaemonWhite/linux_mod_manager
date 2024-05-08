@@ -32,6 +32,8 @@ class ApllicationConfiguration(object):
         self._mode_symb = self.__settings.get_int("mode-default-symb")
         self._mode_archive = self.__settings.get_int("mode-default-archive")
 
+        self._thread_download = self.__settings.get_int("download-thread")
+
         self._donwload_base_folder = self.__settings.get_string("donwload-base-folder")
         self._install_base_folder = self.__settings.get_string("install-base-folder")
         self._archive_base_folder = self.__settings.get_string("archive-base-folder")
@@ -49,6 +51,8 @@ class ApllicationConfiguration(object):
         self.__settings.set_int("mode-default-copy", self._mode_copy)
         self.__settings.set_int("mode-default-symb",self._mode_symb)
         self.__settings.set_int("mode-default-archive",self._mode_archive)
+
+        self.__settings.set_int("download-thread", self._thread_download)
 
         self.__settings.set_string("donwload-base-folder", self._donwload_base_folder)
         self.__settings.set_string("install-base-folder", self._install_base_folder)
@@ -79,6 +83,9 @@ class ApllicationConfiguration(object):
 
     def get_mode_symb(self):
         return self._mode_symb
+
+    def get_thread_download(self):
+        return self._thread_download
 
     def get_auto_detect_games(self):
         return self._auto_detect_games
@@ -118,6 +125,9 @@ class ApllicationConfiguration(object):
 
     def set_mode_symb(self, symb: int):
         self._mode_symb = symb
+
+    def set_thread_download(self, nb_thread):
+        self._thread_download = nb_thread
 
     def set_auto_detect_games(self, auto: bool):
         self._auto_detect_games = auto
