@@ -21,13 +21,13 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
     force_symb = Gtk.Template.Child()
     force_archive = Gtk.Template.Child()
 
-    archive_row =  Gtk.Template.Child()
-    install_row =  Gtk.Template.Child()
-    download_row =  Gtk.Template.Child()
+    archive_row = Gtk.Template.Child()
+    install_row = Gtk.Template.Child()
+    download_row = Gtk.Template.Child()
 
     archive_folder = Gtk.Template.Child()
-    install_folder =  Gtk.Template.Child()
-    download_folder =  Gtk.Template.Child()
+    install_folder = Gtk.Template.Child()
+    download_folder = Gtk.Template.Child()
 
     preference_copy = Gtk.Template.Child()
     preference_symbolic = Gtk.Template.Child()
@@ -38,7 +38,6 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
     auto_detect = Gtk.Template.Child()
 
     expand_default_settings = Gtk.Template.Child()
-
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
@@ -52,20 +51,20 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         self.preference_symbolic.connect('notify::selected', self.on_change)
         self.preference_archive.connect('notify::selected', self.on_change)
 
-        self.archive_folder.connect( \
-            'clicked', \
-            self.__on_select_folder, \
-            self.__win.settings.set_archive_base_folder \
+        self.archive_folder.connect(
+            'clicked',
+            self.__on_select_folder,
+            self.__win.settings.set_archive_base_folder
         )
         self.download_folder.connect(
-            'clicked', \
-            self.__on_select_folder, \
-            self.__win.settings.set_donwload_base_folder \
+            'clicked',
+            self.__on_select_folder,
+            self.__win.settings.set_donwload_base_folder
         )
         self.install_folder.connect(
-            'clicked', \
-            self.__on_select_folder, \
-            self.__win.settings.set_install_base_folder \
+            'clicked',
+            self.__on_select_folder,
+            self.__win.settings.set_install_base_folder
         )
 
         self.__plugin_path = xdg_conf_path()
@@ -83,7 +82,9 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         mode_symb = self.__win.settings.get_mode_symb()
         mode_archive = self.__win.settings.get_mode_archive()
 
-        self.download_thread.set_value(self.__win.settings.get_thread_download())
+        self.download_thread.set_value(
+            self.__win.settings.get_thread_download()
+        )
 
         self.preference_copy.set_selected(mode_copy)
         self.preference_symbolic.set_selected(mode_symb)
@@ -104,12 +105,16 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         if not mode_archive == GLOBAL:
             self.force_archive.set_sensitive(False)
 
-        self.auto_detect.set_active(self.__win.settings.get_auto_detect_games())
+        self.auto_detect.set_active(
+            self.__win.settings.get_auto_detect_games()
+        )
 
     def __create_base_row_plugin(self, plugin):
         plug = SwitchInfoRow()
         plug.set_title(plugin.name)
-        plug.set_subtitle(f"V {plugin.plugin_version} Authors {plugin.authors}")
+        plug.set_subtitle(
+            f"V {plugin.plugin_version} Authors {plugin.authors}"
+        )
         return plug
 
     def load_detect_games_plugin(self):
@@ -129,7 +134,11 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
             if plugin.windows:
                 plug.create_tag("Wine")
 
-            plug.connect(NOTIFY_ACTIVE, self.__active_plugin, self.__win.plugin.PLUGIN_DETECT_GAMES)
+            plug.connect(
+                NOTIFY_ACTIVE,
+                self.__active_plugin,
+                self.__win.plugin.PLUGIN_DETECT_GAMES
+            )
             plug.set_active(conf_plugin.is_enable())
             self.list_auto_detect_games_plugin.add(plug)
 
@@ -142,13 +151,20 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
             for systeme in plugin.systeme:
                 plug.create_tag(systeme)
             plug.set_active(conf_plugin.is_enable())
-            plug.connect(NOTIFY_ACTIVE, self.__active_plugin, self.__win.plugin.PLUGIN_GAMES)
+            plug.connect(
+                NOTIFY_ACTIVE,
+                self.__active_plugin,
+                self.__win.plugin.PLUGIN_GAMES
+            )
             self.list_games_plugin.add(plug)
 
     def __active_plugin(self, widget, _, plugin_registre):
         name_plugin = widget.get_title()
         plugin = self.__win.plugin.get_plugin(plugin_registre, name_plugin)
-        conf_plugin = self.__win.plugin.get_conf_plugin(plugin_registre, name_plugin)
+        conf_plugin = self.__win.plugin.get_conf_plugin(
+            plugin_registre,
+            name_plugin
+        )
         conf_plugin.enable(widget.get_active())
 
     def __on_single_selected(self, dialog, result, callback):
@@ -158,12 +174,16 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
             file = dialog.select_folder_finish(result).get_path()
             callback(file)
             self.load_settings()
-        except Exception as e :
+        except Exception as e:
             print(e)
 
     def __on_select_folder(self, dialog, callback):
         dialog_for_folder = Gtk.FileDialog()
-        file = dialog_for_folder.select_folder(self, None, self.__on_single_selected, callback)
+        file = dialog_for_folder.select_folder(
+            self,
+            None,
+            self.__on_single_selected, callback
+        )
 
     def __verified_change(self, row, value):
         if value == 2:
@@ -180,7 +200,6 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         self.__verified_change(self.force_symb, mode_symb)
         self.__verified_change(self.force_archive, mode_archive)
 
-
     def save_settings(self):
         # Save Force
         self.__win.settings.set_app_copy(self.force_copy.get_active())
@@ -188,12 +207,20 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         self.__win.settings.set_app_archive(self.force_archive.get_active())
         # Save Mode
         self.__win.settings.set_mode_copy(self.preference_copy.get_selected())
-        self.__win.settings.set_mode_symb(self.preference_symbolic.get_selected())
-        self.__win.settings.set_mode_archive(self.preference_archive.get_selected())
+        self.__win.settings.set_mode_symb(
+            self.preference_symbolic.get_selected()
+        )
+        self.__win.settings.set_mode_archive(
+            self.preference_archive.get_selected()
+        )
 
-        self.__win.settings.set_auto_detect_games(self.auto_detect.get_active())
+        self.__win.settings.set_auto_detect_games(
+            self.auto_detect.get_active()
+        )
 
-        self.__win.settings.set_thread_download(self.download_thread.get_value())
+        self.__win.settings.set_thread_download(
+            self.download_thread.get_value()
+        )
 
         self.__win.settings.save_app_settings()
 
