@@ -42,6 +42,7 @@ py_mod_manager_sources = [
 
 modules_src = [
 	'custom_widget',
+	'dialout',
 	'modal',
 	'mod_handlers',
 	'plugin_controller',

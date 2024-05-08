@@ -22,7 +22,7 @@ class PluginLoader(object):
         try:
             for file_name in os.listdir(folder):
                 if file_name.endswith(".py") and file_name != "__init__.py":
-                    plugin_name = os.path.splitext(file_name)[0]
+                    # plugin_name = os.path.splitext(file_name)[0]
                     spec = importlib.util.spec_from_file_location(name, f"{folder}/{file_name}")
                     module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(module)

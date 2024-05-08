@@ -1,9 +1,17 @@
+import os
+
+import utils
+
 from gi.repository import Gtk, Adw, GObject, GLib, Gio
 
-from mod_handlers.download import DownloadModManager
+from dialout.replace import DialoutReplace
+
+from mod_handlers.download import DownloadModManager, verif_download_exist_file
 
 from custom_widget.progress_row import ProgressRow
 from py_mod_manager.const import UI_BASE
+
+from utils.files import slice_path_in_file
 
 # TODO Donwload end event change color
 
@@ -29,6 +37,7 @@ class ModStack(Adw.Bin):
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
+        self.__kwargs = kwargs
         self.__window = window
         list_mime_type = [
             'application/zip',
@@ -37,6 +46,10 @@ class ModStack(Adw.Bin):
             'application/gzip',
             'application/x-7z-compressed'
         ]
+
+        self.__array_file_exist = []
+        self.__exist_fill_popup = False
+
         placeholder = Gtk.Label()
         placeholder.set_label("Aucun téléchargement en cours")
         self.downloader_list_box.set_placeholder(placeholder)
@@ -59,6 +72,16 @@ class ModStack(Adw.Bin):
             self.__archive_filter.add_mime_type(mime_type)
         self.import_button.connect("clicked", self.__on_select_files)
 
+    def __event_array_file_exist_choose(self, dialog, choose):
+        if dialog.choose_finish(choose) == "y":
+            self.__download_append(
+                self.__array_file_exist[0][0],
+                self.__array_file_exist[0][1]
+            )
+
+        self.__array_file_exist.pop(0)
+        self.__exist_fill_popup = False
+        self.__launch_dialout_exist_fill()
 
     def __erase_download_row(self, button):
         # TODO Ajouter la verification des erreurs
@@ -85,9 +108,16 @@ class ModStack(Adw.Bin):
         else:
             self.downloader_progress.set_fraction(progress/total)
 
-    def __event_end_download(self, progress, total, state_copy=False, progress_bar=None):
+    def __event_end_download(
+        self,
+        progress,
+        total,
+        state_copy=False,
+        progress_bar=None
+    ):
         if state_copy:
-            progress_bar.progress_style(progress_bar.FINISH)
+            GLib.idle_add(progress_bar.progress_style, progress_bar.FINISH)
+            self.__row_update_download(progress, [progress_bar])
         GLib.idle_add(self.__update_subtitle_download, progress, total)
 
     def __row_update_download(self, progress, progress_bar):
@@ -106,26 +136,31 @@ class ModStack(Adw.Bin):
     def __on_single_selected(self, dialog, result):
         files = ""
         try:
+            print(self.__window.cg.plugin_name)
             # TODO Ajouter la gestion d'erreur flatpak et basic
             files = dialog.open_multiple_finish(result)
             for file in files:
                 file_path = file.get_path()
-                progress = self.__create_downloader_row(
+                if not verif_download_exist_file(
                     file_path,
-                    self.__window.cg.plugin_name
-                )
-                self.__download_manager.append(
-                    file_path,
-                    self.__window.settings.get_donwload_base_folder(),
-                    self.__window.cg.plugin_name,
-                    progress
-                )
-                self.__event_end_download(
-                    self.__download_manager.total_download_end,
-                    self.__download_manager.total_download,
-                )
+                    os.path.join(
+                        self.__window.settings.get_donwload_base_folder(),
+                        self.__window.cg.plugin_name
+                    )
+                ):
+                    self.__download_append(
+                        file_path,
+                        self.__window.cg.plugin_name
+                    )
+                else:
+                    self.__donwload_append_exist_fill(
+                        file_path,
+                        self.__window.cg.plugin_name
+                    )
         except Exception as e:
             print(e)
+
+        self.__launch_dialout_exist_fill()
 
     def __on_select_files(self, dialog):
         dialog_for_folder = Gtk.FileDialog()
@@ -138,4 +173,33 @@ class ModStack(Adw.Bin):
             self.__on_single_selected
         )
 
+    def __launch_dialout_exist_fill(self):
+        print("dialout")
+        if len(self.__array_file_exist) > 0:
+            self.__exist_fill_popup = True
+            dialout_replace = DialoutReplace(self.__window)
+            dialout_replace.set_replace(
+                self.__array_file_exist[0][1],
+                slice_path_in_file(self.__array_file_exist[0][0])
+            )
+            dialout_replace.choose(
+                callback=self.__event_array_file_exist_choose
+            )
+            dialout_replace.present()
 
+    def __donwload_append_exist_fill(self, file_path, plugin):
+        self.__array_file_exist.append((file_path, plugin))
+
+    def __download_append(self, file_path, plugin):
+        progress = self.__create_downloader_row(file_path, plugin)
+
+        self.__download_manager.append(
+            file_path,
+            self.__window.settings.get_donwload_base_folder(),
+            plugin,
+            progress
+        )
+        self.__event_end_download(
+            self.__download_manager.total_download_end,
+            self.__download_manager.total_download,
+        )

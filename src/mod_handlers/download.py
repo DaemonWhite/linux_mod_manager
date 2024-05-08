@@ -1,9 +1,21 @@
 import os
 import shutil
 import threading
+import time
 import copy
 
+from utils.files import slice_path_in_file
+
+
+def verif_download_exist_file(file_path, path):
+    exist = False
+    file = slice_path_in_file(file_path)
+    if os.path.isfile(os.path.join(path, file)):
+        exist = True
+    return exist
+
 class DownloadModManager(object):
+    # TODO Ajouter une option pour définir le rafraichisement
     def __init__(self, task_synchrone=1):
         self.__TASK_SYNCHRONE = task_synchrone
         self.__count_task = 0
@@ -84,13 +96,12 @@ class DownloadModManager(object):
         self.__call_callback_end(state_copy, task_data['object_callback'])
         self.__add_task()
 
-
     def append(self, src: str, dest: str, plugin: str, *args):
         dl_data = {
-            'src' : src,
-            'dest' : dest,
-            'plugin' : plugin,
-            'object_callback' : args
+            'src':src,
+            'dest':dest,
+            'plugin':plugin,
+            'object_callback':args
         }
         self.__count_download_rest += 1
         self.__count_total_download += 1
@@ -98,14 +109,16 @@ class DownloadModManager(object):
         self.__add_task()
 
 class DownloadMod(object):
-    def __init__(self, plugin):
+    #TODO Ajouter une option pour anuller
+    def __init__(self, plugin, refrech_progress=0.5):
         self.__base_path = str()
+        self.__refrech_progress = refrech_progress
         self.__progress_percentage = float()
         self.__dest_path = str()
         self.__name = str()
         self.__src_path = str()
         self.__plugin = plugin
-
+        self.__callback_locked = False
         self.__progress_callback = self.__default_callaback
         self.__args = []
 
@@ -126,6 +139,10 @@ class DownloadMod(object):
         return self.__src_path
 
     @property
+    def refrech_progress(self) -> float:
+        return self.__refrech_progress
+
+    @property
     def progress_percentage(self) -> float:
         return self.__progress_percentage
 
@@ -138,6 +155,7 @@ class DownloadMod(object):
 
     def set_dest_path(self, path):
         path = os.path.join(path, self.__plugin)
+        print(path)
         if not os.path.isdir(path):
             os.makedirs(path)
 
@@ -149,6 +167,12 @@ class DownloadMod(object):
         self.__name = file
         self.__src_path = src
 
+    def __progress_call(self):
+        self.__callback_locked = True
+        self.__progress_callback(self._progress_percentage, *self.__args)
+        time.sleep(self.__refrech_progress)
+        self.__callback_locked = False
+
     def download(self, url_path):
         pass
 
@@ -158,7 +182,6 @@ class DownloadMod(object):
         buffer_size = 1024 * 1024  # 1 MB
 
         self.__dest_path = os.path.join(self.__dest_path, self.__name)
-
         with open(self.__src_path, 'rb') as source_file, open( self.__dest_path, 'wb') as dest_file:
             buffer = source_file.read(buffer_size)
             while buffer:
@@ -167,7 +190,9 @@ class DownloadMod(object):
                 copied_size += len(buffer)
 
                 self._progress_percentage = (copied_size / total_size)
-                self.__progress_callback(self._progress_percentage, *self.__args)
+                if not self.__callback_locked:
+                    progress = threading.Thread(target=self.__progress_call)
+                    progress.start()
                 buffer = source_file.read(buffer_size)
 
         return True
