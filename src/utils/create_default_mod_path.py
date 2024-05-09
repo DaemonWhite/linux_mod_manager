@@ -20,3 +20,4 @@ def create_default_mod_path(settings):
         if not os.path.isdir(final_folder):
             os.makedirs(final_folder)
             settings.set_string(setting_name, final_folder)
+            settings.load_app_settings()
