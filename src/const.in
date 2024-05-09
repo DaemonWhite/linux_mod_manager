@@ -9,10 +9,10 @@ ARCHIVE="archive"
 NOTIFY_ACTIVE="notify::active"
 NOTIFY_SELECT_ITEM="notify::selected-item"
 
-URL="/fr/daemonwhite/mod_manager/"
-UI_BASE="/fr/daemonwhite/mod_manager/ui/"
+URL="@PREFIX@"
+UI_BASE=URL+"/ui/"
 
-URI="fr.daemonwhite.mod_manager"
+URI="@APP_ID@"
 DEVELOPERS=['DaemonWhite']
 VERSION='@VERSION@'
 VERSION_PLUGIN="0.1"

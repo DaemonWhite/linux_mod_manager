@@ -62,7 +62,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.app = kwargs.get("application")
 
         css_provider = Gtk.CssProvider()
-        css_provider.load_from_resource(URL+'css/style.css')
+        css_provider.load_from_resource(URL+'/css/style.css')
         Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
         plugin_path = os.path.join(PKGDATADIR, 'plugins')

@@ -1,5 +1,5 @@
 {
-    "app-id" : "fr.daemonwhite.mod_manager",
+    "app-id" : "fr.daemonwhite.mod_manager.Devel",
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "46",
     "sdk" : "org.gnome.Sdk",
@@ -50,6 +50,9 @@
                     "type" : "git",
                     "url" : "file:///home/matheo/Projets/Python"
                 }
+            ],
+            "config-opts" : [
+                "-Ddevel=true"
             ]
         }
     ],

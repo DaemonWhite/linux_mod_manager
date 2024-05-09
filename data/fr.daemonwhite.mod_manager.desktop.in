@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=py_mod_manager
+Name=Linux Mod Manager
 Exec=py_mod_manager
-Icon=fr.daemonwhite.mod_manager
+Icon=@APP_ID@
 Terminal=false
 Type=Application
 Categories=GTK;

@@ -1,20 +1,4 @@
-pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
 moduledir = pkgdatadir / 'py_mod_manager'
-
-gnome = import('gnome')
-python = import('python')
-
-conf_python = configuration_data()
-conf_python.set('PYTHON', python.find_installation('python3').full_path())
-conf_python.set('localedir', get_option('prefix') / get_option('localedir'))
-conf_python.set('pkgdatadir', pkgdatadir)
-
-conf = configuration_data()
-conf.set('VERSION', meson.project_version())
-conf.set('DEVEL', devel)
-conf.set('localedir', get_option('prefix') / get_option('localedir'))
-conf.set('pkgdatadir', pkgdatadir)
-
 
 configure_file(
   input: 'const.in',
@@ -28,7 +12,7 @@ configure_file(
 configure_file(
   input: 'py_mod_manager.in',
   output: 'py_mod_manager',
-  configuration: conf_python,
+  configuration: conf,
   install: true,
   install_dir: get_option('bindir'),
   install_mode: 'r-xr--r--'

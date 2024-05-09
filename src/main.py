@@ -25,7 +25,7 @@ gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Gio, Adw
 from .window import PyModManagerWindow
-from .const import URI, VERSION, DEVELOPERS
+from .const import URI, VERSION, DEVELOPERS, URI
 
 
 class PyModManagerApplication(Adw.Application):
@@ -53,7 +53,7 @@ class PyModManagerApplication(Adw.Application):
         """Callback for the app.about action."""
         about = Adw.AboutWindow(transient_for=self.props.active_window,
                                 application_name='py_mod_manager',
-                                application_icon='fr.daemonwhite.mod_manager',
+                                application_icon=URI,
                                 developer_name=DEVELOPERS[0],
                                 version=VERSION,
                                 developers=DEVELOPERS,
