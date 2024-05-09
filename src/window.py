@@ -65,7 +65,8 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         css_provider.load_from_resource(URL+'/css/style.css')
         Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
-        plugin_path = os.path.join(PKGDATADIR, 'plugins')
+        # TODO Plugins additional loader
+        # plugin_path = os.path.join(PKGDATADIR, 'plugins')
 
         self.settings = ApllicationConfiguration()
         create_default_mod_path(self.settings)
