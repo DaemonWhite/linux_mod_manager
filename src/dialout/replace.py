@@ -14,4 +14,6 @@ class DialoutReplace(Adw.MessageDialog):
 
     def set_replace(self, heading, body):
         self.set_heading(f"Voulez-vous remplacer le mod dans {heading}")
-        self.set_body(f"Il y'a un déjà un fichier au nom de {body} voulez vous le remplacer ? ")
+        self.set_body(
+            f"Il y'a un déjà un fichier au nom de {body} voulez vous le remplacer ? "
+        )
