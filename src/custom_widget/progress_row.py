@@ -8,11 +8,11 @@ class ProgressRow(Adw.ActionRow):
     __gobject_init__ = "ProgressRow"
 
     __gproperties__ = {
-        'active': ( \
-            Gtk.Widget, \
-            'Activatable Switch', \
-            'The switch to activate when the row is activated.', \
-            GObject.ParamFlags.READWRITE \
+        'active': (
+            Gtk.Widget,
+            'Activatable Switch',
+            'The switch to activate when the row is activated.',
+            GObject.ParamFlags.READWRITE
         ),
     }
 
