@@ -19,12 +19,24 @@ class SettingsStack(Adw.Bin):
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
         self.__window = window
-        self.symbolic_row.connect(NOTIFY_ACTIVE, self.__switch_change, "symbolic")
+        self.symbolic_row.connect(
+            NOTIFY_ACTIVE,
+            self.__switch_change,
+            "symbolic"
+        )
         self.copie_row.connect(NOTIFY_ACTIVE, self.__switch_change, "copy")
-        self.archive_row.connect(NOTIFY_ACTIVE, self.__switch_change, "archive")
+        self.archive_row.connect(
+            NOTIFY_ACTIVE,
+            self.__switch_change,
+            "archive"
+        )
 
         self.game_folder.connect("clicked", self.__on_select_folder, "path")
-        self.prefix_folder.connect("clicked", self.__on_select_folder, "prefix")
+        self.prefix_folder.connect(
+            "clicked",
+            self.__on_select_folder,
+            "prefix"
+        )
 
     def __on_single_selected(self, dialog, result, path):
         file = ""
@@ -33,12 +45,15 @@ class SettingsStack(Adw.Bin):
             self.__window.cg.set_configuration(path, file)
             self.__window.cg.save_plugin()
             self.__window.enable_current_plugin()
-        except Exception as e :
+        except Exception as e:
             print(e)
 
     def __on_select_folder(self, dialog, path):
         dialog_for_folder = Gtk.FileDialog()
-        file = dialog_for_folder.select_folder(self.__window, None, self.__on_single_selected, path)
+        dialog_for_folder.select_folder(
+            self.__window, None, self.__on_single_selected,
+            path
+        )
 
     def __switch_change(self, widget, _, data):
         mode = USER
