@@ -3,8 +3,8 @@ import json
 
 from utils.xdg import xdg_conf_path
 
-#TODO Re-protéger set_path
 
+# TODO Re-protéger set_path
 class PluginConfig(object):
 
     def __init__(self, plugin):
@@ -15,12 +15,19 @@ class PluginConfig(object):
         self.__plugin = {
             "enable": True,
             "plugin_conf": False,
+            "conflit_syst": False,
+            "post_conf": False
         }
         for name, data in plugin.get_plugin_conf().items():
             self.__plugin[name] = data
 
-    def is_enable(self):
-        return bool(self.__plugin["enable"])
+    @property
+    def conflit_syst(self):
+        return bool(self.__plugin["conflit_syst"])
+
+    @property
+    def post_conf(self):
+        return bool(self.__plugin["post_conf"])
 
     @property
     def existe(self):
@@ -42,12 +49,20 @@ class PluginConfig(object):
         if os.path.isfile(self.__path):
             self.__existe = True
 
+    def enable_init_conflit_syst(self, enable):
+        self.__plugin["conflit_init"] = enable
+        self.save_plugin()
+
+    def enable_post_conf(self, enable):
+        self.__plugin["post_conf"] = enable
+        self.save_plugin()
+
     def enable(self, enable):
         self.__plugin["enable"] = enable
         self.save_plugin()
 
     def is_enable(self):
-        return self.__plugin["enable"]
+        return bool(self.__plugin["enable"])
 
     def add_configuration(self, data):
         self.__plugin += data
