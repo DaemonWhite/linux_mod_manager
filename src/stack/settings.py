@@ -1,10 +1,14 @@
 from gi.repository import Gtk, Adw, GObject, Gio
 
 from py_mod_manager.const import USER, NOTIFY_ACTIVE, UI_BASE
+from custom_widget.stape_row import StapeRow
+
 
 @Gtk.Template(resource_path=UI_BASE+'stack/settings.ui')
 class SettingsStack(Adw.Bin):
     __gtype_name__ = 'SettingsStack'
+
+    information_group = Gtk.Template.Child()
 
     symbolic_row = Gtk.Template.Child()
     copie_row = Gtk.Template.Child()
@@ -37,6 +41,18 @@ class SettingsStack(Adw.Bin):
             self.__on_select_folder,
             "prefix"
         )
+        self.__path_stape_row = StapeRow()
+        self.__path_stape_row.set_title("Chemin du jeux et du prefix")
+        self.__path_stape_row.set_subtitle(
+            "Pour corriger indiquer le chemin du jeu ou/et du prefix.\n Réinstaler le jeu peut corriger des problèmes si ça persiste "
+        )
+        self.__configure_stape_row = StapeRow()
+        self.__configure_stape_row.set_title("Configuration du jeu")
+        self.__configure_stape_row.set_subtitle(
+            "Appuer sur le bouton configurer pour corriger les poblèmes"
+        )
+        self.information_group.add(self.__path_stape_row)
+        self.information_group.add(self.__configure_stape_row)
 
     def __on_single_selected(self, dialog, result, path):
         file = ""
@@ -87,3 +103,9 @@ class SettingsStack(Adw.Bin):
     def set_prefix_row(self, path: str):
         subtitle = f'Chemin du prefix : {path}'
         self.prefix_row.set_subtitle(subtitle)
+
+    def path_state(self, state):
+        self.__path_stape_row.choose_state(state)
+
+    def post_traitement_state(self, state):
+        self.__configure_stape_row.choose_state(state)

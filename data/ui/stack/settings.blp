@@ -4,8 +4,23 @@ using Adw 1;
 template $SettingsStack : $AdwBin {
 	Gtk.Box {
 		Adw.PreferencesPage {
+      Adw.PreferencesGroup information_group {
+        title: "Information";
+        description: "Information au paramètres manquant";
+      }
 			Adw.PreferencesGroup {
 				title: "Base";
+				header-suffix: Gtk.Box{
+				  spacing: 5;
+				  Gtk.Button {
+				    styles ["error"]
+				    label: "Post Traitement";
+				    sensitive: false;
+				  }
+				  Gtk.Button {
+				    label: "Reconfigurer";
+				  }
+				};
 				Adw.SwitchRow symbolic_row {
 					title: "Liens Symbolic";
 				}
