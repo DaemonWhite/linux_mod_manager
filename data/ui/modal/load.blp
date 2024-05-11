@@ -3,13 +3,21 @@ using Adw 1;
 
 template $PyModManagerWindowModalLoad : $AdwWindow {
 	modal: true;
-	default-height: 450;
-	default-width: 450;
+	default-width: 800;
 
 	Gtk.Box {
-		orientation: vertical;
+		orientation: horizontal;
 		vexpand: true;
 		hexpand: true;
+		Gtk.Box {
+		  margin-end: 5;
+		  margin-start: 5;
+		  margin-top: 5;
+		  Adw.PreferencesPage {
+		    Adw.PreferencesGroup stape_configuration {
+		      }
+		  }
+		}
 		Gtk.Box {
 			vexpand: true;
 			hexpand: true;
@@ -24,14 +32,6 @@ template $PyModManagerWindowModalLoad : $AdwWindow {
 						title: "Recherche de jeux en cours";
 						description: "Configure le jeux avec y plugin";
 						icon-name: 'input-gaming-symbolic';
-						Gtk.Spinner search_spiner {
-								vexpand: true;
-								hexpand: true;
-								valign: center;
-								width-request: 100;
-								height-request: 100;
-								styles ["flat", "title-1"]
-				    }
 					};
 				}
 				Gtk.StackPage {
