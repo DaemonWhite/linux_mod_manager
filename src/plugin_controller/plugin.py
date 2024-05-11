@@ -1,6 +1,7 @@
 import importlib
 import os
 
+
 class PluginLoader(object):
 
     def __init__(self, NAME_PLUGIN, MODULE):
@@ -19,18 +20,22 @@ class PluginLoader(object):
 
     def load(self, name, path, registery_plugin):
         folder = os.path.join(path, self.__NAME_PLUGIN)
-        try:
-            for file_name in os.listdir(folder):
+        for file_name in os.listdir(folder):
+            try:
                 if file_name.endswith(".py") and file_name != "__init__.py":
                     # plugin_name = os.path.splitext(file_name)[0]
-                    spec = importlib.util.spec_from_file_location(name, f"{folder}/{file_name}")
+                    spec = importlib.util.spec_from_file_location(
+                        name,
+                        f"{folder}/{file_name}"
+                    )
                     module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(module)
                     registery_plugin(module, self.__list_plugin)
-        except Exception as e:
-            print(f"Impossible d'accéder au donné {folder} \n\n {e}")
+            except Exception as e:
+                print(f"Impossible d'accéder au donné {folder}/{file_name} \
+                \n\n {e}")
 
-    def reload(self, name, path , registery_plugin):
+    def reload(self, name, path, registery_plugin):
         self.unload()
         self.load(name, path, registery_plugin)
 
