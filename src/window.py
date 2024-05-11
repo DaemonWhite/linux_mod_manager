@@ -155,84 +155,45 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         self.__started = True
 
-    def __end_auto_detect_game(self, load_modal):
-        result, prefix, path = self.cg.auto_detect_path_game(
+    def configure_game(self):
+        result = self.cg.auto_detect_path_game(
             self._plugin,
             self._list_auto_detect
         )
 
         if result:
-            load_modal.choose_state(0, "success")
-            load_modal.load_state(1)
-            load_modal.set_name_load(
-                self.cg.name,
-                "Veullier patienter pendant que le \
-                système applique le poste traitement"
-            )
             self.cg.plugin_conf = True
-            self.cg.path_game = path
-            self.cg.path_prefix = prefix
             self.enable_current_plugin()
-        else:
-            load_modal.set_name_result(
-                result,
-                self.cg.name,
-                "N'a pas étais trouver"
-            )
-            load_modal.choose_state(0, "error")
-            load_modal.choose_state(1, "error")
-            load_modal.choose_state(2, "error")
-            return 1
 
-        result = self.cg.post_traitement()
-
-        if result:
-            load_modal.choose_state(1, "success")
-        else:
-            load_modal.set_name_result(
-                result,
-                self.cg.name,
-                "Le poste traitement na pas pus êtres appliquer"
-            )
-            load_modal.choose_state(1, "error")
-
-        load_modal.load_state(2)
-
-        result = self.cg.init_conflit_syst()
-        if result:
-            load_modal.set_name_result(
-                result,
-                self.cg.name,
-                "Le jeu à étais correctement configurer"
-            )
-            load_modal.choose_state(2, "success")
-        else:
-            load_modal.set_name_result(
-                result,
-                self.cg.name,
-                "L'intégritée à echouer"
-            )
-            load_modal.choose_state(1, "error")
+        return result
 
     def auto_detect_game(self):
         load_modal = PyModManagerWindowModalLoad(
             self,
             "Etape de configuration du jeu"
         )
-        load_modal.add_stape("Cherche le jeux", "", "")
-        load_modal.add_stape("Application du post traitement", "", "")
-        load_modal.add_stape("Creation de l'intégritée", "", "")
-        load_modal.load_state(0)
-        load_modal.set_name_load(
-            self.cg.name,
-            "Veullier patienter pendant que le système cherche votre jeux"
+        load_modal.set_name_load(self.cg.name)
+        load_modal.add_stape(
+            name="Cherche le jeux",
+            title_description="Veullier patienter pendant que le système \
+            cherche votre jeux",
+            error_description="N'a pas étais trouver",
+            callback=self.configure_game,
+            error_end=True
+        )
+        load_modal.add_stape(
+            name="Application du post traitement",
+            title_description="Veullier patienter pendant que le système \
+            applique le poste traitement",
+            callback=self.cg.post_traitement
+        )
+        load_modal.add_stape(
+            name="Creation de l'intégritée",
+            title_description="Le jeu à étais correctement configurer",
+            callback=self.cg.init_conflit_syst
         )
         load_modal.show()
-        thread_detect_game = threading.Thread(
-            target=self.__end_auto_detect_game,
-            args=(load_modal,)
-        )
-        thread_detect_game.start()
+        load_modal.task_synchrone()
 
     def __change_page(self, widget, _):
         PAGE = widget.get_visible_child_name()
@@ -288,7 +249,6 @@ class PyModManagerWindow(Adw.ApplicationWindow):
                 break
             i += 1
         return index
-
 
     def select_game(self, index: int):
         if self.__len_enable_support_game == 0:
@@ -349,10 +309,26 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.page_settings.set_path_row(self.cg.path_game)
         self.page_settings.set_prefix_row(self.cg.path_prefix)
 
+        path_error = False
+        if self.cg.path_game == "":
+            path_error = True
+
         if self.cg.systeme == ["win"]:
             self.page_settings.enable_windows(True)
+            if self.cg.path_prefix == "":
+                path_error = True
         else:
             self.page_settings.enable_windows(False)
+
+        if path_error:
+            self.page_settings.path_state("error")
+        else:
+            self.page_settings.path_state("success")
+
+        if self.cg.conflit_syst or self.cg.post_conf:
+            self.page_settings.post_traitement_state("success")
+        else:
+            self.page_settings.post_traitement_state("error")
 
     def __show_prefrences(self, _, _1):
         pref = PreferencesLinuxModManager(self)

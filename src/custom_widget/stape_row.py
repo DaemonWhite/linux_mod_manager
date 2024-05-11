@@ -67,6 +67,7 @@ class StapeRow(Adw.ActionRow):
             )
             self.box_color.set_css_classes(["state-icon", state.style])
 
+    # TODO add state
     def add_state(self, name, icone, styles):
         pass
 
