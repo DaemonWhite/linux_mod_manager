@@ -11,8 +11,15 @@
     <file preprocess="xml-stripblanks">ui/stack/error.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/progress_row.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/switch_info_row.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/stape_row.ui</file>
     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
-    <file preprocess="xml-stripblanks">icons/hicolor/scalable/actions/tab-new-symbolic.svg</file>
     <file>css/style.css</file>
+  </gresource>
+  <gresource prefix="@PREFIX@/icons/scalable/actions/">
+    <file alias="check-round-outline2-symbolic">icons/hicolor/scalable/actions/check-round-outline2-symbolic.svg</file>
+    <file alias="cross-large-circle-filled-symbolic">icons/hicolor/scalable/actions/cross-large-circle-filled-symbolic.svg</file>
+    <file alias="stop-sign-large-outline-symbolic">icons/hicolor/scalable/actions/stop-sign-large-outline-symbolic.svg</file>
+    <file alias="tab-new-symbolic">icons/hicolor/scalable/actions/tab-new-symbolic.svg</file>
+    <file alias="warning-outline-symbolic">icons/hicolor/scalable/actions/warning-outline-symbolic.svg</file>
   </gresource>
 </gresources>

@@ -15,5 +15,33 @@
 
 .progress_valide > trough > progress {
     background-color: @success_bg_color;
+}
 
+.state-icon {
+  border-radius: 9999px;
+}
+
+.state-icon.work {
+  color: @accent_color;
+  background-color: alpha(@accent_bg_color, .25);
+}
+
+.state-icon.success {
+  color: @success_color;
+  background-color: alpha(@success_color, .25);
+}
+
+.state-icon.error {
+  color: @error_color;
+  background-color: alpha(@error_color, .25);
+}
+
+.state-icon.warning {
+  color: @warning_color;
+  background-color: alpha(@warning_color, .25);
+}
+
+.state-icon.neutral {
+  color: @light_5;
+  background-color: alpha(@light_5, .25);
 }
