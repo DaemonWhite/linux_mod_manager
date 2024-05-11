@@ -23,6 +23,7 @@ class PluginConfig(object):
 
     @property
     def conflit_syst(self):
+        print(self.__plugin)
         return bool(self.__plugin["conflit_syst"])
 
     @property
@@ -45,12 +46,12 @@ class PluginConfig(object):
             if not os.path.isdir(base_path):
                 os.makedirs(base_path)
 
-        self.__path =  os.path.join(base_path, f"{name}.json")
+        self.__path = os.path.join(base_path, f"{name}.json")
         if os.path.isfile(self.__path):
             self.__existe = True
 
     def enable_init_conflit_syst(self, enable):
-        self.__plugin["conflit_init"] = enable
+        self.__plugin["conflit_syst"] = enable
         self.save_plugin()
 
     def enable_post_conf(self, enable):
