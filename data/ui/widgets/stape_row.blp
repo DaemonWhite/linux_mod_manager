@@ -1,0 +1,40 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $StapeRow : Adw.ActionRow {
+  title: "coucou";
+  subtitle: "Tu vas bien";
+  [prefix]
+  Gtk.Box box_color {
+    styles ["neutral", "state-icon"]
+    valign: center;
+    halign: center;
+    Gtk.Image image_status {
+      halign: center;
+      valign: center;
+      margin-start: 5;
+      margin-end: 5;
+      margin-top: 5;
+      margin-bottom: 5;
+      icon-size: large;
+      icon-name: "stop-sign-large-outline-symbolic";
+
+    }
+    Gtk.Spinner spinner_status {
+      styles ["large-icons"]
+      halign: center;
+      valign: center;
+      margin-start: 5;
+      margin-end: 5;
+      margin-top: 5;
+      margin-bottom: 5;
+      visible: false;
+    }
+  }
+  [suffix]
+  Gtk.Box {
+    valign: center;
+    Gtk.Label label_info{
+    }
+  }
+}
