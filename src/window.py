@@ -26,7 +26,6 @@ from gi.repository import Gtk
 from gi.repository import Gio
 from gi.repository import Gdk
 
-from plugin_controller.plugin_game import PluginGame
 from plugin_controller.factory import Game
 
 from modal.preferences import PreferencesLinuxModManager
@@ -35,8 +34,7 @@ from modal.load import PyModManagerWindowModalLoad
 
 from utils.current_game import CurrentGame
 from utils.conf import ApllicationConfiguration
-from utils.plugin_conf import PluginConfig
-from utils.xdg import xdg_conf_path
+# from utils.files import generate_dict_archive, lower_case_recursif
 from utils.plugin_loaders import PluginManager
 from utils.create_default_mod_path import create_default_mod_path
 
@@ -46,6 +44,7 @@ from stack.mod import ModStack
 from stack.error import ErrorStack
 
 from py_mod_manager.const import USER, NOTIFY_SELECT_ITEM, BUILD_TYPE, URI, PKGDATADIR, UI_BASE, URL
+
 
 @Gtk.Template(resource_path=UI_BASE+'window.ui')
 class PyModManagerWindow(Adw.ApplicationWindow):
@@ -60,10 +59,13 @@ class PyModManagerWindow(Adw.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.app = kwargs.get("application")
-
         css_provider = Gtk.CssProvider()
         css_provider.load_from_resource(URL+'/css/style.css')
-        Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        Gtk.StyleContext.add_provider_for_display(
+            Gdk.Display.get_default(),
+            css_provider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
 
         # TODO Plugins additional loader
         # plugin_path = os.path.join(PKGDATADIR, 'plugins')
@@ -92,10 +94,14 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self._list_plugin_game_load = list()
 
         # Create list plugin auto_detect_game
-        self._list_auto_detect = self._plugin.get_list_plugin(self._plugin.PLUGIN_DETECT_GAMES)
+        self._list_auto_detect = self._plugin.get_list_plugin(
+            self._plugin.PLUGIN_DETECT_GAMES
+        )
 
         # Event List plugin
-        self._list_plugin = self._plugin.get_list_plugin(self._plugin.PLUGIN_GAMES)
+        self._list_plugin = self._plugin.get_list_plugin(
+            self._plugin.PLUGIN_GAMES
+        )
 
         factory = Gtk.SignalListItemFactory()
         factory.connect("setup", self._on_factory_setup)
@@ -107,7 +113,10 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         # Apply list
         self.choose_game.set_model(self._list)
-        self.choose_game.connect(NOTIFY_SELECT_ITEM, self._on_selected_item_notify)
+        self.choose_game.connect(
+            NOTIFY_SELECT_ITEM,
+            self._on_selected_item_notify
+        )
 
         self.page_settings = SettingsStack(self)
         self.page_order = OrderStack(self)
@@ -147,21 +156,82 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.__started = True
 
     def __end_auto_detect_game(self, load_modal):
-        result, prefix, path = self.cg.auto_detect_path_game(self._plugin, self._list_auto_detect)
+        result, prefix, path = self.cg.auto_detect_path_game(
+            self._plugin,
+            self._list_auto_detect
+        )
+
         if result:
-            load_modal.set_name_result(result, self.cg.name, "A bien étais trouver")
+            load_modal.choose_state(0, "success")
+            load_modal.load_state(1)
+            load_modal.set_name_load(
+                self.cg.name,
+                "Veullier patienter pendant que le \
+                système applique le poste traitement"
+            )
             self.cg.plugin_conf = True
             self.cg.path_game = path
             self.cg.path_prefix = prefix
             self.enable_current_plugin()
         else:
-            load_modal.set_name_result(result, self.cg.name, "N'a pas étais trouver")
+            load_modal.set_name_result(
+                result,
+                self.cg.name,
+                "N'a pas étais trouver"
+            )
+            load_modal.choose_state(0, "error")
+            load_modal.choose_state(1, "error")
+            load_modal.choose_state(2, "error")
+            return 1
+
+        result = self.cg.post_traitement()
+
+        if result:
+            load_modal.choose_state(1, "success")
+        else:
+            load_modal.set_name_result(
+                result,
+                self.cg.name,
+                "Le poste traitement na pas pus êtres appliquer"
+            )
+            load_modal.choose_state(1, "error")
+
+        load_modal.load_state(2)
+
+        result = self.cg.init_conflit_syst()
+        if result:
+            load_modal.set_name_result(
+                result,
+                self.cg.name,
+                "Le jeu à étais correctement configurer"
+            )
+            load_modal.choose_state(2, "success")
+        else:
+            load_modal.set_name_result(
+                result,
+                self.cg.name,
+                "L'intégritée à echouer"
+            )
+            load_modal.choose_state(1, "error")
 
     def auto_detect_game(self):
-        load_modal = PyModManagerWindowModalLoad(self)
-        load_modal.set_name_load(self.cg.name, "Veullier patienter pendant que le système cherche votre jeux" )
+        load_modal = PyModManagerWindowModalLoad(
+            self,
+            "Etape de configuration du jeu"
+        )
+        load_modal.add_stape("Cherche le jeux", "", "")
+        load_modal.add_stape("Application du post traitement", "", "")
+        load_modal.add_stape("Creation de l'intégritée", "", "")
+        load_modal.load_state(0)
+        load_modal.set_name_load(
+            self.cg.name,
+            "Veullier patienter pendant que le système cherche votre jeux"
+        )
         load_modal.show()
-        thread_detect_game = threading.Thread(target=self.__end_auto_detect_game, args=(load_modal,))
+        thread_detect_game = threading.Thread(
+            target=self.__end_auto_detect_game,
+            args=(load_modal,)
+        )
         thread_detect_game.start()
 
     def __change_page(self, widget, _):
@@ -172,7 +242,9 @@ class PyModManagerWindow(Adw.ApplicationWindow):
     def verif_load_game(self):
         if self.__len_enable_support_game == 0:
             self.main_stack.set_visible_child_name("page_error")
-            self.page_error.error_label.set_label("Veulier activer au moins un pluging de jeux")
+            self.page_error.error_label.set_label(
+                "Veulier activer au moins un pluging de jeux"
+            )
             self.view_switcher_bar.set_visible(False)
             self.view_switcher_title.set_visible(False)
             return False
@@ -209,12 +281,12 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
     def search_game_plugin(self, name: str) -> int:
         index = -1
-        i=0
+        i = 0
         for plugin_name in self._list_plugin_game_load:
             if plugin_name == name:
                 index = i
                 break
-            i+=1
+            i += 1
         return index
 
 
@@ -228,9 +300,9 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             game = self._list_plugin_game_load[index]
             self.choose_game.set_selected(index)
 
-        self.cg.set_current_game( \
-            self._plugin.get_plugin(self._plugin.PLUGIN_GAMES, game), \
-            self._plugin.get_conf_plugin(self._plugin.PLUGIN_GAMES, game) \
+        self.cg.set_current_game(
+            self._plugin.get_plugin(self._plugin.PLUGIN_GAMES, game),
+            self._plugin.get_conf_plugin(self._plugin.PLUGIN_GAMES, game)
         )
 
     @property
@@ -255,19 +327,19 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         if not self.cg.plugin_conf and self.settings.get_auto_detect_games():
             self.auto_detect_game()
 
-        self.verif_sensitive_settings( \
-            self.page_settings.symbolic_row, \
-            self.settings.get_mode_symb() \
+        self.verif_sensitive_settings(
+            self.page_settings.symbolic_row,
+            self.settings.get_mode_symb()
         )
 
-        self.verif_sensitive_settings( \
-            self.page_settings.copie_row, \
-            self.settings.get_mode_copy() \
+        self.verif_sensitive_settings(
+            self.page_settings.copie_row,
+            self.settings.get_mode_copy()
         )
 
-        self.verif_sensitive_settings( \
-            self.page_settings.archive_row, \
-            self.settings.get_mode_archive() \
+        self.verif_sensitive_settings(
+            self.page_settings.archive_row,
+            self.settings.get_mode_archive()
         )
 
         self.page_settings.set_symbolic_row(self.cg.symbolic)
@@ -300,8 +372,14 @@ class PyModManagerWindow(Adw.ApplicationWindow):
             game = dropdown.get_selected_item()
             self.__last_game = game.game_name
             self.cg.set_current_game( \
-                self._plugin.get_plugin(self._plugin.PLUGIN_GAMES, game.game_name), \
-                self._plugin.get_conf_plugin(self._plugin.PLUGIN_GAMES, game.game_name)
+                self._plugin.get_plugin(
+                    self._plugin.PLUGIN_GAMES,
+                    game.game_name
+                ),
+                self._plugin.get_conf_plugin(
+                    self._plugin.PLUGIN_GAMES,
+                    game.game_name
+                )
             )
         if self.__started:
             self.enable_current_plugin()
