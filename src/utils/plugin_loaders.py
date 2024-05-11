@@ -1,5 +1,5 @@
-#TODO Créer un système de chargement propre
-#TODO Ajouter un systèmes de vérification de plugin
+# TODO Créer un système de chargement propre
+# TODO Ajouter un systèmes de vérification de plugin
 
 import os
 
@@ -16,8 +16,10 @@ from utils.xdg import xdg_conf_path
 def registery_game_plugin(module, list_module):
     list_module[module.PluginGames().name] = module.PluginGames
 
+
 def registery_detect_game_plugin(module, list_module):
     list_module[module.PluginDetectGames().name] = module.PluginDetectGames
+
 
 class PluginManager(object):
     def __init__(self):
@@ -29,33 +31,46 @@ class PluginManager(object):
 
         self.__plugins = dict()
 
-        self.__CONF_PATH =  os.path.join(self.__path, "plugin_conf")
+        self.__CONF_PATH = os.path.join(self.__path, "plugin_conf")
 
         self.__USER_PATH = os.path.join(self.__path, PLUGINS)
         self.__SYSTEME_PATH = os.path.join(PKGDATADIR, PLUGINS)
 
         self.__load()
 
-
-
     def __load(self):
         self.__games = PluginLoader("games", PluginGame)
         self.__games.create_folder_plugin(self.__USER_PATH)
-        self.__games.load(self.__PLUGIN_GAMES, self.__SYSTEME_PATH, registery_game_plugin)
-        self.__games.load(self.__PLUGIN_GAMES, self.__USER_PATH, registery_game_plugin)
+        self.__games.load(
+            self.__PLUGIN_GAMES,
+            self.__SYSTEME_PATH,
+            registery_game_plugin
+        )
+        self.__games.load(
+            self.__PLUGIN_GAMES,
+            self.__USER_PATH,
+            registery_game_plugin
+        )
 
         self.__load_plugins(self.__PLUGIN_GAMES, self.__games)
 
         self.__detect_games = PluginLoader("detect_games", PluginDetectGame)
         self.__detect_games.create_folder_plugin(self.__USER_PATH)
-        self.__detect_games.load(self.__PLUGIN_DETECT_GAMES, self.__SYSTEME_PATH, registery_detect_game_plugin)
-        self.__detect_games.load(self.__PLUGIN_DETECT_GAMES, self.__USER_PATH, registery_detect_game_plugin)
+        self.__detect_games.load(
+            self.__PLUGIN_DETECT_GAMES,
+            self.__SYSTEME_PATH,
+            registery_detect_game_plugin
+        )
+        self.__detect_games.load(
+            self.__PLUGIN_DETECT_GAMES,
+            self.__USER_PATH,
+            registery_detect_game_plugin
+        )
         self.__load_plugins(self.__PLUGIN_DETECT_GAMES, self.__detect_games)
 
     def reload(self):
         self.__plugins.clear()
         self.__load()
-
 
     def __load_plugins(self, name, plugins):
         self.__plugins[name] = dict()
@@ -66,7 +81,6 @@ class PluginManager(object):
                 conf.save_plugin()
             conf.load_plugin()
             self.__plugins[name][plugin_name] = (plugin, conf)
-
 
     def get_list_all_plugin(self):
         return self.__plugins
