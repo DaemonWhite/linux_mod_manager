@@ -1,5 +1,6 @@
 from py_mod_manager.const import VERSION_PLUGIN
 
+
 class PluginBase(object):
 
     def __init__(self, name, version, plugin_version, type_plugin):
@@ -33,7 +34,6 @@ class PluginBase(object):
     def plugin_version(self):
         return self.__plugin_version
 
-
     @property
     def authors(self):
         return self._authors
@@ -57,11 +57,11 @@ class PluginBase(object):
         if not self.verif_banned_conf(name):
             self.__plugin_conf[name] = value
 
-    def set_conf(self, name:str, value):
+    def set_conf(self, name: str, value):
         valide = False
         if self.verif_banned_conf(name):
             valide = True
-            print("banned ",name)
+            print("banned ", name)
             return valide
 
         for name_conf, _ in self.__plugin_conf.items():
