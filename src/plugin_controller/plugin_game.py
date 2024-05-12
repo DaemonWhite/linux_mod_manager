@@ -15,6 +15,8 @@ class PluginGame(PluginBase):
         self._add_conf("archive", True)
         self._add_conf("copy", True)
         self._add_conf("path", "")
+        self._add_conf("path_download", "")
+        self._add_conf("path_install", "")
         self._add_conf("prefix", "")
         self._add_conf("conflit_syst", False)
         self._add_conf("post_conf", False)
@@ -24,6 +26,8 @@ class PluginGame(PluginBase):
         self._add_protected_conf("conflit_syst")
         self._add_protected_conf("post_conf")
         self._add_ban_conf("path")
+        self._add_ban_conf("path_download")
+        self._add_ban_conf("path_install")
         self._add_ban_conf("prefix")
         self._nexus_mod = False
         self._platform = ["Manual"]
