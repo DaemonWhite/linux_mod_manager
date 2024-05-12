@@ -1,6 +1,7 @@
 import os
 from utils.xdg import xdg_share_path
 
+
 def create_default_mod_path(settings):
     path = xdg_share_path()
 

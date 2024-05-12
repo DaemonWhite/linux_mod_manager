@@ -44,6 +44,14 @@ class CurrentGame(object):
         return self.__current_config.get_plugin_configuration("prefix")
 
     @property
+    def path_download(self):
+        return self.__current_config.get_plugin_configuration("path_download")
+
+    @property
+    def path_install(self):
+        return self.__current_config.get_plugin_configuration("path_install")
+
+    @property
     def symbolic(self):
         symbolic = False
         mode_symb = self.__settings.get_mode_symb()
@@ -88,10 +96,12 @@ class CurrentGame(object):
     @conflit_syst.setter
     def conflit_syst(self, value: bool):
         self.__current_config.set_configuration("conflit_syst", value)
+        self.save_plugin()
 
     @post_conf.setter
     def post_conf(self, value: bool):
         self.__current_config.set_configuration("post_conf", value)
+        self.save_plugin()
 
     @path_game.setter
     def path_game(self, value: str):
@@ -101,6 +111,16 @@ class CurrentGame(object):
     @path_prefix.setter
     def path_prefix(self, value: str):
         self.__current_config.set_configuration("prefix", value)
+        self.save_plugin()
+
+    @path_download.setter
+    def path_download(self, value: str):
+        self.__current_config.set_configuration("path_download", value)
+        self.save_plugin()
+
+    @path_install.setter
+    def path_install(self, value: str):
+        self.__current_config.set_configuration("path_install", value)
         self.save_plugin()
 
     @plugin_conf.setter
@@ -162,6 +182,17 @@ class CurrentGame(object):
                             result = True
                             break
         return result
+
+    def generated_default_path(self):
+        paths = [
+            self.path_download,
+            self.path_install
+        ]
+        print(self.path_download)
+        for path in paths:
+            path_game = path + "/" + self.plugin_name
+            if not os.path.isdir(path_game):
+                os.mkdir(path_game)
 
     def set_copy(self):
         self._default_force
