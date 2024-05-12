@@ -25,11 +25,11 @@ class CurrentGame(object):
 
     @property
     def conflit_syst(self):
-        return self.__current_config.conflit_syst
+        return self.__current_config.get_plugin_configuration("conflit_syst")
 
     @property
     def post_conf(self):
-        return self.__current_config.post_conf
+        return self.__current_config.get_plugin_configuration("post_conf")
 
     @property
     def plugin_conf(self):
@@ -85,6 +85,14 @@ class CurrentGame(object):
     def systeme(self):
         return self.__current_game.systeme
 
+    @conflit_syst.setter
+    def conflit_syst(self, value: bool):
+        self.__current_config.set_configuration("conflit_syst", value)
+
+    @post_conf.setter
+    def post_conf(self, value: bool):
+        self.__current_config.set_configuration("post_conf", value)
+
     @path_game.setter
     def path_game(self, value: str):
         self.__current_config.set_configuration("path", value)
@@ -119,9 +127,9 @@ class CurrentGame(object):
             lower_case_recursif(self.path_game)
             if not self.__current_game.post_traitement():
                 return False
-            self.__current_config.enable_post_conf(True)
+            self.post_conf = True
         except Exception as e:
-            self.__current_config.enable_post_conf(False)
+            self.post_conf = False
             print("Error poste traitement : ", e)
             result = False
         return result
@@ -130,9 +138,9 @@ class CurrentGame(object):
         result = True
         try:
             generate_dict_archive(False, self.path_game)
-            self.__current_config.enable_init_conflit_syst(True)
+            self.conflit_syst = True
         except Exception as e:
-            self.__current_config.enable_init_conflit_syst(False)
+            self.conflit_syst = False
             print("Error dict traitement : ", e)
             result = False
         return result
