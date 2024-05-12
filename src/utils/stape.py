@@ -39,19 +39,19 @@ class Stape(object):
         self.__spinner.set_margin_top(MARGIN)
         self.__spinner.set_margin_bottom(MARGIN)
         self.__spinner.set_visible(False)
+        self.__spinner.set_css_classes(["large-icons"])
 
         self.__box.prepend(self.__image)
         self.__box.prepend(self.__spinner)
 
-        self.__box.set_css_classes(["large-icons"])
-
-        self.__current_state = "stop"
+        self.__current_state = ""
         self.__state = {
             "error": State("cross-large-circle-filled-symbolic", "error"),
             "success": State("check-round-outline2-symbolic", "success"),
             "stop": State("stop-sign-large-outline-symbolic", "neutral"),
             "warning": State("warning-outline-symbolic", "warning"),
         }
+        self.choose_state("stop")
 
     def get_styles(self):
         return self.__state[self.__current_state].get_style()
