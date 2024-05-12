@@ -1,8 +1,6 @@
 import os
-import shutil
 import threading
 import time
-import copy
 
 from utils.files import slice_path_in_file
 
@@ -13,6 +11,7 @@ def verif_download_exist_file(file_path, path):
     if os.path.isfile(os.path.join(path, file)):
         exist = True
     return exist
+
 
 class DownloadModManager(object):
     # TODO Ajouter une option pour définir le rafraichisement
@@ -89,7 +88,10 @@ class DownloadModManager(object):
         task = DownloadMod(task_data['plugin'])
         task.set_src_path(task_data['src'])
         task.set_dest_path(task_data['dest'])
-        task.set_progress_callback(self.__call_callback_progress, task_data['object_callback'])
+        task.set_progress_callback(
+            self.__call_callback_progress,
+            task_data['object_callback']
+        )
         state_copy = task.copy()
         self.__count_task -= 1
         self.__count_total_end_download += 1
@@ -98,18 +100,19 @@ class DownloadModManager(object):
 
     def append(self, src: str, dest: str, plugin: str, *args):
         dl_data = {
-            'src':src,
-            'dest':dest,
-            'plugin':plugin,
-            'object_callback':args
+            'src': src,
+            'dest': dest,
+            'plugin': plugin,
+            'object_callback': args
         }
         self.__count_download_rest += 1
         self.__count_total_download += 1
         self.__list_download_mod.append(dl_data)
         self.__add_task()
 
+
 class DownloadMod(object):
-    #TODO Ajouter une option pour anuller
+    # TODO Ajouter une option pour anuller
     def __init__(self, plugin, refrech_progress=0.5):
         self.__base_path = str()
         self.__refrech_progress = refrech_progress
