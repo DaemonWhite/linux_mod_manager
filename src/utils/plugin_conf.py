@@ -15,15 +15,12 @@ class PluginConfig(object):
         self.__plugin = {
             "enable": True,
             "plugin_conf": False,
-            "conflit_syst": False,
-            "post_conf": False
         }
         for name, data in plugin.get_plugin_conf().items():
             self.__plugin[name] = data
 
     @property
     def conflit_syst(self):
-        print(self.__plugin)
         return bool(self.__plugin["conflit_syst"])
 
     @property
