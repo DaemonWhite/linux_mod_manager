@@ -1,0 +1,18 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $InstallRow : Adw.ActionRow {
+  [prefix]
+  Gtk.Box box_color {
+    styles ["neutral", "state-icon"]
+    valign: center;
+    halign: center;
+  }
+  [suffix]
+  Gtk.Box {
+    valign: center;
+    Gtk.Button install_button{
+      label: "Installer";
+    }
+  }
+}
