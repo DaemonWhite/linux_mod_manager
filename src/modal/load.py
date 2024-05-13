@@ -72,10 +72,8 @@ class PyModManagerWindowModalLoad(Adw.Window):
         self.load_stack.set_visible_child_name("result_status_page")
 
     def __task_syncrone(self):
-        index = -1
         result = False
-        for stape in self.__array_stape:
-            index += 1
+        for index, stape in enumerate(self.__array_stape):
             self.load_status.set_description(
                 stape['title_description']
             )
