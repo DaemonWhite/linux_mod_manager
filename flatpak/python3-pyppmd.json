@@ -1,0 +1,14 @@
+{
+    "name": "python3-pyppmd",
+    "buildsystem": "simple",
+    "build-commands": [
+        "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"pyppmd\" --no-build-isolation"
+    ],
+    "sources": [
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/31/7c/956ebf1f07506bb59e6f13ef068d91f1bec828758d399b455b175b668f6c/pyppmd-1.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "ec8a2447e69444703e2b273247bfcd4b540ec601780eff07da16344c62d2993d"
+        }
+    ]
+}

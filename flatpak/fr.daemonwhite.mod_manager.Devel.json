@@ -3,6 +3,9 @@
     "runtime" : "org.gnome.Platform",
     "runtime-version" : "46",
     "sdk" : "org.gnome.Sdk",
+    "sdk-extensions": [
+	{"sdk": "org.freedesktop.Sdk", "version": "23.08" }
+    ],
     "command" : "py_mod_manager",
     "finish-args" : [
         "--share=network",
@@ -41,6 +44,8 @@
         },
         "python3-pyxdg.json",
         "python3-vdf.json",
+        "python3-py7zr.json",
+        "python3-rarfile.json",
         {
             "name" : "py_mod_manager",
             "builddir" : true,

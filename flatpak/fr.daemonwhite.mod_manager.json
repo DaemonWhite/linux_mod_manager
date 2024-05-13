@@ -41,6 +41,8 @@
         },
         "python3-pyxdg.json",
         "python3-vdf.json",
+        "python3-py7zr.json",
+        "python3-rarfile.json",
         {
             "name" : "py_mod_manager",
             "builddir" : true,

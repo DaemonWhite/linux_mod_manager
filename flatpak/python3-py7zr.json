@@ -1,0 +1,59 @@
+{
+    "name": "python3-py7zr",
+    "buildsystem": "simple",
+    "build-commands": [
+        "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"py7zr\" --no-build-isolation"
+    ],
+    "sources": [
+    	{
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/31/7c/956ebf1f07506bb59e6f13ef068d91f1bec828758d399b455b175b668f6c/pyppmd-1.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "ec8a2447e69444703e2b273247bfcd4b540ec601780eff07da16344c62d2993d"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/2f/c2/f9e977608bdf958650638c3f1e28f85a1b075f075ebbe77db8555463787b/Brotli-1.1.0.tar.gz",
+            "sha256": "81de08ac11bcb85841e440c13611c00b67d3bf82698314928d0b676362546724"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/62/d6/fe113b12773cad2c093d381c2b1629f9cfa240c9ad86a7f9f9079e7a51b5/inflate64-1.0.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "3e243ea9bd36a035059f2365bd6d156ff59717fbafb0255cb0c75bf151bf6904"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/22/31/ec5f46fd4c83185b806aa9c736e228cb780f13990a9cf4da0beb70025fcc/multivolumefile-0.2.3-py3-none-any.whl",
+            "sha256": "237f4353b60af1703087cf7725755a1f6fcaeeea48421e1896940cd1c920d678"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/90/c7/6dc0a455d111f68ee43f27793971cf03fe29b6ef972042549db29eec39a2/psutil-5.9.8.tar.gz",
+            "sha256": "6be126e3225486dff286a8fb9a06246a5253f4c7c53b475ea5f5ac934e64194c"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/e7/38/783a9591807e1e5fd9cd92ce6e0fe49a4ba5a84fed0f552599881017faa6/py7zr-0.21.0-py3-none-any.whl",
+            "sha256": "ea6ded2e5c6d8539e3406cb3b0317192b32af59cff13eaf87702acc36a274da6"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/9e/13/af86c86cdfb293e82dd0b6c4bbdf08645cd8993456ee3fb911c3eeed1b22/pybcj-1.0.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+            "sha256": "8007371f6f2b462f5aa05d5c2135d0a1bcf5b7bdd9bd15d86c730f588d10b7d3"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/31/a4/b03a16637574312c1b54c55aedeed8a4cb7d101d44058d46a0e5706c63e1/pycryptodomex-3.20.0.tar.gz",
+            "sha256": "7a710b79baddd65b806402e14766c721aee8fb83381769c27920f26476276c1e"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/0f/ae/dc18432a364b34e7adbc0edc32de44dd5310184112945552c106ab913f39/pyzstd-0.15.10.tar.gz",
+            "sha256": "83603a97fdbcf2139f475c940789f09e32703f931f29f4a8ddf3551e6700108b"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/24/99/4772b8e00a136f3e01236de33b0efda31ee7077203ba5967fcc76da94d65/texttable-1.7.0-py2.py3-none-any.whl",
+            "sha256": "72227d592c82b3d7f672731ae73e4d1f88cd8e2ef5b075a7a7f01a23a3743917"
+        }
+    ]
+}
