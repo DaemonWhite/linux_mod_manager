@@ -1,19 +1,11 @@
-from gi.repository import Adw, Gtk, GObject
+from gi.repository import Gtk
+from dataclasses import dataclass
 
 
+@dataclass
 class State(object):
-
-    def __init__(self, icon, style):
-        self.__icon = icon
-        self.__style = style
-
-    @property
-    def icon(self):
-        return self.__icon
-
-    @property
-    def style(self):
-        return self.__style
+    icon: str
+    style: str
 
 
 class Stape(object):
