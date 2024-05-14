@@ -9,7 +9,16 @@ class ListRowModel(GObject.Object, Gio.ListModel):
         self.row = []
 
     def __iter__(self):
-        return iter(self.row)
+        self.index = 0
+        return self
+
+    def __next__(self):
+        if self.index < len(self.row):
+            result = self.row[self.index]
+            self.index += 1
+            return result
+        else:
+            raise StopIteration
 
     def do_get_item(self, index):
         return self.row[index]
@@ -29,7 +38,8 @@ class ListRowModel(GObject.Object, Gio.ListModel):
 
     def append_row(self, row):
         self.row.append(row)
-        self.items_changed(len(self.row) - 1, False, True)
+        index = len(self.row) - 1
+        self.items_changed(index, False, True)
 
     def clear(self):
         for _ in self.row:
@@ -48,8 +58,8 @@ class ListRowModel(GObject.Object, Gio.ListModel):
     def remove_row_by_row(self, by_row):
         for i, roww in enumerate(self.row):
             if roww == by_row:
-                self.row.pop(i)
                 self.items_changed(i, True, False)
+                self.row.pop(i)
 
     def remove_row_by_name(self, name):
         for i, roww in enumerate(self.row):
