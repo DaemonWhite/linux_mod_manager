@@ -1,25 +1,21 @@
 import os
 
-import utils
-
-from gi.repository import Gtk, Adw, GObject, GLib, Gio
+from gi.repository import Gtk, Adw, GLib
 
 from dialout.replace import DialoutReplace
 
 from mod_handlers.download import DownloadModManager, verif_download_exist_file
 
 from custom_widget.progress_row import ProgressRow
+from custom_widget.install_row import InstallRow
+
 from py_mod_manager.const import UI_BASE
 
 from utils.files import slice_path_in_file
+from utils.list_model import ListRowModel, give_item_list_row
+
 
 # TODO Donwload end event change color
-
-class model(GObject.Object, Gio.ListModel):
-    __gtype_name__ = 'RowModel'
-    def __init__(self):
-        super.__init__()
-
 @Gtk.Template(resource_path=UI_BASE+'stack/mod.ui')
 class ModStack(Adw.Bin):
     __gtype_name__ = 'ModStack'
@@ -27,13 +23,15 @@ class ModStack(Adw.Bin):
     import_button = Gtk.Template.Child()
 
     install_row = Gtk.Template.Child()
-    configure_row = Gtk.Template.Child()
-    download_row = Gtk.Template.Child()
+    uninstall_row = Gtk.Template.Child()
 
     downloader_row = Gtk.Template.Child()
     downloader_progress = Gtk.Template.Child()
     downloader_button = Gtk.Template.Child()
+
     downloader_list_box = Gtk.Template.Child()
+    uninstall_list_row = Gtk.Template.Child()
+    install_list_row = Gtk.Template.Child()
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
@@ -67,6 +65,22 @@ class ModStack(Adw.Bin):
             self.__row_update_download
         )
         self.__download_manager.set_callback_end(self.__event_end_download)
+
+        self.__window.mod_manager.set_default_callback_finish(
+            self.__event_end_install
+        )
+
+        self.__list_uninstall = ListRowModel()
+        self.uninstall_list_row.bind_model(
+            self.__list_uninstall,
+            give_item_list_row
+        )
+
+        # self.__list_install = ListRowModel()
+        # self.install_list_row.bind_model(
+        #     self.__list_install,
+        #     give_item_list_row
+        # )
 
         for mime_type in list_mime_type:
             self.__archive_filter.add_mime_type(mime_type)
@@ -108,6 +122,13 @@ class ModStack(Adw.Bin):
         else:
             self.downloader_progress.set_fraction(progress/total)
 
+    def __event_end_install(self, mod_plugin, file, error=""):
+        if file.installed:
+            self.__list_uninstall.remove_row_by_name(file.file)
+        else:
+            roww = self.__list_uninstall.do_get_item_by_name(file.file)
+            roww.choose_state("error")
+
     def __event_end_download(
         self,
         progress,
@@ -118,6 +139,16 @@ class ModStack(Adw.Bin):
         if state_copy:
             GLib.idle_add(progress_bar.progress_style, progress_bar.FINISH)
             self.__row_update_download(progress, [progress_bar])
+            file = self.__window.mod_manager.add_install_file(
+                os.path.basename(
+                    progress_bar.get_title()
+                ),
+                progress_bar.get_subtitle()
+            )
+            roww = InstallRow()
+            roww.set_title(file.file)
+            roww.connect(self.install_mod, file)
+            self.__list_uninstall.append_row(roww)
         GLib.idle_add(self.__update_subtitle_download, progress, total)
 
     def __row_update_download(self, progress, progress_bar):
@@ -203,3 +234,17 @@ class ModStack(Adw.Bin):
             self.__download_manager.total_download_end,
             self.__download_manager.total_download,
         )
+
+    def install_mod(self, _, install_row, identifiant):
+        self.__window.mod_manager.install(identifiant[0])
+        install_row.start_load_state()
+        install_row.lock()
+
+    def reload_mod(self):
+        self.__list_uninstall.clear()
+        files = self.__window.mod_manager.list_no_installed_mod()
+        for file in files:
+            roww = InstallRow()
+            roww.set_title(file.file)
+            roww.connect(self.install_mod, file)
+            self.__list_uninstall.append_row(roww)

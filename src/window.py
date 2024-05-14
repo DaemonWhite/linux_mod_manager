@@ -32,6 +32,8 @@ from modal.preferences import PreferencesLinuxModManager
 from modal.choose_games import PyModManagerWindowChooseGames
 from modal.load import PyModManagerWindowModalLoad
 
+from mod_handlers.mod import ModManager
+
 from utils.current_game import CurrentGame
 from utils.conf import ApllicationConfiguration
 # from utils.files import generate_dict_archive, lower_case_recursif
@@ -43,7 +45,9 @@ from stack.order import OrderStack
 from stack.mod import ModStack
 from stack.error import ErrorStack
 
-from py_mod_manager.const import USER, NOTIFY_SELECT_ITEM, BUILD_TYPE, URI, PKGDATADIR, UI_BASE, URL
+from py_mod_manager.const import (
+    USER, NOTIFY_SELECT_ITEM, BUILD_TYPE, UI_BASE, URL
+)
 
 
 @Gtk.Template(resource_path=UI_BASE+'window.ui')
@@ -88,6 +92,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         # Start Plugin
         self._plugin = PluginManager()
         self.cg = CurrentGame(self.settings)
+        self.mod_manager = ModManager()
 
         # Create list plugin game
         self._list = Gio.ListStore.new(Game)
@@ -176,7 +181,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         load_modal.add_stape(
             name="Cherche le jeux",
             title_description="Veullier patienter pendant que le système \
-            cherche votre jeux",
+cherche votre jeux",
             error_description="N'a pas étais trouver",
             callback=self.configure_game,
             error_end=True
@@ -184,7 +189,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         load_modal.add_stape(
             name="Application du post traitement",
             title_description="Veullier patienter pendant que le système \
-            applique le poste traitement",
+applique le poste traitement",
             callback=self.cg.post_traitement
         )
         load_modal.add_stape(
@@ -223,7 +228,6 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         if self.verif_load_game():
             self.enable_current_plugin()
         self.__started = True
-
 
     def unload_support_game(self):
         self._list_plugin_game_load = list()
@@ -287,6 +291,28 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         if not self.cg.plugin_conf and self.settings.get_auto_detect_games():
             self.auto_detect_game()
 
+        if self.cg.path_download == "":
+            self.cg.path_download = self.settings.get_donwload_base_folder()
+
+        if self.cg.path_install == "":
+            self.cg.path_install = self.settings.get_install_base_folder()
+
+        self.cg.generated_default_path()
+        if not self.mod_manager.mod_exist(self.cg.plugin_name):
+            self.mod_manager.add_mod(
+                self.cg.plugin_name,
+                os.path.join(
+                    self.cg.path_download,
+                    self.cg.plugin_name,
+                ),
+                os.path.join(
+                    self.cg.path_install,
+                    self.cg.plugin_name,
+                ),
+            )
+        self.mod_manager.select_mod(self.cg.plugin_name)
+        self.page_mod.reload_mod()
+
         self.verif_sensitive_settings(
             self.page_settings.symbolic_row,
             self.settings.get_mode_symb()
@@ -347,7 +373,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         if not self.__len_enable_support_game == 0:
             game = dropdown.get_selected_item()
             self.__last_game = game.game_name
-            self.cg.set_current_game( \
+            self.cg.set_current_game(
                 self._plugin.get_plugin(
                     self._plugin.PLUGIN_GAMES,
                     game.game_name

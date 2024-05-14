@@ -5,8 +5,13 @@ template $ModStack : $AdwBin {
 	Adw.PreferencesPage {
 
 	  Adw.PreferencesGroup {
+	    title: "File de télèchargement";
+	    header-suffix:
+		    Gtk.Button import_button {
+		      label: "Importés des mods";
+		  };
 	    Adw.ExpanderRow downloader_row {
-	      title: "Télèchargement en cour...";
+	      title: "Télèchargement";
 	      subtitle : "0/0";
         [suffix]
         Gtk.Box {
@@ -17,10 +22,11 @@ template $ModStack : $AdwBin {
             valign: center;
           }
           Gtk.Button downloader_button {
+
 	          valign: center;
 	          halign: center;
             icon-name: 'user-trash-symbolic';
-            styles ["opaque", "circular"]
+            styles ["error", "circular",]
           }
         }
         Gtk.ListBox downloader_list_box {
@@ -36,22 +42,54 @@ template $ModStack : $AdwBin {
 
 		Adw.PreferencesGroup {
 		  title: "Gérer et installer vos mods";
-		  header-suffix:
-		   Gtk.Button import_button {
-		    label: "Importés des mods";
-		  };
+      header-suffix: Gtk.Box {
+        spacing: 5;
+        Gtk.Box {
+          styles ["linked"]
+          Gtk.Button deploy_button {
+            styles ["accent"]
+            label:'deployer';
+            sensitive: false;
+          }
+          Gtk.Button purger_button {
+            styles ["error"]
+            label: 'purger';
+            sensitive: false;
+          }
+        }
+        Gtk.Box {
+          styles ["linked"]
+          Gtk.DropDown choose_config {}
+          Gtk.Button {
+            icon-name: "tab-new-symbolic";
+          }
+        }
 
+      };
 			Adw.ExpanderRow install_row {
 				title: "Mod Installer";
 				subtitle: "mod installer dans le jeux";
+				Gtk.ListBox install_list_row {
+          show-separators: true;
+          margin-top: 5;
+          margin-end: 5;
+          margin-start: 5;
+          margin-bottom: 5;
+          styles ["boxed-list"]
+        }
 			}
 
-			Adw.ExpanderRow configure_row {
-				title: "Mod Configurer";
-			}
-			Adw.ExpanderRow download_row {
+			Adw.ExpanderRow uninstall_row {
 				title: "Mod Desinstaller";
 				subtitle: "mod télécharger mais pas configurer";
+				Gtk.ListBox uninstall_list_row {
+          show-separators: true;
+          margin-top: 5;
+          margin-end: 5;
+          margin-start: 5;
+          margin-bottom: 5;
+          styles ["boxed-list"]
+        }
 			}
 		}
 	}
