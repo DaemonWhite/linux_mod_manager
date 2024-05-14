@@ -84,18 +84,29 @@ def uncompress_archive(path_file, path_dest):
         Gio.FileQueryInfoFlags.NONE,
         None
     )
-
-    print(path_file)
-    print(info.get_content_type())
+    error = True
 
     if info.get_content_type().find("7z") >= 0:
-        unzip_7zip(path_file, path_dest)
+        try:
+            unzip_7zip(path_file, path_dest)
+            error = False
+        except Exception as e:
+            print(e)
     elif info.get_content_type().find("rar") >= 0:
-        unrar(path_file, path_dest)
+        try:
+            unrar(path_file, path_dest)
+            error = False
+        except Exception as e:
+            print(e)
     elif info.get_content_type().find("zip") >= 0:
-        unzip_zip(path_file, path_dest)
+        try:
+            unzip_zip(path_file, path_dest)
+            error = False
+        except Exception as e:
+            print(e)
     # elif info.get_content_type().find("tar") >= 0:
     #     pass
     else:
         print("Format d'archive non pris en charge.")
 
+    return error
