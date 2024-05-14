@@ -70,6 +70,12 @@ class ModStack(Adw.Bin):
             self.__event_end_install
         )
 
+        self.__list_download = ListRowModel()
+        self.downloader_list_box.bind_model(
+            self.__list_download,
+            give_item_list_row
+        )
+
         self.__list_uninstall = ListRowModel()
         self.uninstall_list_row.bind_model(
             self.__list_uninstall,
@@ -100,7 +106,7 @@ class ModStack(Adw.Bin):
     def __erase_download_row(self, button):
         # TODO Ajouter la verification des erreurs
         delete_row = []
-        for progress_row in self.downloader_list_box:
+        for progress_row in self.__list_download:
             if type(progress_row) == type(ProgressRow()) and not progress_row.PROGRESS == progress_row.state :
                 delete_row.append(progress_row)
 
@@ -112,7 +118,7 @@ class ModStack(Adw.Bin):
         )
 
         for progress_row in delete_row:
-            self.downloader_list_box.remove(progress_row)
+            self.__list_download.remove_row_by_row(progress_row)
 
     def __update_subtitle_download(self, progress, total):
         self.downloader_row.set_subtitle(f"{progress}/{total}")
@@ -139,30 +145,25 @@ class ModStack(Adw.Bin):
         if state_copy:
             GLib.idle_add(progress_bar.progress_style, progress_bar.FINISH)
             self.__row_update_download(progress, [progress_bar])
-            file = self.__window.mod_manager.add_install_file(
-                os.path.basename(
-                    progress_bar.get_title()
-                ),
+            file = os.path.basename(progress_bar.get_title())
+            if not self.__window.mod_manager.get_install_file(
+                file,
                 progress_bar.get_subtitle()
-            )
-            roww = InstallRow()
-            roww.set_title(file.file)
-            roww.connect(self.install_mod, file)
-            self.__list_uninstall.append_row(roww)
+            ):
+                file = self.__window.mod_manager.add_install_file(
+                    file,
+                    progress_bar.get_subtitle()
+                )
+                roww = InstallRow()
+                roww.set_title(file.file)
+                roww.connect(self.install_mod, file)
+                self.__list_uninstall.append_row(roww)
         GLib.idle_add(self.__update_subtitle_download, progress, total)
 
     def __row_update_download(self, progress, progress_bar):
         def row_update(progress, progress_bar):
             progress_bar.set_progress_fraction(progress)
         GLib.idle_add(row_update, progress, progress_bar[0])
-
-    def __create_downloader_row(self, name, plugin):
-        # TODO Create widget
-        progress = ProgressRow()
-        progress.set_title(name)
-        progress.set_subtitle(plugin)
-        self.downloader_list_box.prepend(progress)
-        return progress
 
     def __on_single_selected(self, dialog, result):
         files = ""
@@ -222,7 +223,10 @@ class ModStack(Adw.Bin):
         self.__array_file_exist.append((file_path, plugin))
 
     def __download_append(self, file_path, plugin):
-        progress = self.__create_downloader_row(file_path, plugin)
+        progress = ProgressRow()
+        progress.set_title(file_path)
+        progress.set_subtitle(plugin)
+        self.__list_download.append_row(progress)
 
         self.__download_manager.append(
             file_path,
@@ -230,6 +234,7 @@ class ModStack(Adw.Bin):
             plugin,
             progress
         )
+
         self.__event_end_download(
             self.__download_manager.total_download_end,
             self.__download_manager.total_download,

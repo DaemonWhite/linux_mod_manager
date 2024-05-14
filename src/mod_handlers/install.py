@@ -24,20 +24,20 @@ class InstallSysteme(object):
             ):
                 self.append_file(file)
 
-    def append_file(self, file):
-        file = InstallProperties(self.__id, file)
+    def append_file(self, file_name):
+        file = InstallProperties(self.__id, file_name)
         self.__list_file.append(file)
         self.__id += 1
         return file
 
-    def existed(self, identifiant):
-        existe = False
-        for i, file in enumerate(self.__list_file):
-            if identifiant == file.identifiant:
-                existe = True
+    def get_file(self, file_name):
+        file_exist = None
+        for file in self.__list_file:
+            if file_name == file.file:
+                file_exist = file
                 break
-
-        return existe
+        print(file_exist)
+        return file_exist
 
     def install(self, file_installe):
         file = ""

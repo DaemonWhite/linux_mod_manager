@@ -14,6 +14,11 @@ class ModManager(object):
     def default_callback(*args):
         pass
 
+    def get_install_file(self, file_name, mod_plugin):
+        return self.__list_task_mod[mod_plugin]['install_syst'].get_file(
+            file_name
+        )
+
     def set_default_callback_finish(self, callback):
         self.__callback_finish_install = callback
 
