@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Adw, GObject, Gio
+from gi.repository import Gtk, Adw
 
 from py_mod_manager.const import USER, NOTIFY_ACTIVE, UI_BASE
 from custom_widget.stape_row import StapeRow
@@ -44,7 +44,8 @@ class SettingsStack(Adw.Bin):
         self.__path_stape_row = StapeRow()
         self.__path_stape_row.set_title("Chemin du jeux et du prefix")
         self.__path_stape_row.set_subtitle(
-            "Pour corriger indiquer le chemin du jeu ou/et du prefix.\n Réinstaler le jeu peut corriger des problèmes si ça persiste "
+            "Pour corriger indiquer le chemin du jeu ou/et du prefix.\
+\nRéinstaler le jeu peut corriger des problèmes si ça persiste "
         )
         self.__configure_stape_row = StapeRow()
         self.__configure_stape_row.set_title("Configuration du jeu")
