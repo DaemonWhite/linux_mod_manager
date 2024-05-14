@@ -23,6 +23,11 @@ class ModManager(object):
             'install_syst': InstallSysteme(path_download, path_install)
         }
 
+    def add_install_file(self, file_name, mod_plugin):
+        return self.__list_task_mod[mod_plugin]['install_syst'].append_file(
+            file_name
+        )
+
     def select_mod(self, mod_name: str):
         self.__selected = mod_name
 
@@ -45,26 +50,26 @@ class ModManager(object):
     def __finish_install(self, mod_plugin, identifiant):
         self.__callback_finish_install(mod_plugin, identifiant)
 
-    def __install(self, mod_plugin, identifiant):
+    def __install(self, mod_plugin, file):
         self.__install_work = True
-        self.__list_task_mod[mod_plugin]['install_syst'].install(identifiant)
+        self.__list_task_mod[mod_plugin]['install_syst'].install(file)
         self.__install_fill.pop(0)
 
-        self.__finish_install(mod_plugin, identifiant)
+        self.__finish_install(mod_plugin, file)
 
         if len(self.__install_fill) > 0:
             self.__install_fill[0].start()
         else:
             self.__install_work = False
 
-    def install(self, identifiant, mod_plugin=""):
+    def install(self, file, mod_plugin=""):
         if mod_plugin == "":
             mod_plugin = self.__selected
 
         self.__install_fill.append(
             threading.Thread(
                 target=self.__install,
-                args=(mod_plugin, identifiant,)
+                args=(mod_plugin, file,)
             )
         )
 
