@@ -3,9 +3,12 @@
 
 import os
 
+from dataclasses import dataclass
+
 from py_mod_manager.const import PKGDATADIR
 
 from plugin_controller.plugin import PluginLoader
+from plugin_controller.plugin_base import PluginBase
 from plugin_controller.plugin_detect_game import PluginDetectGame
 from plugin_controller.plugin_game import PluginGame
 
@@ -19,6 +22,12 @@ def registery_game_plugin(module, list_module):
 
 def registery_detect_game_plugin(module, list_module):
     list_module[module.PluginDetectGames().name] = module.PluginDetectGames
+
+
+@dataclass
+class DataPlugin:
+    PLUGIN: PluginBase
+    ENABLE: bool
 
 
 class PluginManager(object):
@@ -80,7 +89,11 @@ class PluginManager(object):
             if not conf.existe:
                 conf.save_plugin()
             conf.load_plugin()
-            self.__plugins[name][plugin_name] = (plugin, conf)
+
+            self.__plugins[name][plugin_name] = DataPlugin(
+                plugin,
+                conf.is_enable()
+            )
 
     def get_list_all_plugin(self):
         return self.__plugins
@@ -89,10 +102,22 @@ class PluginManager(object):
         return self.__plugins[plugin]
 
     def get_plugin(self, plugin, plugin_name):
-        return self.__plugins[plugin][plugin_name][0]()
+        return self.__plugins[plugin][plugin_name].PLUGIN
+
+    def get_plugin_enabled(self, plugin):
+        plugins = []
+
+        for plugin_name, plugin in self.__plugins[plugin].items():
+            if plugin.ENABLE:
+                plugins.append(plugin.PLUGIN)
+
+        return plugins
 
     def get_conf_plugin(self, plugin, plugin_name):
-        return self.__plugins[plugin][plugin_name][1]
+        conf = PluginConfig(self.__plugins[plugin][plugin_name].PLUGIN())
+        conf.set_path_plugin(plugin_name, self.__path)
+        conf.load_plugin()
+        return conf
 
     @property
     def CONF_PATH(self):

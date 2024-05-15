@@ -33,6 +33,7 @@ class CurrentGame(object):
 
     @property
     def plugin_conf(self):
+        print("current : ", self.__current_config.get_plugin_configuration("plugin_conf"))
         return self.__current_config.get_plugin_configuration("plugin_conf")
 
     @property
@@ -95,7 +96,6 @@ class CurrentGame(object):
 
     @conflit_syst.setter
     def conflit_syst(self, value: bool):
-        self.__current_config.set_configuration("conflit_syst", value)
         self.save_plugin()
 
     @post_conf.setter
@@ -134,6 +134,7 @@ class CurrentGame(object):
     def set_current_game(self, current_game, current_config):
         self.__current_game = current_game
         self.__current_config = current_config
+        print(current_config)
         self.__current_config.set_path_plugin(
             self.__current_game.name,
             self.__conf_path
@@ -168,19 +169,18 @@ class CurrentGame(object):
     def save_plugin(self):
         self.__current_config.save_plugin()
 
-    def auto_detect_path_game(self, plugin, list_name_plugin):
+    def auto_detect_path_game(self, list_name_plugin):
         result = False
         if self.__current_config.get_plugin_configuration("path") == "":
             for game_name in self.__current_game.list_name:
-                for plug_name, plugin_detect in list_name_plugin.items():
-                    if plugin_detect[1].is_enable():
-                        plug = plugin_detect[0]()
-                        game = plug.search_game(game_name)
-                        if not game.install_dir == "":
-                            self.path_game = game.install_dir
-                            self.path_prefix = game.prefix
-                            result = True
-                            break
+                for plugin in list_name_plugin:
+                    plug = plugin()
+                    game = plug.search_game(game_name)
+                    if not game.install_dir == "":
+                        self.path_game = game.install_dir
+                        self.path_prefix = game.prefix
+                        result = True
+                        break
         return result
 
     def generated_default_path(self):

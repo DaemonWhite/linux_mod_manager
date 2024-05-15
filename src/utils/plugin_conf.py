@@ -19,6 +19,10 @@ class PluginConfig(object):
         for name, data in plugin.get_plugin_conf().items():
             self.__plugin[name] = data
 
+    def __repr__(self):
+        return f"PluginConfig(path: {self.__path},\
+\nbase_path:{self.__base_path},plugin:\n{self.__plugin})"
+
     @property
     def conflit_syst(self):
         return bool(self.__plugin["conflit_syst"])

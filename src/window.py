@@ -18,8 +18,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
-import threading
-import time
 
 from gi.repository import Adw
 from gi.repository import Gtk
@@ -29,7 +27,7 @@ from gi.repository import Gdk
 from plugin_controller.factory import Game
 
 from modal.preferences import PreferencesLinuxModManager
-from modal.choose_games import PyModManagerWindowChooseGames
+# from modal.choose_games import PyModManagerWindowChooseGames
 from modal.load import PyModManagerWindowModalLoad
 
 from mod_handlers.mod import ModManager
@@ -82,7 +80,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.__last_game = self.settings.get_last_game()
         self.__last_page = self.settings.get_last_page()
 
-        self.choose_games = PyModManagerWindowChooseGames(self)
+        # self.choose_games = PyModManagerWindowChooseGames(self)
 
         if BUILD_TYPE == "devel":
             self.add_css_class(BUILD_TYPE)
@@ -95,18 +93,8 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         self.mod_manager = ModManager()
 
         # Create list plugin game
-        self._list = Gio.ListStore.new(Game)
+        self._list = Gio.ListStore.new(item_type=Game)
         self._list_plugin_game_load = list()
-
-        # Create list plugin auto_detect_game
-        self._list_auto_detect = self._plugin.get_list_plugin(
-            self._plugin.PLUGIN_DETECT_GAMES
-        )
-
-        # Event List plugin
-        self._list_plugin = self._plugin.get_list_plugin(
-            self._plugin.PLUGIN_GAMES
-        )
 
         factory = Gtk.SignalListItemFactory()
         factory.connect("setup", self._on_factory_setup)
@@ -162,8 +150,7 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
     def configure_game(self):
         result = self.cg.auto_detect_path_game(
-            self._plugin,
-            self._list_auto_detect
+            self.plugin.get_plugin_enabled(self.plugin.PLUGIN_DETECT_GAMES)
         )
 
         if result:
@@ -238,11 +225,12 @@ applique le poste traitement",
         # Add Plugin
         self._list_plugin_game_load = list()
         self.__len_enable_support_game = 0
-        for plugin_name, plugin_data in self._list_plugin.items():
-            if plugin_data[1].is_enable():
-                self._list_plugin_game_load.append(plugin_name)
-                self._list.append(Game(plugin_name))
-                self.__len_enable_support_game += 1
+        for plugin in self.plugin.get_plugin_enabled(
+            self.plugin.PLUGIN_GAMES
+        ):
+            self._list_plugin_game_load.append(plugin)
+            self._list.append(Game(key=plugin().name, plugin=plugin))
+            self.__len_enable_support_game += 1
 
     def search_game_plugin(self, name: str) -> int:
         index = -1
@@ -259,19 +247,13 @@ applique le poste traitement",
             print('Not selected games')
             return False
 
-        game = self.choose_game.get_selected_item().game_name
-        if index > -1:
-            game = self._list_plugin_game_load[index]
-            self.choose_game.set_selected(index)
-
         self.cg.set_current_game(
-            self._plugin.get_plugin(self._plugin.PLUGIN_GAMES, game),
-            self._plugin.get_conf_plugin(self._plugin.PLUGIN_GAMES, game)
+            self.choose_game.get_selected_item().plugin(),
+            self._plugin.get_conf_plugin(
+                self._plugin.PLUGIN_GAMES,
+                self.choose_game.get_selected_item().key
+            )
         )
-
-    @property
-    def list_auto_detect(self):
-        return self._list_auto_detect
 
     @property
     def list_plugin(self):
@@ -367,20 +349,17 @@ applique le poste traitement",
     def _on_factory_bind(self, factory, list_item):
         label = list_item.get_child()
         game = list_item.get_item()
-        label.set_text(game.game_name)
+        label.set_text(game.key)
 
     def _on_selected_item_notify(self, dropdown, _):
         if not self.__len_enable_support_game == 0:
             game = dropdown.get_selected_item()
-            self.__last_game = game.game_name
+            self.__last_game = game.key
             self.cg.set_current_game(
-                self._plugin.get_plugin(
-                    self._plugin.PLUGIN_GAMES,
-                    game.game_name
-                ),
+                game.plugin(),
                 self._plugin.get_conf_plugin(
                     self._plugin.PLUGIN_GAMES,
-                    game.game_name
+                    game.key
                 )
             )
         if self.__started:

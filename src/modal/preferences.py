@@ -118,10 +118,11 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
         return plug
 
     def load_detect_games_plugin(self):
-        list_plugin = self.__win.list_auto_detect
-        for name_plugin, plugin_data in list_plugin.items():
-            plugin = plugin_data[0]()
-            conf_plugin = plugin_data[1]
+        list_plugin = self.__win.plugin.get_list_plugin(
+            self.__win.plugin.PLUGIN_DETECT_GAMES
+        )
+        for plugin_name, plugin_data in list_plugin.items():
+            plugin = plugin_data.PLUGIN()
 
             plug = self.__create_base_row_plugin(plugin)
 
@@ -139,18 +140,20 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
                 self.__active_plugin,
                 self.__win.plugin.PLUGIN_DETECT_GAMES
             )
-            plug.set_active(conf_plugin.is_enable())
+            plug.set_active(plugin_data.ENABLE)
             self.list_auto_detect_games_plugin.add(plug)
 
     def load_game_plugin(self):
-        for name_plugin, plugin_data in self.__win.list_plugin.items():
+        for plugin_name, plugin_data in self.__win.plugin.get_list_plugin(
+            self.__win.plugin.PLUGIN_GAMES
+        ).items():
+            print(plugin_data)
             plug = SwitchInfoRow()
-            plugin = plugin_data[0]()
+            plugin = plugin_data.PLUGIN()
             plug = self.__create_base_row_plugin(plugin)
-            conf_plugin = plugin_data[1]
             for systeme in plugin.systeme:
                 plug.create_tag(systeme)
-            plug.set_active(conf_plugin.is_enable())
+            plug.set_active(plugin_data.ENABLE)
             plug.connect(
                 "activated",
                 self.__active_plugin,
@@ -226,4 +229,5 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
     def on_destroy(self, _):
         self.save_settings()
+        self.plugin.reload()
         self.__win.reload()
