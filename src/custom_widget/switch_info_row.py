@@ -7,6 +7,10 @@ class SwitchInfoRow(Adw.PreferencesRow):
     __gtype_name__ = "SwitchInfoRow"
     __gobject_init__ = "SwitchInfoRow"
 
+    __gsignals__ = {
+        'activated': (GObject.SignalFlags.RUN_FIRST, None, (object,)),
+    }
+
     contents = Gtk.Template.Child()
 
     labels_box = Gtk.Template.Child()
@@ -20,26 +24,38 @@ class SwitchInfoRow(Adw.PreferencesRow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         b = GObject.BindingGroup.new()
-        b.bind("action-name", self.active_switch, "action-name", GObject.BindingFlags.SYNC_CREATE)
-        b.bind("action-target", self.active_switch, "action-target", GObject.BindingFlags.SYNC_CREATE)
+        b.bind(
+            "action-name",
+            self.active_switch,
+            "action-name",
+            GObject.BindingFlags.SYNC_CREATE
+        )
+        b.bind(
+            "action-target",
+            self.active_switch,
+            "action-target",
+            GObject.BindingFlags.SYNC_CREATE
+        )
 
-        self.active_switch.connect("notify::active", self.slider_notify_active_cb )
+        self.active_switch.connect(
+            "notify::active",
+            self.slider_notify_active_cb
+        )
 
+        self.demo_group = Gio.SimpleActionGroup()
+        self.insert_action_group("row", self.demo_group)
         simple_action = Gio.SimpleAction(name="activated")
-        row_group = Gio.SimpleActionGroup()
-        self.active_switch.insert_action_group("row", row_group)
-        self.insert_action_group("row", row_group)
         simple_action.connect(
             "activate",
-            self.__inverse_switch,
+            self.__inverse_switch
         )
-        row_group.add_action(simple_action)
+        self.demo_group.add_action(simple_action)
 
     def slider_notify_active_cb(self, widget, param):
         Gtk.Accessible.update_state(
             self, [Gtk.AccessibleState.CHECKED], [int(self.active_switch.get_active())]
         )
-        self.notify("active")
+        self.emit("activated", self)
 
     def __inverse_switch(self, widget, _):
         state = not self.active_switch.get_active()
@@ -65,7 +81,7 @@ class SwitchInfoRow(Adw.PreferencesRow):
         self.active_switch.set_active(active)
 
     def create_tag(self, name: str, color=""):
-        #TODO Activer l'ajout de tag avec couleur
+        # TODO Activer l'ajout de tag avec couleur
         box = Gtk.Box()
         label = Gtk.Label()
         label.set_label(name)

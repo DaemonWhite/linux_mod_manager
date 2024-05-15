@@ -135,7 +135,7 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
                 plug.create_tag("Wine")
 
             plug.connect(
-                NOTIFY_ACTIVE,
+                "activated",
                 self.__active_plugin,
                 self.__win.plugin.PLUGIN_DETECT_GAMES
             )
@@ -152,15 +152,15 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
                 plug.create_tag(systeme)
             plug.set_active(conf_plugin.is_enable())
             plug.connect(
-                NOTIFY_ACTIVE,
+                "activated",
                 self.__active_plugin,
                 self.__win.plugin.PLUGIN_GAMES
             )
             self.list_games_plugin.add(plug)
 
     def __active_plugin(self, widget, _, plugin_registre):
+        print(widget.get_active())
         name_plugin = widget.get_title()
-        plugin = self.__win.plugin.get_plugin(plugin_registre, name_plugin)
         conf_plugin = self.__win.plugin.get_conf_plugin(
             plugin_registre,
             name_plugin
@@ -179,7 +179,7 @@ class PreferencesLinuxModManager(Adw.PreferencesWindow):
 
     def __on_select_folder(self, dialog, callback):
         dialog_for_folder = Gtk.FileDialog()
-        file = dialog_for_folder.select_folder(
+        dialog_for_folder.select_folder(
             self,
             None,
             self.__on_single_selected, callback
