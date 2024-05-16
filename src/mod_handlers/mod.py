@@ -43,11 +43,11 @@ class ModManager(object):
 
         return exist
 
-    def list_no_installed_mod(self, mod_plugin=""):
+    def list_installable_mod(self, mod_plugin=""):
         if mod_plugin == "":
             mod_plugin = self.__selected
 
-        return self.__list_task_mod[mod_plugin]['install_syst'].no_installed()
+        return self.__list_task_mod[mod_plugin]['install_syst'].list_file
 
     def update_list_install(self, file):
         pass
@@ -57,15 +57,14 @@ class ModManager(object):
 
     def __install(self, mod_plugin, file):
         self.__install_work = True
-        self.__list_task_mod[mod_plugin]['install_syst'].install(file)
+        task = self.__list_task_mod[mod_plugin]['install_syst']
+        task.install(file)
         self.__install_fill.pop(0)
 
         self.__finish_install(mod_plugin, file)
 
         if len(self.__install_fill) > 0:
             self.__install_fill[0].start()
-        else:
-            self.__install_work = False
 
     def install(self, file, mod_plugin=""):
         if mod_plugin == "":
