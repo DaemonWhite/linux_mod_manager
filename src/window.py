@@ -159,6 +159,18 @@ class PyModManagerWindow(Adw.ApplicationWindow):
 
         return result
 
+    def configure_conflit(self):
+        base_path_install = os.path.join(
+            self.cg.path_install,
+            self.cg.plugin_name
+        )
+        path_install = base_path_install + "/" + self.cg.plugin_name + ".json"
+        self.cg.conflit_syst = self.mod_manager.init_config(
+            self.cg.path_game,
+            path_install
+        )
+        return self.cg.conflit_syst
+
     def auto_detect_game(self):
         load_modal = PyModManagerWindowModalLoad(
             self,
@@ -182,7 +194,7 @@ applique le poste traitement",
         load_modal.add_stape(
             name="Creation de l'intégritée",
             title_description="Le jeu à étais correctement configurer",
-            callback=self.cg.init_conflit_syst
+            callback=self.configure_conflit
         )
         load_modal.show()
         load_modal.task_synchrone()

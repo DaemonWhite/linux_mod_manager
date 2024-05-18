@@ -1,5 +1,9 @@
-from mod_handlers.install import InstallSysteme
 import threading
+
+
+from mod_handlers.install import InstallSysteme
+from mod_handlers.configure import ConfigFile
+from utils.files import generate_dict_archive
 
 
 class ModManager(object):
@@ -10,6 +14,20 @@ class ModManager(object):
         self.__install_work = False
 
         self.__callback_finish_install = self.default_callback
+
+    def init_config(self, path_game, path_installed) -> bool:
+        result = False
+        try:
+            config = generate_dict_archive(False, path_game)
+            conf = ConfigFile()
+            conf.load(path_installed)
+            conf.init_config(config)
+            conf.save(path_installed)
+            result = True
+        except Exception as e:
+            print("Error dict traitement : ", e)
+            result = False
+        return result
 
     def default_callback(*args):
         pass
