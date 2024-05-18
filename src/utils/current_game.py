@@ -33,7 +33,9 @@ class CurrentGame(object):
 
     @property
     def plugin_conf(self):
-        print("current : ", self.__current_config.get_plugin_configuration("plugin_conf"))
+        print("current : ", self.__current_config.get_plugin_configuration(
+            "plugin_conf"
+        ))
         return self.__current_config.get_plugin_configuration("plugin_conf")
 
     @property
@@ -96,6 +98,7 @@ class CurrentGame(object):
 
     @conflit_syst.setter
     def conflit_syst(self, value: bool):
+        self.__current_config.set_configuration("conflit_syst", value)
         self.save_plugin()
 
     @post_conf.setter
@@ -152,17 +155,6 @@ class CurrentGame(object):
         except Exception as e:
             self.post_conf = False
             print("Error poste traitement : ", e)
-            result = False
-        return result
-
-    def init_conflit_syst(self):
-        result = True
-        try:
-            generate_dict_archive(False, self.path_game)
-            self.conflit_syst = True
-        except Exception as e:
-            self.conflit_syst = False
-            print("Error dict traitement : ", e)
             result = False
         return result
 
