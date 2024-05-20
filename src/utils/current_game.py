@@ -1,7 +1,7 @@
 import os
 
 from utils.xdg import xdg_conf_path
-from utils.files import generate_dict_archive, lower_case_recursif
+from utils.files import lower_case_recursif
 
 from py_mod_manager.const import USER, PLUGIN
 
@@ -53,6 +53,18 @@ class CurrentGame(object):
     @property
     def path_install(self):
         return self.__current_config.get_plugin_configuration("path_install")
+
+    @property
+    def path_mod(self):
+        return self.__current_game.path_mod
+
+    @property
+    def recurrent_directory(self):
+        return self.__current_game.recurrent_directory
+
+    @property
+    def mode_extention(self):
+        return self.__current_game.mode_extention
 
     @property
     def symbolic(self):
@@ -142,7 +154,8 @@ class CurrentGame(object):
             self.__current_game.name,
             self.__conf_path
         )
-        if not self.__current_game.version == self.__current_config.get_plugin_configuration("version"):
+        if not self.__current_game.version == \
+                self.__current_config.get_plugin_configuration("version"):
             print(f"ne correspond pas {self.__current_game.name}")
 
     def post_traitement(self):
@@ -176,6 +189,7 @@ class CurrentGame(object):
         return result
 
     def generated_default_path(self):
+        print("generate \n\n")
         paths = [
             self.path_download,
             self.path_install
@@ -183,8 +197,10 @@ class CurrentGame(object):
         print(self.path_download)
         for path in paths:
             path_game = path + "/" + self.plugin_name
+            print(path)
             if not os.path.isdir(path_game):
                 os.mkdir(path_game)
+                print(path_game)
 
     def set_copy(self):
         self._default_force

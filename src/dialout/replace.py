@@ -1,6 +1,5 @@
-from gi.repository import Gtk, Adw
+from gi.repository import Adw
 
-from py_mod_manager.const import UI_BASE
 
 class DialoutReplace(Adw.MessageDialog):
     def __init__(self, window):

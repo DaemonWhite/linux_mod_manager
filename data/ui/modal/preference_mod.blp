@@ -1,0 +1,33 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $PyModManagerWindowModalPreferenceMod : $AdwWindow {
+  modal: true;
+  default-width: 800;
+  default-height: 550;
+  Gtk.Box {
+    orientation: vertical;
+    hexpand: true;
+    vexpand: true;
+    Adw.HeaderBar {
+      decoration-layout: "";
+      [start]
+      Gtk.Button previous_button {
+        label: "Annuller";
+        styles ["destructive-action"]
+      }
+      [end]
+      Gtk.Button next_button {
+        label: "Valider";
+        styles ["suggested-action"]
+      }
+    }
+    Gtk.Box {
+      orientation: horizontal;
+      vexpand: true;
+      hexpand: true;
+      Gtk.Stack stack {
+      }
+    }
+  }
+}

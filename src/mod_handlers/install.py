@@ -17,6 +17,14 @@ class InstallSysteme(object):
     def list_file(self):
         return self.__list_file
 
+    @property
+    def path_download(self):
+        return self.__path_download
+
+    @property
+    def path_install(self):
+        return self.__install_path
+
     def __init__(self, path_download, path_install):
         self.__path_download = path_download
         self.__path_download_archive = path_download + "/archive"

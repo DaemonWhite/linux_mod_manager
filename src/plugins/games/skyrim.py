@@ -8,3 +8,5 @@ class PluginGames(PluginGame):
         self._systeme = ["win"]
         self.symbolic = False
         self._path_mod = "data"
+        self._mode_extention = [".esp", ".esl", ".esm"]
+        self.append_recurent_directory("data", "/")

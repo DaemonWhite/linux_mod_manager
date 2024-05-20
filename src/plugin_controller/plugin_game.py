@@ -1,4 +1,5 @@
 from plugin_controller.plugin_base import PluginBase
+from mod_handlers.configure import RecurentDataDirectory
 
 # TODO Ne sauvegarde pas le système de configuration correctement Probablement
 # un problème d'ordre
@@ -11,6 +12,9 @@ class PluginGame(PluginBase):
         self.__list_name = [short_name, true_name]
         self._true_name = true_name
         self._systeme = ["linux"]
+        self.__recurrent_directory = []
+        self._mode_extention = []
+        self._ignore_extention = []
         self._add_conf("symbolic", True)
         self._add_conf("archive", True)
         self._add_conf("copy", True)
@@ -74,6 +78,14 @@ class PluginGame(PluginBase):
     def path_mod(self):
         return self._path_mod
 
+    @property
+    def recurrent_directory(self):
+        return self.__recurrent_directory
+
+    @property
+    def mode_extention(self):
+        return self._mode_extention
+
     @symbolic.setter
     def symbolic(self, activate: bool):
         self.set_conf("symbolic", activate)
@@ -91,3 +103,8 @@ class PluginGame(PluginBase):
 
     def append_name(self, name: str):
         self.__list_name.append(name)
+
+    def append_recurent_directory(self, folder: str, destination: str):
+        self.__recurrent_directory.append(
+            RecurentDataDirectory(folder, destination)
+        )

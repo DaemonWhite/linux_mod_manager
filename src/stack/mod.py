@@ -14,6 +14,8 @@ from py_mod_manager.const import UI_BASE
 from utils.files import slice_path_in_file
 from utils.list_model import ListRowModel, give_item_list_row
 
+from modal.preference_mod import PyModManagerWindowModalPreferenceMod
+
 
 # TODO Donwload end event change color
 @Gtk.Template(resource_path=UI_BASE+'stack/mod.ui')
@@ -21,6 +23,8 @@ class ModStack(Adw.Bin):
     __gtype_name__ = 'ModStack'
 
     import_button = Gtk.Template.Child()
+    deploy_button = Gtk.Template.Child()
+    purger_button = Gtk.Template.Child()
 
     install_row = Gtk.Template.Child()
     uninstall_row = Gtk.Template.Child()
@@ -37,6 +41,7 @@ class ModStack(Adw.Bin):
         super().__init__(**kwargs)
         self.__kwargs = kwargs
         self.__window = window
+
         list_mime_type = [
             'application/zip',
             'application/x-rar-compressed',
@@ -66,8 +71,11 @@ class ModStack(Adw.Bin):
         )
         self.__download_manager.set_callback_end(self.__event_end_download)
 
-        self.__window.mod_manager.set_default_callback_finish(
+        self.__window.mod_manager.set_callback_finish(
             self.__event_end_install
+        )
+        self.__window.mod_manager.set_configuration_callback(
+            self.__event_configuration
         )
 
         self.__list_download = ListRowModel()
@@ -82,15 +90,23 @@ class ModStack(Adw.Bin):
             give_item_list_row
         )
 
-        # self.__list_install = ListRowModel()
-        # self.install_list_row.bind_model(
-        #     self.__list_install,
-        #     give_item_list_row
-        # )
+        self.__list_install = ListRowModel()
+        self.install_list_row.bind_model(
+            self.__list_install,
+            give_item_list_row
+        )
 
         for mime_type in list_mime_type:
             self.__archive_filter.add_mime_type(mime_type)
         self.import_button.connect("clicked", self.__on_select_files)
+
+    def __event_configuration(self, conf):
+        print("ok configuration")
+        pref = PyModManagerWindowModalPreferenceMod(
+            self.__window
+        )
+        pref.set_page_conf(conf)
+        GLib.idle_add(pref.present)
 
     def __event_array_file_exist_choose(self, dialog, choose):
         if dialog.choose_finish(choose) == "y":
@@ -107,7 +123,8 @@ class ModStack(Adw.Bin):
         # TODO Ajouter la verification des erreurs
         delete_row = []
         for progress_row in self.__list_download:
-            if type(progress_row) == type(ProgressRow()) and not progress_row.PROGRESS == progress_row.state :
+            if type(progress_row) == type(ProgressRow()) \
+                    and not progress_row.PROGRESS == progress_row.state:
                 delete_row.append(progress_row)
 
         self.__download_manager.clear()
@@ -247,9 +264,17 @@ class ModStack(Adw.Bin):
 
     def reload_mod(self):
         self.__list_uninstall.clear()
-        files = self.__window.mod_manager.list_no_installed_mod()
+        self.__list_install.clear()
+        files = self.__window.mod_manager.list_installable_mod()
         for file in files:
-            roww = InstallRow()
-            roww.set_title(file.file)
-            roww.connect(self.install_mod, file)
-            self.__list_uninstall.append_row(roww)
+            if not file.installed:
+                roww = InstallRow()
+                roww.set_title(file.file)
+                roww.connect(self.install_mod, file)
+                self.__list_uninstall.append_row(roww)
+            else:
+                roww = InstallRow()
+                roww.set_title(file.file)
+                roww.connect(self.install_mod, file)
+                self.__list_install.append_row(roww)
+

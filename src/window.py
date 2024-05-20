@@ -19,10 +19,7 @@
 
 import os
 
-from gi.repository import Adw
-from gi.repository import Gtk
-from gi.repository import Gio
-from gi.repository import Gdk
+from gi.repository import Adw, Gtk, Gio, Gdk
 
 from plugin_controller.factory import Game
 
@@ -160,22 +157,34 @@ class PyModManagerWindow(Adw.ApplicationWindow):
         return result
 
     def configure_conflit(self):
-        base_path_install = os.path.join(
-            self.cg.path_install,
-            self.cg.plugin_name
-        )
-        path_install = base_path_install + "/" + self.cg.plugin_name + ".json"
+        self.mod_manager.add_game(
+                self.cg.plugin_name,
+                os.path.join(
+                    self.cg.path_download,
+                    self.cg.plugin_name,
+                ),
+                os.path.join(
+                    self.cg.path_install,
+                    self.cg.plugin_name,
+                ),
+                self.cg.path_game,
+                self.cg.path_mod,
+                self.cg.path_install,
+                self.cg.mode_extention,
+                self.cg.recurrent_directory,
+                []
+            )
+
         self.cg.conflit_syst = self.mod_manager.init_config(
-            self.cg.path_game,
-            path_install
+            self.cg.plugin_name
         )
         return self.cg.conflit_syst
 
     def auto_detect_game(self):
         load_modal = PyModManagerWindowModalLoad(
-            self,
-            "Etape de configuration du jeu"
+            self
         )
+        load_modal.set_configuration_title("Etape de configuration du jeu")
         load_modal.set_name_load(self.cg.name)
         load_modal.add_stape(
             name="Cherche le jeux",
@@ -201,7 +210,8 @@ applique le poste traitement",
 
     def __change_page(self, widget, _):
         PAGE = widget.get_visible_child_name()
-        if PAGE == "page_order" or PAGE == "page_mod" or PAGE == "page_settings":
+        if PAGE == "page_order" or PAGE == "page_mod" \
+                or PAGE == "page_settings":
             self.__last_page = widget.get_visible_child_name()
 
     def verif_load_game(self):
@@ -282,9 +292,6 @@ applique le poste traitement",
             row.set_sensitive(False)
 
     def enable_current_plugin(self):
-        if not self.cg.plugin_conf and self.settings.get_auto_detect_games():
-            self.auto_detect_game()
-
         if self.cg.path_download == "":
             self.cg.path_download = self.settings.get_donwload_base_folder()
 
@@ -292,8 +299,9 @@ applique le poste traitement",
             self.cg.path_install = self.settings.get_install_base_folder()
 
         self.cg.generated_default_path()
+
         if not self.mod_manager.mod_exist(self.cg.plugin_name):
-            self.mod_manager.add_mod(
+            self.mod_manager.add_game(
                 self.cg.plugin_name,
                 os.path.join(
                     self.cg.path_download,
@@ -303,7 +311,17 @@ applique le poste traitement",
                     self.cg.path_install,
                     self.cg.plugin_name,
                 ),
+                self.cg.path_game,
+                self.cg.path_mod,
+                self.cg.path_install,
+                self.cg.mode_extention,
+                self.cg.recurrent_directory,
+                []
             )
+
+        if not self.cg.plugin_conf and self.settings.get_auto_detect_games():
+            self.auto_detect_game()
+
         self.mod_manager.select_mod(self.cg.plugin_name)
         self.page_mod.reload_mod()
 
