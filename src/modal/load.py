@@ -22,14 +22,12 @@ class PyModManagerWindowModalLoad(Adw.Window):
 
     close_button = Gtk.Template.Child()
 
-    def __init__(self, windows, name):
-        Adw.Window.__init__(self, title="Load")
+    def __init__(self, windows, **kwargs):
+        super().__init__(**kwargs)
         self.__window = windows
         self.__stape = 0
         self.__array_stape = []
         self.set_transient_for(self.__window)
-
-        self.stape_configuration.set_title(name)
 
         self.accept_close = False
 
@@ -54,6 +52,9 @@ class PyModManagerWindowModalLoad(Adw.Window):
 
     def __default_callback():
         pass
+
+    def set_configuration_title(self, name):
+        self.stape_configuration.set_title(name)
 
     def set_name_load(self, name, description=""):
         title = f'Rechercher de : {name}'
