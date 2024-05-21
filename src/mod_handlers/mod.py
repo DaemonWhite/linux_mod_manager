@@ -178,5 +178,3 @@ class ModManager(object):
 
     def purge():
         pass
-
-

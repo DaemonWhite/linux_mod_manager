@@ -6,6 +6,19 @@ from dataclasses import dataclass
 
 
 @dataclass
+class Page:
+    name: str
+    groups: list
+
+
+@dataclass
+class Group:
+    name: str
+    tipe: object
+    options: list
+
+
+@dataclass
 class RecurentDataDirectory:
     folder: str
     destination: str
@@ -33,7 +46,7 @@ class StateDetect:
 
 class ConfigInterface():
     def __init__(self):
-        self.__page = {}
+        self.__pages = []
         self.__index = 0
 
     def __iter__(self):
@@ -41,36 +54,69 @@ class ConfigInterface():
         return self
 
     def __next__(self):
-        if len(self.__page) < self.__index:
-            return self.__page.keys()[self.__index]
+        print(len(self.__pages))
+        if len(self.__pages) > self.__index:
+            index = self.__index
+            self.__index += 1
+            return self.__pages[index]
         else:
             raise StopIteration
 
     def __repr__(self):
         data_text = "Page Empty"
-        for page in self.__page:
-            data_text = f"page -> {self.__page[page]}\n"
+        for page in self.__pages:
+            data_text = f"page ({page.name})-> {page.groups}\n"
 
         return data_text
 
     def add_page(self, name):
-        self.__page[name] = {}
+        self.__pages.append(Page(name=name, groups=[]))
 
-    def add_select(
-        self, page: str, group: str, select_type: ChoiceType,
+    def add_group(
+        self, page_name: str, group_name: str, select_type: ChoiceType,
         options: list = []
     ):
 
-        self.__page[page][group] = {
-            "type": select_type,
-            "options": options
-        }
+        group = self.get_group(page_name, group_name)
+        if not group:
+            page = self.get_page(page_name)
+            page.groups.append(
+                Group(
+                    name=group_name,
+                    tipe=select_type,
+                    options=options
+                )
+            )
+        else:
+            if len(options):
+                group.options = options
 
-    def add_options(self, page: str, group: str, option: ChoiceOptions):
-        self.__page[page][group]["options"].append(option)
+    def add_options(
+        self, page_name: str, group_name: str, option: ChoiceOptions
+    ):
+        group = self.get_group(page_name, group_name)
+        if group:
+            group.options
 
-    def get_pages(self):
-        self.__page
+    def get_page(self, page_name: str):
+        return_page = None
+        for page in self.__pages:
+            if page.name == page_name:
+                return_page = page
+                break
+
+        return return_page
+
+    def get_group(self, name_page: str, name_group: str):
+        page = self.get_page(name_page)
+        return_group = None
+
+        for group in page.groups:
+            if group.name == name_group:
+                return_group = group
+                break
+
+        return return_group
 
     def generate_config(self):
         pass
@@ -191,17 +237,17 @@ class GenertedModConfig():
         #     return self.__script_detect(self.__path_game)
 
         self.detecte_file(self.__path_game)
-        print(len(self.__file_detect))
-        if len(self.__file_detect) > 1:
+        if len(self.__file_detected) > 1:
             is_detected = StateDetect.HUMAN_INTERVENTION
             print("coucou")
             self.__config.add_page("Mods")
-            self.__config.add_select(
+            self.__config.add_group(
                 "Mods",
                 "Selectioner les mods",
                 ChoiceType.SELECT_MULTIPLE
             )
             for relative_path in self.__file_detected:
+                print(relative_path)
                 self.__config.add_options(
                     "Mods",
                     "Selectioner les mods",
@@ -218,10 +264,10 @@ class GenertedModConfig():
         return self.__config
 
     def generate_config(self):
-        for path_config in self.__file_detected:
-            self.__simple_config['path'].append(path_config)
-            self.__simple_config['conflit'] = generate_dict_archive(
-                os.path.join(self.__path_game, path_config)
-            )
+        # for path_config in self.__file_detected:
+        #     self.__simple_config['path'].append(path_config)
+        #     self.__simple_config['conflit'] = generate_dict_archive(
+        #         path=os.path.join(self.__path_game, path_config)
+        #     )
 
         return self.__simple_config
