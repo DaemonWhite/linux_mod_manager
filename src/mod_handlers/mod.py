@@ -147,6 +147,8 @@ class ModManager(object):
 
         if len(self.__install_fill) > 0:
             self.__install_fill[0].start()
+        else:
+            self.__install_work = False
 
     def install(self, file, mod_plugin=""):
         if mod_plugin == "":
