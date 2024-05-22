@@ -33,6 +33,8 @@ class ChoiceType:
 @dataclass
 class ChoiceOptions:
     name: str
+    description: str
+    activate: bool
     destination: str
     mod_path: str
 
@@ -96,7 +98,7 @@ class ConfigInterface():
     ):
         group = self.get_group(page_name, group_name)
         if group:
-            group.options
+            group.options.append(option)
 
     def get_page(self, page_name: str):
         return_page = None
@@ -253,6 +255,8 @@ class GenertedModConfig():
                     "Selectioner les mods",
                     ChoiceOptions(
                         name=relative_path,
+                        activate=True,
+                        description="",
                         destination=relative_path,
                         mod_path=self.__mod_path + "/" + relative_path
                     )
