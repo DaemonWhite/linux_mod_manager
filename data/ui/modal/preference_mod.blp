@@ -27,6 +27,8 @@ template $PyModManagerWindowModalPreferenceMod : $AdwWindow {
       vexpand: true;
       hexpand: true;
       Gtk.Stack stack {
+        transition-duration: 1000;
+        transition-type: over_right_left;
       }
     }
   }
