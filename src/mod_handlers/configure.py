@@ -26,7 +26,7 @@ class RecurentDataDirectory:
 
 @dataclass
 class ChoiceType:
-    SELECT_ONE: int = 0
+    SELECT_SINGLE: int = 0
     SELECT_MULTIPLE: int = 0
 
 
@@ -34,7 +34,9 @@ class ChoiceType:
 class ChoiceOptions:
     name: str
     description: str
+    ilustration: str
     activate: bool
+    enable: bool
     destination: str
     mod_path: str
 
@@ -255,7 +257,9 @@ class GenertedModConfig():
                     "Selectioner les mods",
                     ChoiceOptions(
                         name=relative_path,
+                        ilustration="",
                         activate=True,
+                        enable=True,
                         description="",
                         destination=relative_path,
                         mod_path=self.__mod_path + "/" + relative_path
