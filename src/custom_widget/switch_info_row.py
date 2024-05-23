@@ -1,6 +1,7 @@
-from gi.repository import Adw, Gtk, Gio, GLib, GObject
+from gi.repository import Adw, Gtk, Gio, GObject
 
 from py_mod_manager.const import UI_BASE
+
 
 @Gtk.Template(resource_path=UI_BASE+'widgets/switch_info_row.ui')
 class SwitchInfoRow(Adw.PreferencesRow):
@@ -53,7 +54,8 @@ class SwitchInfoRow(Adw.PreferencesRow):
 
     def slider_notify_active_cb(self, widget, param):
         Gtk.Accessible.update_state(
-            self, [Gtk.AccessibleState.CHECKED], [int(self.active_switch.get_active())]
+            self, [Gtk.AccessibleState.CHECKED],
+            [int(self.active_switch.get_active())]
         )
         self.emit("activated", self)
 
@@ -97,4 +99,3 @@ class SwitchInfoRow(Adw.PreferencesRow):
             context_label.add_class(color)
         context.add_class('card')
         context.add_class('activatable')
-
