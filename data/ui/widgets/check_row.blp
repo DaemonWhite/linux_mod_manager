@@ -1,0 +1,11 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $CheckRow : Adw.ActionRow {
+  [suffix]
+  Gtk.Box {
+    Gtk.CheckButton check_button {
+      styles ["selection-mode"]
+    }
+  }
+}
