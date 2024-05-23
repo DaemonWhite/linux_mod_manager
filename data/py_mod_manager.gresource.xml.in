@@ -10,7 +10,10 @@
     <file preprocess="xml-stripblanks">ui/stack/order.ui</file>
     <file preprocess="xml-stripblanks">ui/stack/mod.ui</file>
     <file preprocess="xml-stripblanks">ui/stack/error.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/check_row.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/install_row.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/preference_group_model.ui</file>
+    <file preprocess="xml-stripblanks">ui/widgets/preference_mod_stackpage.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/progress_row.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/switch_info_row.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/stape_row.ui</file>
