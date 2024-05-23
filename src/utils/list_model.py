@@ -1,4 +1,64 @@
 from gi.repository import GObject, Gio
+from custom_widget.check_row import CheckRow
+
+
+class GObjectSelected(GObject.Object):
+    __gtype_name__ = 'GObjectSelected'
+
+    def __init__(self, objectt: object):
+        super().__init__()
+        self.__object = objectt
+
+    @property
+    def object(self):
+        return self.__object
+
+
+class ListSingleSelectModel(GObject.Object, Gio.ListModel):
+    __gtype_name__ = 'ListSingleSelectModel'
+
+    def __init__(self, groups: list):
+        super().__init__()
+
+
+class ListMultipleSelectModel(GObject.Object, Gio.ListModel):
+    __gtype_name__ = 'ListMultipleSelectModel'
+
+    def __init__(self, groups: list):
+        super().__init__()
+        self.groups = []
+        for group in groups:
+            self.groups.append(GObjectSelected(group))
+        print("coucou")
+
+    def __iter__(self):
+        self.index = 0
+        return self
+
+    def __next__(self):
+        print("ok")
+        if self.index < len(self.groups):
+            result = self.groups[self.index]
+            self.index += 1
+            return result
+        else:
+            raise StopIteration
+
+    def enable(self, name: str, value: bool):
+        for group in self.groups:
+            if group.object.name == name:
+                group.object.enable = value
+                return value
+
+    def do_get_item(self, index):
+        print("call -> ", self.groups[index])
+        return self.groups[index]
+
+    def do_get_n_items(self):
+        return len(self.groups)
+
+    def do_get_item_type(self):
+        return GObjectSelected
 
 
 class ListRowModel(GObject.Object, Gio.ListModel):
