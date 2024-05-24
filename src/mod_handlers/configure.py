@@ -6,6 +6,15 @@ from dataclasses import dataclass
 
 
 @dataclass
+class MetaData:
+    name: str
+    description: str
+    autors: str
+    version: str
+    web: str
+
+
+@dataclass
 class Page:
     name: str
     groups: list
