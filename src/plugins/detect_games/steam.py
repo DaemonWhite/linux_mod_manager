@@ -4,7 +4,6 @@ import os
 
 import vdf
 
-from pathlib import PurePath, Path
 
 class PluginDetectGames(PluginDetectGame):
     STEAMAPPS = 'steamapps'
@@ -14,8 +13,12 @@ class PluginDetectGames(PluginDetectGame):
         self.__detect_game_path = []
         self._local = True
         self._flatpak = True
-        self._locals_path = [os.path.join('steam',self.STEAMAPPS), os.path.join('.steam/steam', self.STEAMAPPS)]
-        self._flatpak_path = "com.valvesoftware.Steam/data/Steam/" + self.STEAMAPPS
+        self._locals_path = [
+            os.path.join('steam', self.STEAMAPPS),
+            os.path.join('.steam/steam', self.STEAMAPPS)
+        ]
+        self._flatpak_path = "com.valvesoftware.Steam/data/Steam/" + \
+            self.STEAMAPPS
 
     def detect_path(self, path):
         if not os.path.isdir(path):
