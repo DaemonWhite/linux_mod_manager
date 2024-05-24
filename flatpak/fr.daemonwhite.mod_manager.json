@@ -39,6 +39,7 @@
                 "*"
             ]
         },
+        "python3-lxml.json",
         "python3-pyxdg.json",
         "python3-vdf.json",
         "python3-py7zr.json",
