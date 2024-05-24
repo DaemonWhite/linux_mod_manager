@@ -2,13 +2,14 @@ from gi.repository import GLib
 
 from plugin_controller.plugin_base import PluginBase
 from pathlib import Path
-import os
+
 
 class GameData(object):
     def __init__(self):
         self.name = str()
         self.prefix = str()
         self.install_dir = str()
+
 
 class PluginDetectGame(PluginBase):
 
@@ -28,9 +29,11 @@ class PluginDetectGame(PluginBase):
     @property
     def _game_name(self):
         return self.__game.name
+
     @property
     def _prefix(self):
         return self.__game.prefix
+
     @property
     def _install_dir(self):
         return self.__game.install_dir
