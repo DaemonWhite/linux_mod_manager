@@ -1,1 +1,1 @@
-i18n.gettext('py_mod_manager', preset: 'glib')
+i18n.gettext('rust_linux_mod_manager', preset: 'glib')

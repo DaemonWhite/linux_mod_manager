@@ -1,18 +1,29 @@
 {
-    "app-id" : "fr.daemonwhite.mod_manager",
+    "id" : "fr.daemonwhite.mod_manager",
     "runtime" : "org.gnome.Platform",
-    "runtime-version" : "46",
+    "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
-    "command" : "py_mod_manager",
+    "sdk-extensions" : [
+        "org.freedesktop.Sdk.Extension.rust-stable"
+    ],
+    "command" : "rust_linux_mod_manager",
     "finish-args" : [
         "--share=network",
         "--share=ipc",
         "--socket=fallback-x11",
         "--device=dri",
-        "--socket=wayland",
-        "--filesystem=host",
-        "--filesystem=~/.var/app/"
+        "--socket=wayland"
     ],
+    "build-options" : {
+        "append-path" : "/usr/lib/sdk/rust-stable/bin",
+        "build-args" : [
+            "--share=network"
+        ],
+        "env" : {
+            "RUST_BACKTRACE" : "1",
+            "RUST_LOG" : "rust_linux_mod_manager=debug"
+        }
+    },
     "cleanup" : [
         "/include",
         "/lib/pkgconfig",
@@ -25,38 +36,33 @@
         "*.a"
     ],
     "modules" : [
-    	{
+        {
             "name" : "blueprint-compiler",
             "buildsystem" : "meson",
             "sources" : [
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/jwestman/blueprint-compiler",
-                    "tag" : "v0.10.0"
+                    "tag" : "v0.14.0"
                 }
             ],
             "cleanup" : [
                 "*"
             ]
         },
-        "python3-lxml.json",
-        "python3-pyxdg.json",
-        "python3-vdf.json",
-        "python3-py7zr.json",
-        "python3-rarfile.json",
         {
-            "name" : "py_mod_manager",
+            "name" : "rust_linux_mod_manager",
             "builddir" : true,
             "buildsystem" : "meson",
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "file:///home/matheo/Projets/Python"
+                    "url" : "file:///home/matheo/Projects/Rust"
                 }
+            ],
+            "config-opts" : [
+                "--libdir=lib"
             ]
         }
-    ],
-    "build-options" : {
-        "env" : {        }
-    }
+    ]
 }

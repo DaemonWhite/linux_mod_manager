@@ -1,8 +1,10 @@
 [Desktop Entry]
-Name=Linux Mod Manager
-Exec=py_mod_manager
-Icon=@APP_ID@
+Name=rust_linux_mod_manager
+Exec=rust_linux_mod_manager
+Icon=fr.daemonwhite.mod_manager
 Terminal=false
 Type=Application
-Categories=GTK;
+Categories=Utility;
+Keywords=GTK;
 StartupNotify=true
+DBusActivatable=true

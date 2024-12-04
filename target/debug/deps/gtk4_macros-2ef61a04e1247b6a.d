@@ -1,0 +1,9 @@
+/home/matheo/Projects/Rust/rust_linux_mod_manager/target/debug/deps/libgtk4_macros-2ef61a04e1247b6a.so: /home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/lib.rs /home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/attribute_parser.rs /home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/composite_template_derive.rs /home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/template_callbacks_attribute.rs /home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/util.rs
+
+/home/matheo/Projects/Rust/rust_linux_mod_manager/target/debug/deps/gtk4_macros-2ef61a04e1247b6a.d: /home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/lib.rs /home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/attribute_parser.rs /home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/composite_template_derive.rs /home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/template_callbacks_attribute.rs /home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/util.rs
+
+/home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/lib.rs:
+/home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/attribute_parser.rs:
+/home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/composite_template_derive.rs:
+/home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/template_callbacks_attribute.rs:
+/home/matheo/.cargo/registry/src/index.crates.io-6f17d22bba15001f/gtk4-macros-0.9.1/src/util.rs:

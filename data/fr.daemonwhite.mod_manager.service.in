@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=fr.daemonwhite.mod_manager
+Exec=@bindir@/rust_linux_mod_manager --gapplication-service

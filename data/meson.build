@@ -1,15 +1,9 @@
-pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
-
 desktop_file = i18n.merge_file(
-	input: configure_file(
-		input: 'fr.daemonwhite.mod_manager.desktop.in',
-    	output: app_id + '.desktop.in',
-      configuration: conf
-  ),
-  output: app_id + '.desktop',
-  type: 'desktop',
-  po_dir: '../po',
-  install: true,
+        input: 'fr.daemonwhite.mod_manager.desktop.in',
+       output: 'fr.daemonwhite.mod_manager.desktop',
+         type: 'desktop',
+       po_dir: '../po',
+      install: true,
   install_dir: get_option('datadir') / 'applications'
 )
 
@@ -54,11 +48,11 @@ blueprints = custom_target('blueprints',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
 )
 
-gnome.compile_resources('py_mod_manager',
+gnome.compile_resources('rust_linux_mod_manager',
   configure_file(
-  	input: 'py_mod_manager.gresource.xml.in',
-	output: 'py_mod_manager.gresource.xml',
-	configuration: conf
+  	input: 'rust_linux_mod_manager.gresource.xml.in',
+		output: 'rust_linux_mod_manager.gresource.xml',
+		configuration: conf
   ),
   dependencies: blueprints,
   gresource_bundle: true,
@@ -72,12 +66,22 @@ install_data(
     output: app_id + '.gschema.xml',
     configuration: conf
   ),
-  install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
+  install_dir: get_option('datadir') / 'glib-2.0' / 'schemas'
 )
 
 compile_schemas = find_program('glib-compile-schemas', required: false, disabler: true)
 test('Validate schema file',
      compile_schemas,
      args: ['--strict', '--dry-run', meson.current_source_dir()])
+
+
+service_conf = configuration_data()
+service_conf.set('bindir', get_option('prefix') / get_option('bindir'))
+configure_file(
+  input: 'fr.daemonwhite.mod_manager.service.in',
+  output: 'fr.daemonwhite.mod_manager.service',
+  configuration: service_conf,
+  install_dir: get_option('datadir') / 'dbus-1' / 'services'
+)
 
 subdir('icons')

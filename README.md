@@ -1,3 +1,3 @@
-# py_mod_manager
+# rust_linux_mod_manager
 
-Projet loint d'etres finis
+A description of this project.

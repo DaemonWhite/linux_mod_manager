@@ -1,1 +1,1 @@
-option('devel', type : 'boolean', value : false)
+option('devel', type : 'integer', value : 0)

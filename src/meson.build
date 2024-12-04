@@ -1,42 +1,40 @@
-moduledir = pkgdatadir / 'py_mod_manager'
-
 configure_file(
-  input: 'const.in',
-  output: 'const.py',
-  configuration: conf,
-  install: true,
-  install_dir: moduledir,
-  install_mode: 'r-xr--r--'
+    input: 'config.rs.in',
+    output: 'config.rs',
+    configuration: conf
 )
 
-configure_file(
-  input: 'py_mod_manager.in',
-  output: 'py_mod_manager',
-  configuration: conf,
+# Copy the config.rs output to the source directory.
+run_command(
+  'cp',
+  meson.project_build_root() / 'src' / 'config.rs',
+  meson.project_source_root() / 'src' / 'config.rs',
+  check: true
+)
+
+cargo_bin  = find_program('cargo')
+cargo_opt  = [ '--manifest-path', meson.project_source_root() / 'Cargo.toml' ]
+cargo_opt += [ '--target-dir', meson.project_build_root()  / 'src' ]
+cargo_env  = [ 'CARGO_HOME=' + meson.project_build_root()  / 'cargo-home' ]
+
+if get_option('buildtype') == 'release'
+  cargo_opt += [ '--release' ]
+  rust_target = 'release'
+else
+  rust_target = 'debug'
+endif
+
+cargo_build = custom_target(
+  'cargo-build',
+  build_by_default: true,
+  build_always_stale: true,
+  output: meson.project_name(),
+  console: true,
   install: true,
   install_dir: get_option('bindir'),
-  install_mode: 'r-xr--r--'
+  command: [
+    'env', cargo_env,
+    cargo_bin, 'build',
+    cargo_opt, '&&', 'cp', 'src' / rust_target / meson.project_name(), '@OUTPUT@',
+  ]
 )
-
-py_mod_manager_sources = [
-  '__init__.py',
-  'main.py',
-  'window.py',
-]
-
-modules_src = [
-	'custom_widget',
-	'dialout',
-	'modal',
-	'mod_handlers',
-	'plugin_controller',
-	'plugins',
-	'stack',
-	'utils',
-]
-
-foreach module : modules_src
-	install_subdir(module, install_dir: pkgdatadir)
-endforeach
-
-install_data(py_mod_manager_sources, install_dir: moduledir)

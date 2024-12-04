@@ -1,0 +1,6 @@
+# List of source files containing translatable strings.
+# Please keep this file sorted alphabetically.
+data/fr.daemonwhite.mod_manager.desktop.in
+data/fr.daemonwhite.mod_manager.metainfo.xml.in
+data/fr.daemonwhite.mod_manager.gschema.xml
+src/window.ui
