@@ -1,13 +1,13 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $OrderStack : $AdwBin {
+template $OrderStack : Adw.Bin {
 	Adw.PreferencesPage {
 		Adw.PreferencesGroup {
-			Adw.ExpanderRow {
+			Adw.ExpanderRow row_enabled {
 				title: "Mod activer";
 			}
-			Adw.ExpanderRow {
+			Adw.ExpanderRow row_disabled {
 				title: "Mod Desactiver";
 			}
 		}

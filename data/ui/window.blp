@@ -5,6 +5,14 @@ template $LinuxModManagerWindow : $AdwApplicationWindow {
   default-width: 900;
   default-height: 600;
 
+  Adw.Breakpoint window_breakpoint {
+    condition ("max-width: 850sp")
+
+    setters {
+      view_switcher_bar.reveal: true;
+    }
+  }
+
   Gtk.Box {
   	orientation: vertical;
   	vexpand: true;
@@ -12,8 +20,8 @@ template $LinuxModManagerWindow : $AdwApplicationWindow {
   	Adw.ToolbarView {
   		[top]
 			Adw.HeaderBar header_bar {
-				title-widget: Adw.ViewSwitcherTitle view_switcher_title{
-					title: "Linux Mod Manager";
+				title-widget: Adw.ViewSwitcher view_switcher_title{
+				  policy: wide;
 					stack: main_stack;
 				};
 		  	[start]
@@ -56,11 +64,16 @@ template $LinuxModManagerWindow : $AdwApplicationWindow {
 		  }
 		  Adw.ViewStack main_stack{
 		  	vexpand: true;
+		  	Adw.ViewStackPage {
+		  	      name: "order";
+		  	      title: _("Order");
+		  	      child: $OrderStack order_stack {};
+		  	}
+
 		  }
 		  [bottom]
 			Adw.ViewSwitcherBar view_switcher_bar {
 			  stack: main_stack;
-			  reveal: bind view_switcher_title.title-visible;
 			}
 		}
   }

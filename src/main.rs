@@ -20,10 +20,9 @@
 
 mod application;
 mod config;
-mod window;
+mod ui;
 
 use self::application::LinuxModManagerApplication;
-use self::window::LinuxModManagerWindow;
 
 use config::{GETTEXT_PACKAGE, LOCALEDIR, PKGDATADIR, APP_ID};
 use gettextrs::{bind_textdomain_codeset, bindtextdomain, textdomain};
