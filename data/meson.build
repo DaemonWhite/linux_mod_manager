@@ -1,6 +1,6 @@
 desktop_file = i18n.merge_file(
-        input: 'fr.daemonwhite.mod_manager.desktop.in',
-       output: 'fr.daemonwhite.mod_manager.desktop',
+        input: base_id + '.desktop.in',
+       output: app_id + '.desktop',
          type: 'desktop',
        po_dir: '../po',
       install: true,
@@ -13,8 +13,8 @@ if desktop_utils.found()
 endif
 
 appstream_file = i18n.merge_file(
-        input: 'fr.daemonwhite.mod_manager.metainfo.xml.in',
-       output: 'fr.daemonwhite.mod_manager.metainfo.xml',
+        input: base_id + '.metainfo.xml.in',
+       output: app_id + '.metainfo.xml',
        po_dir: '../po',
       install: true,
   install_dir: get_option('datadir') / 'metainfo'
@@ -23,6 +23,15 @@ appstream_file = i18n.merge_file(
 appstreamcli = find_program('appstreamcli', required: false, disabler: true)
 test('Validate appstream file', appstreamcli,
      args: ['validate', '--no-net', '--explain', appstream_file])
+
+install_data(
+  configure_file(
+    input: 'fr.daemonwhite.mod_manager.gschema.xml.in',
+    output: app_id + '.gschema.xml',
+    configuration: conf
+  ),
+  install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
+)
 
 blueprints = custom_target('blueprints',
   input: files(
@@ -48,11 +57,11 @@ blueprints = custom_target('blueprints',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
 )
 
-gnome.compile_resources('rust_linux_mod_manager',
+gnome.compile_resources('linux_mod_manager',
   configure_file(
-  	input: 'rust_linux_mod_manager.gresource.xml.in',
-		output: 'rust_linux_mod_manager.gresource.xml',
-		configuration: conf
+  	input: 'linux_mod_manager.gresource.xml.in',
+	output: 'linux_mod_manager.gresource.xml',
+	configuration: conf
   ),
   dependencies: blueprints,
   gresource_bundle: true,
@@ -60,14 +69,6 @@ gnome.compile_resources('rust_linux_mod_manager',
   install_dir: pkgdatadir,
 )
 
-install_data(
-  configure_file(
-    input: 'fr.daemonwhite.mod_manager.gschema.xml.in',
-    output: app_id + '.gschema.xml',
-    configuration: conf
-  ),
-  install_dir: get_option('datadir') / 'glib-2.0' / 'schemas'
-)
 
 compile_schemas = find_program('glib-compile-schemas', required: false, disabler: true)
 test('Validate schema file',
@@ -78,8 +79,8 @@ test('Validate schema file',
 service_conf = configuration_data()
 service_conf.set('bindir', get_option('prefix') / get_option('bindir'))
 configure_file(
-  input: 'fr.daemonwhite.mod_manager.service.in',
-  output: 'fr.daemonwhite.mod_manager.service',
+  input: base_id + '.service.in',
+  output: app_id + '.service',
   configuration: service_conf,
   install_dir: get_option('datadir') / 'dbus-1' / 'services'
 )

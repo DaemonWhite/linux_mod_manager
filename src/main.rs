@@ -1,6 +1,6 @@
 /* main.rs
  *
- * Copyright 2024 Unknown
+ * Copyright 2025 Unknown
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,10 @@ mod application;
 mod config;
 mod window;
 
-use self::application::RustLinuxModManagerApplication;
-use self::window::RustLinuxModManagerWindow;
+use self::application::LinuxModManagerApplication;
+use self::window::LinuxModManagerWindow;
 
-use config::{GETTEXT_PACKAGE, LOCALEDIR, PKGDATADIR};
+use config::{GETTEXT_PACKAGE, LOCALEDIR, PKGDATADIR, APP_ID};
 use gettextrs::{bind_textdomain_codeset, bindtextdomain, textdomain};
 use gtk::{gio, glib};
 use gtk::prelude::*;
@@ -38,14 +38,14 @@ fn main() -> glib::ExitCode {
     textdomain(GETTEXT_PACKAGE).expect("Unable to switch to the text domain");
 
     // Load resources
-    let resources = gio::Resource::load(PKGDATADIR.to_owned() + "/rust_linux_mod_manager.gresource")
+    let resources = gio::Resource::load(PKGDATADIR.to_owned() + "/linux_mod_manager.gresource")
         .expect("Could not load resources");
     gio::resources_register(&resources);
 
     // Create a new GtkApplication. The application manages our main loop,
     // application windows, integration with the window manager/compositor, and
     // desktop features such as file opening and single-instance applications.
-    let app = RustLinuxModManagerApplication::new("fr.daemonwhite.mod_manager", &gio::ApplicationFlags::empty());
+    let app = LinuxModManagerApplication::new(APP_ID, &gio::ApplicationFlags::empty());
 
     // Run the application. This function will block until the application
     // exits. Upon return, we have our exit code to return to the shell. (This

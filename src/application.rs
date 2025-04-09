@@ -1,6 +1,6 @@
 /* application.rs
  *
- * Copyright 2024 Unknown
+ * Copyright 2025 DaemonWhite
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,23 +23,23 @@ use adw::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::{gio, glib};
 
-use crate::config::VERSION;
-use crate::RustLinuxModManagerWindow;
+use crate::config::{VERSION, APP_ID, PREFIX};
+use crate::LinuxModManagerWindow;
 
 mod imp {
     use super::*;
 
     #[derive(Debug, Default)]
-    pub struct RustLinuxModManagerApplication {}
+    pub struct LinuxModManagerApplication {}
 
     #[glib::object_subclass]
-    impl ObjectSubclass for RustLinuxModManagerApplication {
-        const NAME: &'static str = "RustLinuxModManagerApplication";
-        type Type = super::RustLinuxModManagerApplication;
+    impl ObjectSubclass for LinuxModManagerApplication {
+        const NAME: &'static str = "LinuxModManagerApplication";
+        type Type = super::LinuxModManagerApplication;
         type ParentType = adw::Application;
     }
 
-    impl ObjectImpl for RustLinuxModManagerApplication {
+    impl ObjectImpl for LinuxModManagerApplication {
         fn constructed(&self) {
             self.parent_constructed();
             let obj = self.obj();
@@ -48,7 +48,7 @@ mod imp {
         }
     }
 
-    impl ApplicationImpl for RustLinuxModManagerApplication {
+    impl ApplicationImpl for LinuxModManagerApplication {
         // We connect to the activate callback to create a window when the application
         // has been launched. Additionally, this callback notifies us when the user
         // tries to launch a "second instance" of the application. When they try
@@ -57,7 +57,7 @@ mod imp {
             let application = self.obj();
             // Get the current window or create one if necessary
             let window = application.active_window().unwrap_or_else(|| {
-                let window = RustLinuxModManagerWindow::new(&*application);
+                let window = LinuxModManagerWindow::new(&*application);
                 window.upcast()
             });
 
@@ -66,21 +66,22 @@ mod imp {
         }
     }
 
-    impl GtkApplicationImpl for RustLinuxModManagerApplication {}
-    impl AdwApplicationImpl for RustLinuxModManagerApplication {}
+    impl GtkApplicationImpl for LinuxModManagerApplication {}
+    impl AdwApplicationImpl for LinuxModManagerApplication {}
 }
 
 glib::wrapper! {
-    pub struct RustLinuxModManagerApplication(ObjectSubclass<imp::RustLinuxModManagerApplication>)
+    pub struct LinuxModManagerApplication(ObjectSubclass<imp::LinuxModManagerApplication>)
         @extends gio::Application, gtk::Application, adw::Application,
         @implements gio::ActionGroup, gio::ActionMap;
 }
 
-impl RustLinuxModManagerApplication {
+impl LinuxModManagerApplication {
     pub fn new(application_id: &str, flags: &gio::ApplicationFlags) -> Self {
         glib::Object::builder()
             .property("application-id", application_id)
             .property("flags", flags)
+            .property("resource-base-path", PREFIX)
             .build()
     }
 
@@ -97,14 +98,14 @@ impl RustLinuxModManagerApplication {
     fn show_about(&self) {
         let window = self.active_window().unwrap();
         let about = adw::AboutDialog::builder()
-            .application_name("rust_linux_mod_manager")
-            .application_icon("fr.daemonwhite.mod_manager")
-            .developer_name("Unknown")
+            .application_name("Linux Mod Manger")
+            .application_icon(APP_ID)
+            .developer_name("DaemonWhite")
             .version(VERSION)
-            .developers(vec!["Unknown"])
+            .developers(vec!["DaemonWhite"])
             // Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
             .translator_credits(&gettext("translator-credits"))
-            .copyright("© 2024 Unknown")
+            .copyright("© 2025 DaemonWhite")
             .build();
 
         about.present(Some(&window));

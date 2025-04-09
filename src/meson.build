@@ -1,3 +1,6 @@
+gnome = import('gnome')
+
+
 configure_file(
     input: 'config.rs.in',
     output: 'config.rs',

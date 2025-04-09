@@ -6,7 +6,7 @@
     "sdk-extensions" : [
         "org.freedesktop.Sdk.Extension.rust-stable"
     ],
-    "command" : "rust_linux_mod_manager",
+    "command" : "linux_mod_manager",
     "finish-args" : [
         "--share=network",
         "--share=ipc",
@@ -21,7 +21,7 @@
         ],
         "env" : {
             "RUST_BACKTRACE" : "1",
-            "RUST_LOG" : "rust_linux_mod_manager=debug"
+            "RUST_LOG" : "linux_mod_manager=debug"
         }
     },
     "cleanup" : [
@@ -36,7 +36,7 @@
         "*.a"
     ],
     "modules" : [
-        {
+    	{
             "name" : "blueprint-compiler",
             "buildsystem" : "meson",
             "sources" : [
@@ -51,17 +51,14 @@
             ]
         },
         {
-            "name" : "rust_linux_mod_manager",
+            "name" : "linux_mod_manager",
             "builddir" : true,
             "buildsystem" : "meson",
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "file:///home/matheo/Projects/Rust"
+                    "url" : "file:///home/matheo/Projects/ok"
                 }
-            ],
-            "config-opts" : [
-                "--libdir=lib"
             ]
         }
     ]

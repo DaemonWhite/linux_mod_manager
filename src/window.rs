@@ -1,6 +1,6 @@
 /* window.rs
  *
- * Copyright 2024 Unknown
+ * Copyright 2025 DaemonWhite
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,38 +22,23 @@ use gtk::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::{gio, glib};
 
-use crate::{config};
+use crate::config;
 
 mod imp {
     use super::*;
 
     #[derive(Debug, Default, gtk::CompositeTemplate)]
     #[template(resource = "/fr/daemonwhite/mod_manager/ui/window.ui")]
-    pub struct RustLinuxModManagerWindow {
+    pub struct LinuxModManagerWindow {
         // Template widgets
         // #[template_child]
         // pub label: TemplateChild<gtk::Label>,
-        //
-        // pub main_stack: TemplateChild<adw::ViewStack>;
-        #[template_child]
-        pub main_stack: TemplateChild<adw::ViewStack>,
-        #[template_child]
-        pub choose_game: TemplateChild<gtk::DropDown>,
-
-        #[template_child]
-        pub view_switcher_title: TemplateChild<adw::ViewSwitcher>,
-
-        // #[template_child]
-        // pub view: TemplateChild<adw::ViewSwitcher>,
-        // #[template_child]
-        // pub view_switcher_bar: TemplateChild<adw::ViewSwitcherBar>
-
     }
 
     #[glib::object_subclass]
-    impl ObjectSubclass for RustLinuxModManagerWindow {
-        const NAME: &'static str = "RustLinuxModManagerWindow";
-        type Type = super::RustLinuxModManagerWindow;
+    impl ObjectSubclass for LinuxModManagerWindow {
+        const NAME: &'static str = "LinuxModManagerWindow";
+        type Type = super::LinuxModManagerWindow;
         type ParentType = adw::ApplicationWindow;
 
         fn class_init(klass: &mut Self::Class) {
@@ -65,32 +50,30 @@ mod imp {
         }
     }
 
-    impl ObjectImpl for RustLinuxModManagerWindow {
+    impl ObjectImpl for LinuxModManagerWindow {
         fn constructed(&self) {
             self.parent_constructed();
-
             let obj = self.obj();
-            if config::DEVEL != 0 {
+            if config::DEVEL == "devel" {
                 obj.add_css_class("devel");
             }
         }
     }
-    impl WidgetImpl for RustLinuxModManagerWindow {}
-    impl WindowImpl for RustLinuxModManagerWindow {}
-    impl ApplicationWindowImpl for RustLinuxModManagerWindow {}
-    impl AdwApplicationWindowImpl for RustLinuxModManagerWindow {}
+    impl WidgetImpl for LinuxModManagerWindow {}
+    impl WindowImpl for LinuxModManagerWindow {}
+    impl ApplicationWindowImpl for LinuxModManagerWindow {}
+    impl AdwApplicationWindowImpl for LinuxModManagerWindow {}
 }
 
 glib::wrapper! {
-    pub struct RustLinuxModManagerWindow(ObjectSubclass<imp::RustLinuxModManagerWindow>)
+    pub struct LinuxModManagerWindow(ObjectSubclass<imp::LinuxModManagerWindow>)
         @extends gtk::Widget, gtk::Window, gtk::ApplicationWindow, adw::ApplicationWindow,        @implements gio::ActionGroup, gio::ActionMap;
 }
 
-impl RustLinuxModManagerWindow {
+impl LinuxModManagerWindow {
     pub fn new<P: IsA<gtk::Application>>(application: &P) -> Self {
         glib::Object::builder()
             .property("application", application)
             .build()
     }
 }
-

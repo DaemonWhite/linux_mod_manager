@@ -1,10 +1,9 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $RustLinuxModManagerWindow : $AdwApplicationWindow {
+template $LinuxModManagerWindow : $AdwApplicationWindow {
   default-width: 900;
   default-height: 600;
-
 
   Gtk.Box {
   	orientation: vertical;
@@ -13,9 +12,9 @@ template $RustLinuxModManagerWindow : $AdwApplicationWindow {
   	Adw.ToolbarView {
   		[top]
 			Adw.HeaderBar header_bar {
-				title-widget: Adw.ViewSwitcher view_switcher_title{
-				  policy: wide;
-				  stack: main_stack;
+				title-widget: Adw.ViewSwitcherTitle view_switcher_title{
+					title: "Linux Mod Manager";
+					stack: main_stack;
 				};
 		  	[start]
 		  	Gtk.DropDown choose_game {
@@ -61,7 +60,7 @@ template $RustLinuxModManagerWindow : $AdwApplicationWindow {
 		  [bottom]
 			Adw.ViewSwitcherBar view_switcher_bar {
 			  stack: main_stack;
-			  // reveal: bind view_switcher_title.title-visible;
+			  reveal: bind view_switcher_title.title-visible;
 			}
 		}
   }

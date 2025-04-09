@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=rust_linux_mod_manager
-Exec=rust_linux_mod_manager
+Name=linux_mod_manager
+Exec=linux_mod_manager
 Icon=fr.daemonwhite.mod_manager
 Terminal=false
 Type=Application
