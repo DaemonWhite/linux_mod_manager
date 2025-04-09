@@ -26,7 +26,8 @@ use crate::config;
 
 use crate::ui::stack::{
     order::OrderStack,
-    settings::SettingsStack
+    settings::SettingsStack,
+    management::ManagementStack
 };
 
 mod imp {
@@ -46,6 +47,8 @@ mod imp {
         pub order_stack: TemplateChild<OrderStack>,
         #[template_child]
         pub settings_stack: TemplateChild<SettingsStack>,
+        #[template_child]
+        pub management_stack: TemplateChild<ManagementStack>,
     }
 
     #[glib::object_subclass]

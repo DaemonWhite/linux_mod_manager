@@ -64,14 +64,25 @@ template $LinuxModManagerWindow : $AdwApplicationWindow {
 		  }
 		  Adw.ViewStack main_stack{
 		  	vexpand: true;
+
 		  	Adw.ViewStackPage {
 		  	      name: "order";
 		  	      title: _("Order");
+		  	      icon-name: "view-list-symbolic";
 		  	      child: $OrderStack order_stack {};
 		  	}
+
+		  	Adw.ViewStackPage {
+		  	      name: "managemnet";
+		  	      title: _("Management");
+		  	      icon-name: "application-x-addon-symbolic";
+		  	      child: $ManagementStack management_stack {};
+		  	}
+
 		  	Adw.ViewStackPage {
 		  	      name: "settings";
 		  	      title: _("Settings");
+		  	      icon-name: "preferences-other-symbolic";
 		  	      child: $SettingsStack settings_stack {};
 		  	}
 

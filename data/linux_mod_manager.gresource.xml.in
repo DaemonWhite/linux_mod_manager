@@ -8,7 +8,7 @@
     <file preprocess="xml-stripblanks">ui/modal/prefferences.ui</file>
     <file preprocess="xml-stripblanks">ui/stack/settings.ui</file>
     <file preprocess="xml-stripblanks">ui/stack/order.ui</file>
-    <file preprocess="xml-stripblanks">ui/stack/mod.ui</file>
+    <file preprocess="xml-stripblanks">ui/stack/management.ui</file>
     <file preprocess="xml-stripblanks">ui/stack/error.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/check_row.ui</file>
     <file preprocess="xml-stripblanks">ui/widgets/install_row.ui</file>
