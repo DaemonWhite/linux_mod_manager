@@ -24,7 +24,7 @@ use adw::subclass::prelude::*;
 use gtk::{gio, glib};
 
 use crate::config::{VERSION, APP_ID, PREFIX};
-use crate::LinuxModManagerWindow;
+use crate::ui::LinuxModManagerWindow;
 
 mod imp {
     use super::*;

@@ -69,6 +69,11 @@ template $LinuxModManagerWindow : $AdwApplicationWindow {
 		  	      title: _("Order");
 		  	      child: $OrderStack order_stack {};
 		  	}
+		  	Adw.ViewStackPage {
+		  	      name: "settings";
+		  	      title: _("Settings");
+		  	      child: $SettingsStack settings_stack {};
+		  	}
 
 		  }
 		  [bottom]
