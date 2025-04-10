@@ -21,6 +21,41 @@ template $SettingsStack : Adw.Bin {
 				    label: "Reconfigurer";
 				  }
 				};
+
+        Adw.ActionRow {
+          [prefix]
+          Gtk.Box {
+            Gtk.Label {
+              label: _("Mode de déploiment");
+            }
+          }
+          [suffix]
+          Gtk.Box {
+            Adw.ToggleGroup {
+              Adw.Toggle {
+                name: "copy";
+                tooltip: "Copy";
+                label: "Copy";
+              }
+              Adw.Toggle {
+                tooltip: "Deplacer";
+                label: "Deplacer";
+              }
+              Adw.Toggle {
+                tooltip: "Symbolic";
+                label: "Symblolic";
+              }
+              Adw.Toggle {
+                tooltip: "Dedier";
+                label: "Dedier";
+              }
+            }
+            Gtk.Button {
+              margin-start: 10;
+              icon-name: "info-outline-symbolic";
+            }
+          }
+        }
 				Adw.SwitchRow symbolic_row {
 					title: "Liens Symbolic";
 				}

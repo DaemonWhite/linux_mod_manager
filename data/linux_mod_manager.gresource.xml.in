@@ -26,5 +26,6 @@
     <file alias="stop-sign-large-outline-symbolic">icons/hicolor/scalable/actions/stop-sign-large-outline-symbolic.svg</file>
     <file alias="tab-new-symbolic">icons/hicolor/scalable/actions/tab-new-symbolic.svg</file>
     <file alias="warning-outline-symbolic">icons/hicolor/scalable/actions/warning-outline-symbolic.svg</file>
+    <file alias="info-outline-symbolic">icons/hicolor/scalable/actions/info-outline-symbolic.svg</file>
   </gresource>
 </gresources>
