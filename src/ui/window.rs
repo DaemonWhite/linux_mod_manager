@@ -25,9 +25,9 @@ use gtk::{gio, glib};
 use crate::config;
 
 use crate::ui::stack::{
-    order::OrderStack,
-    settings::SettingsStack,
-    management::ManagementStack
+    OrderStack,
+    SettingsStack,
+    ManagementStack
 };
 
 mod imp {

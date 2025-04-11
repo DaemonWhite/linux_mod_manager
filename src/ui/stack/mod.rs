@@ -1,4 +1,9 @@
-pub mod order;
-pub mod settings;
-pub mod management;
-pub mod  error;
+mod error;
+mod management;
+mod order;
+mod settings;
+
+pub use error::ErrorStack;
+pub use management::ManagementStack;
+pub use order::OrderStack;
+pub use settings::SettingsStack;
