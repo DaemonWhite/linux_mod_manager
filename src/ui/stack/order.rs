@@ -19,7 +19,6 @@
  */
 
 
-use gtk::prelude::*;
 use adw::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate};
 
