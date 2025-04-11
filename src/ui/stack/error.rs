@@ -26,7 +26,7 @@ mod imp {
     use super::*;
 
     #[derive(Debug, Default, CompositeTemplate)]
-    #[template(resource = "/fr/daemonwhite/mod_manager/ui/stack/order.ui")]
+    #[template(resource = "/fr/daemonwhite/mod_manager/ui/stack/error.ui")]
     pub struct ErrorStack {
         #[template_child]
         pub row_enabled: TemplateChild<adw::ExpanderRow>,
