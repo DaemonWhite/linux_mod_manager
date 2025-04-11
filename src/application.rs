@@ -24,7 +24,10 @@ use adw::subclass::prelude::*;
 use gtk::{gio, glib};
 
 use crate::config::{VERSION, APP_ID, PREFIX};
-use crate::ui::LinuxModManagerWindow;
+use crate::ui::{
+    LinuxModManagerWindow,
+    modal::PreferencesLinuxModManager
+};
 
 mod imp {
     use super::*;
@@ -92,7 +95,16 @@ impl LinuxModManagerApplication {
         let about_action = gio::ActionEntry::builder("about")
             .activate(move |app: &Self, _, _| app.show_about())
             .build();
-        self.add_action_entries([quit_action, about_action]);
+        let preferences_action = gio::ActionEntry::builder("preferences")
+            .activate(move |app: &Self, _, _| app.show_preferences())
+            .build();
+        self.add_action_entries([quit_action, about_action, preferences_action]);
+    }
+
+    fn show_preferences(&self) {
+        let window = self.active_window().unwrap();
+        let preferences = PreferencesLinuxModManager::default();
+        preferences.present(Some(&window));
     }
 
     fn show_about(&self) {

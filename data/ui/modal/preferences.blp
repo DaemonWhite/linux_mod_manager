@@ -1,12 +1,8 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $PreferencesLinuxModManager : $AdwPreferencesWindow {
+template $PreferencesLinuxModManager : Adw.PreferencesDialog {
 	title: "Preferences";
-	modal: true;
-	default-width: 750;
-	default-height: 600;
-	hide-on-close: true;
 	Adw.PreferencesPage {
 		title: "Comportement";
 		icon-name: "preferences-system-symbolic";
