@@ -18,7 +18,11 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+extern crate plugin_api;
+
+
 mod application;
+// mod plugin_loader;
 mod config;
 mod ui;
 

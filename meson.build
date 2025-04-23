@@ -30,7 +30,7 @@ conf.set_quoted('DEVEL', devel)
 conf.set_quoted('GETTEXT_PACKAGE', 'linux_mod_manager')
 
 subdir('data')
-subdir('src')
+subdir('app/src')
 subdir('po')
 
 gnome.post_install(

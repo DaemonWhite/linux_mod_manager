@@ -1,0 +1,7 @@
+name = "Skyrim"
+description = "Gere les modes skyrim"
+version = "1.0.0"
+author = "DaemonWhite"
+plugin_type = "Base"
+
+entry = "plugin.py"

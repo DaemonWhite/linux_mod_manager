@@ -29,6 +29,8 @@ use crate::ui::{
     modal::PreferencesLinuxModManager
 };
 
+// use crate::plugin_loader;
+
 mod imp {
     use super::*;
 
@@ -48,6 +50,8 @@ mod imp {
             let obj = self.obj();
             obj.setup_gactions();
             obj.set_accels_for_action("app.quit", &["<primary>q"]);
+
+            // plugin_loader::load_manifest("/home/matheo/Projects/Rust/linux_mod_manager/plugins/python/skyrim/plugin.toml");
         }
     }
 

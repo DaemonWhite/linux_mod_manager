@@ -1,0 +1,16 @@
+[package]
+name = "linux_mod_manager"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+plugin_api = { path = "../plugin_api" }
+gettext-rs = { version = "0.7", features = ["gettext-system"] }
+gtk = { version = "0.9.6", package = "gtk4", features = ["gnome_47"] }
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8.20"
+
+[dependencies.adw]
+package = "libadwaita"
+version = "0.7"
+features = ["v1_7"]
