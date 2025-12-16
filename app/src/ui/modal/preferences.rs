@@ -19,7 +19,7 @@
  */
 
 use adw::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate};
+use gtk::{glib, CompositeTemplate, gio};
 
 
 mod imp {
@@ -61,7 +61,9 @@ mod imp {
 
 glib::wrapper! {
     pub struct PreferencesLinuxModManager(ObjectSubclass<imp::PreferencesLinuxModManager>)
-        @extends gtk::Widget, adw::Dialog, adw::PreferencesDialog;
+        @extends gtk::Widget, adw::Dialog, adw::PreferencesDialog,
+        @implements gio::ActionGroup, gio::ActionMap, gtk::Accessible, gtk::Buildable,
+                    gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager;
 }
 
 impl PreferencesLinuxModManager {
